@@ -1,0 +1,37 @@
+{
+  "packageId": "com.schoolpickup.app",
+  "host": "your-domain.com",
+  "name": "Smart School Pick-up",
+  "launcherName": "School Pickup",
+  "display": "standalone",
+  "themeColor": "#1565C0",
+  "navigationColor": "#0D47A1",
+  "backgroundColor": "#1565C0",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://your-domain.com/icon-512.png",
+  "maskableIconUrl": "https://your-domain.com/maskable-icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./school-pickup.keystore",
+    "alias": "school-pickup"
+  },
+  "appVersionCode": 1,
+  "appVersionName": "1.0.0",
+  "shortcuts": [
+    {
+      "name": "Parent",
+      "shortName": "Parent",
+      "url": "/parent",
+      "chosenIconUrl": "https://your-domain.com/icon-192.png"
+    },
+    {
+      "name": "Teacher",
+      "shortName": "Teacher",
+      "url": "/teacher",
+      "chosenIconUrl": "https://your-domain.com/icon-192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://your-domain.com/manifest.json"
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="32" fill="#1565C0"/>
+  <g transform="translate(96,80)" text-anchor="middle">
+    <text font-size="72" fill="white" font-family="Arial,sans-serif" font-weight="bold" dy="0.35em">SP</text>
+  </g>
+  <g transform="translate(96,145)" text-anchor="middle">
+    <text font-size="20" fill="#90CAF9" font-family="Arial,sans-serif">PICK-UP</text>
+  </g>
+</svg>

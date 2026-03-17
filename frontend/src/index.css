@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #1565C0;
+  --primary-light: #42A5F5;
+  --warning: #F57C00;
+  --success: #2E7D32;
+  --danger: #C62828;
+  --bg-gate: #0D1B2A;
+  --highlight: #FDD835;
+  --text-primary: #1A1A2E;
+  --text-secondary: #6B7280;
+  --border: #E5E7EB;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans Lao', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

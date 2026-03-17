@@ -1,0 +1,73 @@
+{
+  "name": "Smart School Pick-up",
+  "short_name": "School Pickup",
+  "description": "ລະບົບຮັບນັກຮຽນອັດສະລິຍະ - Smart School Pick-up System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1565C0",
+  "theme_color": "#1565C0",
+  "orientation": "portrait-primary",
+  "categories": ["education", "utilities"],
+  "lang": "lo",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Parent - ຜູ້ປົກຄອງ",
+      "short_name": "Parent",
+      "url": "/parent",
+      "icons": [{"src": "/icon-192.svg", "sizes": "192x192"}]
+    },
+    {
+      "name": "Teacher - ຄູ",
+      "short_name": "Teacher",
+      "url": "/teacher",
+      "icons": [{"src": "/icon-192.svg", "sizes": "192x192"}]
+    },
+    {
+      "name": "Gate Display - ປ້າຍປະຕູ",
+      "short_name": "Gate",
+      "url": "/gate",
+      "icons": [{"src": "/icon-192.svg", "sizes": "192x192"}]
+    }
+  ]
+}
