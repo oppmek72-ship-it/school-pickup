@@ -9,6 +9,7 @@ import ParentProfile from './pages/parent/ParentProfile';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import TeacherHistory from './pages/teacher/TeacherHistory';
 import GateDisplay from './pages/gate/GateDisplay';
+import InstallPrompt from './components/InstallPrompt';
 
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, token } = useAuth();
@@ -98,6 +99,7 @@ export default function App() {
       <AuthProvider>
         <SocketProvider>
           <AppRoutes />
+          <InstallPrompt />
           <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
         </SocketProvider>
       </AuthProvider>
