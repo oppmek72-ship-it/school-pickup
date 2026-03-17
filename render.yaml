@@ -22,6 +22,6 @@ services:
       - key: PORT
         value: 3001
       - key: FRONTEND_URL
-        value: https://school-pickup.vercel.app
+        value: https://school-pickup-wheat.vercel.app
       - key: NODE_ENV
         value: production
