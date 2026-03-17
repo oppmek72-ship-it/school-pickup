@@ -1,0 +1,27 @@
+databases:
+  - name: school-pickup-db
+    plan: free
+    databaseName: school_pickup
+    user: pickup_user
+
+services:
+  - type: web
+    name: school-pickup-backend
+    plan: free
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: school-pickup-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 3001
+      - key: FRONTEND_URL
+        value: https://school-pickup.vercel.app
+      - key: NODE_ENV
+        value: production
