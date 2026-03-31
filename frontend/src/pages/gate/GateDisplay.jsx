@@ -1,164 +1,251 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
+function Countdown({ expiresAt }) {
+  const [left, setLeft] = useState('');
+  const [urgent, setUrgent] = useState(false);
+
+  useEffect(() => {
+    if (!expiresAt) return;
+    const tick = () => {
+      const diff = new Date(expiresAt) - Date.now();
+      if (diff <= 0) { setLeft('00:00'); setUrgent(true); return; }
+      const m = Math.floor(diff / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setLeft(`${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`);
+      setUrgent(diff < 60000);
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, [expiresAt]);
+
+  if (!expiresAt) return null;
+  return (
+    <span className={`font-mono text-lg font-bold px-3 py-1 rounded-lg ${urgent ? 'bg-red-500 text-white animate-pulse' : 'bg-white/10 text-white'}`}>
+      {left}
+    </span>
+  );
+}
+
+function QueueRow({ item, index }) {
+  const name = item.student?.nickname || item.student?.firstName || '?';
+  const lastName = item.student?.lastName || '';
+  const classroom = item.student?.classroom?.className || '';
+  const initials = name.charAt(0);
+
+  const config = {
+    arrived: { label: 'ຮອດແລ້ວ!', bg: 'bg-red-600', border: 'border-l-red-500', rowBg: 'bg-red-500/10', icon: '🔴' },
+    five_minutes: { label: '5 ນາທີ', bg: 'bg-orange-500', border: 'border-l-orange-500', rowBg: 'bg-orange-500/5', icon: '🟠' },
+    ten_minutes: { label: '10 ນາທີ', bg: 'bg-blue-500', border: 'border-l-blue-500', rowBg: 'bg-blue-500/5', icon: '🔵' },
+  };
+  const c = config[item.callType] || config.arrived;
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40, scale: 0.95 }}
+      transition={{ duration: 0.3 }}
+      className={`flex items-center gap-4 px-5 py-3.5 border-l-4 ${c.border} ${c.rowBg} border-b border-white/5`}
+    >
+      {/* Queue number */}
+      <div className="text-white/40 font-mono text-lg font-bold w-8 text-center shrink-0">
+        #{item.queuePosition || index + 1}
+      </div>
+
+      {/* Call type badge */}
+      <div className={`${c.bg} text-white text-xs font-bold px-3 py-1.5 rounded-full shrink-0 lao flex items-center gap-1.5`}>
+        <span>{c.icon}</span>
+        <span>{c.label}</span>
+      </div>
+
+      {/* Avatar */}
+      {item.student?.photo ? (
+        <img src={item.student.photo} className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-white/20" />
+      ) : (
+        <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-white font-bold text-xl shrink-0 border-2 border-white/20">
+          {initials}
+        </div>
+      )}
+
+      {/* Student info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-white font-bold text-xl lao truncate">{name} {lastName}</p>
+        <p className="text-white/50 text-sm lao">{classroom}</p>
+      </div>
+
+      {/* Countdown or call time */}
+      <div className="shrink-0">
+        {item.expiresAt ? (
+          <Countdown expiresAt={item.expiresAt} />
+        ) : (
+          <span className="text-white/40 text-sm font-mono">
+            {new Date(item.calledAt).toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function GateDisplay() {
-  const [queue, setQueue] = useState([]);
+  const [queue, setQueue] = useState({ fiveMinutes: [], tenMinutes: [], arrived: [] });
   const [announcement, setAnnouncement] = useState(null);
+  const [clock, setClock] = useState('');
+  const audioCtx = useRef(null);
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      setClock(now.toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const playChime = () => {
+    try {
+      if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = audioCtx.current;
+      const freqs = [523, 659, 784, 1047];
+      freqs.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        const t = ctx.currentTime + i * 0.18;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.4, t + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+        osc.start(t); osc.stop(t + 0.6);
+      });
+    } catch {}
+  };
 
   useEffect(() => {
     fetch('/api/pickup/active')
-      .then(res => res.json())
-      .then(data => setQueue(data))
+      .then(r => r.json())
+      .then(d => {
+        if (d.fiveMinutes) setQueue(d);
+        else setQueue({ fiveMinutes: [], tenMinutes: [], arrived: d || [] });
+      })
       .catch(() => {});
+  }, []);
 
+  useEffect(() => {
     const socket = io('/', { transports: ['websocket', 'polling'] });
-    socket.emit('join:gate');
+    socket.emit('join-monitor');
 
-    socket.on('queue:updated', (data) => {
-      setQueue(data.queue);
+    socket.on('queue-update', (data) => {
+      setQueue({
+        fiveMinutes: data.fiveMinutes || [],
+        tenMinutes: data.tenMinutes || [],
+        arrived: data.arrived || []
+      });
     });
 
-    socket.on('student:called', (data) => {
-      setAnnouncement(data);
-      setTimeout(() => setAnnouncement(null), 10000);
+    socket.on('new-call', () => { playChime(); });
+
+    socket.on('call-escalated', (data) => {
+      playChime();
+      const name = data.student?.nickname || data.student?.firstName || '';
+      const cls = data.student?.classroom?.className || '';
+      setAnnouncement({ text: `${name} ${cls} — ຜູ້ປົກຄອງຮອດແລ້ວ! ກະລຸນາກຽມຕົວ`, id: Date.now() });
+      setTimeout(() => setAnnouncement(null), 8000);
     });
+
+    socket.on('call-completed', () => {});
 
     return () => socket.close();
   }, []);
 
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
   };
 
+  // Merge all into single sorted list: arrived first, then five_minutes, then ten_minutes
+  const allCalls = [
+    ...(queue.arrived || []).map(c => ({ ...c, callType: c.callType || 'arrived' })),
+    ...(queue.fiveMinutes || []).map(c => ({ ...c, callType: c.callType || 'five_minutes' })),
+    ...(queue.tenMinutes || []).map(c => ({ ...c, callType: c.callType || 'ten_minutes' })),
+  ];
+
+  const totalCount = allCalls.length;
+  const arrivedCount = (queue.arrived || []).length;
+  const fiveCount = (queue.fiveMinutes || []).length;
+  const tenCount = (queue.tenMinutes || []).length;
+
   return (
-    <div className="min-h-screen text-white relative overflow-hidden" style={{ backgroundColor: '#0D1B2A' }}>
+    <div className="min-h-screen text-white relative overflow-hidden lao" style={{ backgroundColor: '#0D1B2A' }}>
+
+      {/* Announcement banner */}
       <AnimatePresence>
         {announcement && (
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
+          <motion.div key={announcement.id}
+            initial={{ y: -80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            className="absolute top-0 left-0 right-0 z-50 bg-yellow-400 text-gray-900 py-4 px-6 text-center"
+            exit={{ y: -80, opacity: 0 }}
+            className="fixed top-0 left-0 right-0 z-50 bg-yellow-400 text-gray-900 py-5 px-8 text-center shadow-2xl"
           >
-            <p className="text-2xl md:text-3xl font-bold">
-              {announcement.studentName} ຊັ້ນ {announcement.class} - ກະລຸນາມາທີ່ປະຕູ
+            <p className="text-3xl md:text-4xl font-bold animate-bounce">
+              📢 {announcement.text}
             </p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="text-center pt-8 pb-4">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-wider">STUDENT PICK-UP</h1>
-        <div className="flex items-center justify-center gap-4 mt-4">
-          <div className="h-px w-20 bg-blue-400/50" />
-          <p className="text-blue-300 text-lg md:text-xl">Pick-up Queue</p>
-          <div className="h-px w-20 bg-blue-400/50" />
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-4 flex items-center justify-between border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">🏫</span>
+          <div>
+            <h1 className="text-2xl font-bold">ໂຮງຮຽນ ເພັດດາຣາ</h1>
+            <p className="text-blue-300 text-sm">ລະບົບເອີ້ນນັກຮຽນກັບບ້ານ</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+          {/* Summary badges */}
+          <div className="hidden md:flex items-center gap-3">
+            <span className="bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-sm font-bold">🔴 {arrivedCount}</span>
+            <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-sm font-bold">🟠 {fiveCount}</span>
+            <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold">🔵 {tenCount}</span>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-mono font-bold text-blue-200">{clock}</p>
+            <p className="text-xs text-blue-400">ທັງໝົດ {totalCount} ຄົນ</p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-6">
-        {queue.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-6xl mb-4 opacity-50">🏫</p>
-            <p className="text-xl text-blue-300/60">ບໍ່ມີຄິວລໍຖ້າ</p>
+      {/* Single scrollable queue list */}
+      <div className="overflow-y-auto" style={{ height: 'calc(100vh - 85px)' }}>
+        {totalCount === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-white/30">
+            <p className="text-7xl mb-4">😴</p>
+            <p className="text-2xl">ບໍ່ມີນ້ອງໃນຄິວ</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            <AnimatePresence>
-              {queue.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 50 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`rounded-2xl p-5 md:p-6 flex items-center gap-6 transition-all ${
-                    item.status === 'arrived'
-                      ? 'bg-yellow-400/20 border-2 border-yellow-400'
-                      : 'bg-white/5 border border-white/10'
-                  }`}
-                  style={item.status === 'arrived' ? { animation: 'pulse 2s infinite' } : {}}
-                >
-                  <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shrink-0 ${
-                    item.status === 'arrived' ? 'bg-yellow-400 text-gray-900' : 'bg-blue-600 text-white'
-                  }`}>
-                    {index + 1}
-                  </div>
-                  <div className="flex-1">
-                    <h2 className={`text-2xl md:text-4xl font-bold ${
-                      item.status === 'arrived' ? 'text-yellow-300' : 'text-white'
-                    }`}>
-                      {item.student.name}
-                    </h2>
-                    <p className="text-blue-300 text-lg md:text-xl mt-1">ຊັ້ນ {item.student.class}</p>
-                  </div>
-                  <div className="text-right">
-                    {item.status === 'arrived' ? (
-                      <span className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base font-bold">
-                        ມາຮອດແລ້ວ
-                      </span>
-                    ) : (
-                      <span className="bg-blue-600/50 text-blue-200 px-4 py-2 rounded-full text-sm md:text-base">
-                        ກຳລັງມາ {item.eta && `(${item.eta} ນາທີ)`}
-                      </span>
-                    )}
-                    {item.carPlate && (
-                      <p className="text-blue-400/60 text-sm mt-2">ລົດ: {item.carPlate}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+          <AnimatePresence>
+            {allCalls.map((item, i) => (
+              <QueueRow key={item.id} item={item} index={i} />
+            ))}
+          </AnimatePresence>
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none opacity-20">
-        <svg viewBox="0 0 1440 200" className="w-full">
-          <rect x="100" y="100" width="120" height="100" rx="4" fill="#42A5F5" />
-          <rect x="110" y="120" width="30" height="30" rx="2" fill="#0D1B2A" />
-          <rect x="180" y="120" width="30" height="30" rx="2" fill="#0D1B2A" />
-          <rect x="145" y="150" width="30" height="50" rx="2" fill="#0D1B2A" />
-          <polygon points="100,100 160,50 220,100" fill="#1565C0" />
-          <rect x="300" y="80" width="180" height="120" rx="4" fill="#42A5F5" />
-          <rect x="310" y="100" width="35" height="35" rx="2" fill="#0D1B2A" />
-          <rect x="360" y="100" width="35" height="35" rx="2" fill="#0D1B2A" />
-          <rect x="410" y="100" width="35" height="35" rx="2" fill="#0D1B2A" />
-          <rect x="370" y="155" width="40" height="45" rx="2" fill="#0D1B2A" />
-          <rect x="370" y="60" width="40" height="20" rx="2" fill="#1565C0" />
-          <polygon points="300,80 390,30 480,80" fill="#1565C0" />
-          <rect x="550" y="120" width="100" height="80" rx="4" fill="#42A5F5" />
-          <rect x="560" y="140" width="25" height="25" rx="2" fill="#0D1B2A" />
-          <rect x="610" y="140" width="25" height="25" rx="2" fill="#0D1B2A" />
-          <polygon points="550,120 600,80 650,120" fill="#1565C0" />
-          <circle cx="750" cy="160" r="20" fill="#2E7D32" />
-          <rect x="747" y="160" width="6" height="40" fill="#1B5E20" />
-          <circle cx="820" cy="150" r="25" fill="#2E7D32" />
-          <rect x="817" y="150" width="6" height="50" fill="#1B5E20" />
-          <rect x="0" y="200" width="1440" height="2" fill="#42A5F5" opacity="0.3" />
-        </svg>
-      </div>
-
-      <button
-        onClick={toggleFullscreen}
-        className="fixed bottom-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Fullscreen button */}
+      <button onClick={toggleFullscreen}
+        className="fixed bottom-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
         </svg>
       </button>
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.85; }
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { createRequest, markArrived, confirmPickup, getQueue, getActiveQueue, cancelRequest } = require('../controllers/pickup.controller');
+const { createRequest, confirmPickup, cancelRequest, getQueue, getActiveQueue, getStudentActiveCall, escalateCall } = require('../controllers/pickup.controller');
 const authMiddleware = require('../middleware/auth.middleware');
 const roleMiddleware = require('../middleware/role.middleware');
 
-router.post('/request', authMiddleware, roleMiddleware('parent'), createRequest);
-router.put('/:id/arrive', authMiddleware, roleMiddleware('parent'), markArrived);
+router.post('/call', authMiddleware, createRequest);
 router.put('/:id/confirm', authMiddleware, roleMiddleware('teacher', 'admin'), confirmPickup);
-router.get('/queue', authMiddleware, roleMiddleware('teacher', 'admin'), getQueue);
-router.get('/active', getActiveQueue); // Public for gate display
-router.delete('/:id/cancel', authMiddleware, cancelRequest);
+router.put('/:id/cancel', authMiddleware, cancelRequest);
+router.put('/:id/escalate', authMiddleware, roleMiddleware('teacher', 'admin'), escalateCall);
+router.get('/queue', authMiddleware, getQueue);
+router.get('/active', getActiveQueue);  // public for monitor
+router.get('/student/:studentId/active', authMiddleware, getStudentActiveCall);
 
 module.exports = router;

@@ -7,20 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  phone     String   @unique
-  role      Role     @default(parent)
-  password  String
-  createdAt DateTime @default(now())
+// ===========================
+// ຫ້ອງຮຽນ
+// ===========================
+model Classroom {
+  id          Int       @id @default(autoincrement())
+  className   String    // ເຊັ່ນ: "ຫ້ອງ ປ.1/1"
+  gradeLevel  String    // ເຊັ່ນ: "ປ.1", "ມ.3"
+  classCode   String    @unique // "P1-1", "M3-2"
+  teacherName String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  students         Student[]        @relation("ParentStudents")
-  teacherStudents  Student[]        @relation("TeacherStudents")
-  pickupRequests   PickupRequest[]  @relation("PickupRequestParent")
-  notifications    Notification[]
-  historyAsParent  PickupHistory[]  @relation("HistoryParent")
-  historyAsTeacher PickupHistory[]  @relation("HistoryTeacher")
+  students    Student[]
+  users       User[]
+}
+
+// ===========================
+// ຜູ້ໃຊ້
+// ===========================
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  phone       String?   @unique
+  username    String?   @unique
+  role        Role      @default(parent)
+  password    String
+  classroomId Int?
+  classroom   Classroom? @relation(fields: [classroomId], references: [id])
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  pickupRequests  PickupRequest[]
+  notifications   Notification[]
+  historyAsParent PickupHistory[] @relation("HistoryParent")
+  historyAsTeacher PickupHistory[] @relation("HistoryTeacher")
 }
 
 enum Role {
@@ -29,51 +52,65 @@ enum Role {
   admin
 }
 
+// ===========================
+// ນັກຮຽນ
+// ===========================
 model Student {
-  id        Int    @id @default(autoincrement())
-  name      String
-  class     String
-  photo     String?
-  qrCode    String @unique
-  status    StudentStatus @default(at_school)
-
-  parentId  Int
-  parent    User   @relation("ParentStudents", fields: [parentId], references: [id])
-
-  teacherId Int
-  teacher   User   @relation("TeacherStudents", fields: [teacherId], references: [id])
+  id          Int           @id @default(autoincrement())
+  studentCode String        @unique  // STD-0001
+  firstName   String
+  lastName    String
+  nickname    String?
+  classroomId Int?
+  classroom   Classroom?    @relation(fields: [classroomId], references: [id])
+  photo       String?
+  parentPhone String?
+  parentName  String?
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   pickupRequests PickupRequest[]
   pickupHistory  PickupHistory[]
 }
 
-enum StudentStatus {
-  at_school
-  called
-  picked_up
+// ===========================
+// ຄຳຮ້ອງຂໍຮັບນັກຮຽນ
+// ===========================
+model PickupRequest {
+  id            Int           @id @default(autoincrement())
+  studentId     Int
+  student       Student       @relation(fields: [studentId], references: [id])
+  parentId      Int?
+  parent        User?         @relation(fields: [parentId], references: [id])
+  callType      CallType      @default(arrived)
+  status        PickupStatus  @default(waiting)
+  calledAt      DateTime      @default(now())
+  announcedAt   DateTime?
+  pickedUpAt    DateTime?
+  expiresAt     DateTime?
+  queuePosition Int?
+  carPlate      String?
+  carColor      String?
+  notes         String?
 }
 
-model PickupRequest {
-  id          Int           @id @default(autoincrement())
-  studentId   Int
-  student     Student       @relation(fields: [studentId], references: [id])
-  parentId    Int
-  parent      User          @relation("PickupRequestParent", fields: [parentId], references: [id])
-  status      PickupStatus  @default(coming)
-  eta         Int?
-  carPlate    String?
-  carColor    String?
-  requestTime DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+enum CallType {
+  five_minutes
+  ten_minutes
+  arrived
 }
 
 enum PickupStatus {
-  coming
-  arrived
-  confirmed
+  waiting
+  announced
+  picked_up
   cancelled
 }
 
+// ===========================
+// ປະຫວັດການຮັບ
+// ===========================
 model PickupHistory {
   id          Int      @id @default(autoincrement())
   studentId   Int
@@ -82,19 +119,23 @@ model PickupHistory {
   parent      User     @relation("HistoryParent", fields: [parentId], references: [id])
   teacherId   Int?
   teacher     User?    @relation("HistoryTeacher", fields: [teacherId], references: [id])
+  callType    String?
   pickupTime  DateTime @default(now())
   carPlate    String?
   notes       String?
 }
 
+// ===========================
+// ການແຈ້ງເຕືອນ
+// ===========================
 model Notification {
-  id        Int              @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   userId    Int
-  user      User             @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
   message   String
   type      NotifType
-  status    NotifStatus      @default(unread)
-  createdAt DateTime         @default(now())
+  status    NotifStatus @default(unread)
+  createdAt DateTime    @default(now())
 }
 
 enum NotifType {

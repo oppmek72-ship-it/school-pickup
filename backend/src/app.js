@@ -11,41 +11,36 @@ const studentRoutes = require('./routes/student.routes');
 const pickupRoutes = require('./routes/pickup.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const historyRoutes = require('./routes/history.routes');
+const adminRoutes = require('./routes/admin.routes');
 const setupSocketEvents = require('./socket/events');
+const { getQueueData } = require('./controllers/pickup.controller');
 
 const app = express();
 const server = http.createServer(app);
 const prisma = new PrismaClient();
 
 const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-  }
+  cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }
 });
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Make io and prisma accessible in routes
 app.set('io', io);
 app.set('prisma', prisma);
 
-// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/pickup', pickupRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/history', historyRoutes);
+app.use('/api/admin', adminRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
+app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
-// Seed endpoint (for initial production setup)
+// ====================================
+// Seed endpoint
+// ====================================
 app.post('/api/seed', async (req, res) => {
   try {
     const bcrypt = require('bcryptjs');
@@ -54,23 +49,25 @@ app.post('/api/seed', async (req, res) => {
     await prisma.pickupRequest.deleteMany();
     await prisma.student.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.classroom.deleteMany();
 
     const hash = await bcrypt.hash('123456', 10);
 
-    const admin = await prisma.user.create({ data: { name: 'ທ່ານ ບຸນມີ', phone: '02099999999', role: 'admin', password: hash } });
-    const t1 = await prisma.user.create({ data: { name: 'ອາຈານ ສົມພອນ', phone: '02011111111', role: 'teacher', password: hash } });
-    const t2 = await prisma.user.create({ data: { name: 'ອາຈານ ວິໄລ', phone: '02022222222', role: 'teacher', password: hash } });
-    const p1 = await prisma.user.create({ data: { name: 'ທ້າວ ສຸກສະຫວັນ', phone: '02033333333', role: 'parent', password: hash } });
-    const p2 = await prisma.user.create({ data: { name: 'ນາງ ບົວພາ', phone: '02044444444', role: 'parent', password: hash } });
-    const p3 = await prisma.user.create({ data: { name: 'ທ້າວ ພູທອນ', phone: '02055555555', role: 'parent', password: hash } });
+    const p11 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.1/1', gradeLevel: 'ປ.1', classCode: 'P1-1', teacherName: 'ຄູ ມະນີ' } });
+    const p31 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.3/1', gradeLevel: 'ປ.3', classCode: 'P3-1', teacherName: 'ຄູ ສົມພອນ' } });
+    const m11 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ມ.1/1', gradeLevel: 'ມ.1', classCode: 'M1-1', teacherName: 'ຄູ ບຸນມາ' } });
+
+    await prisma.user.create({ data: { name: 'ແອັດມິນ', username: 'admin', role: 'admin', password: hash } });
+    await prisma.user.create({ data: { name: 'ຄູ ສົມພອນ', username: 'P3-1', phone: '02011111111', role: 'teacher', password: hash, classroomId: p31.id } });
+    await prisma.user.create({ data: { name: 'ຄູ ບຸນມາ', username: 'M1-1', phone: '02022222222', role: 'teacher', password: hash, classroomId: m11.id } });
 
     await prisma.student.createMany({
       data: [
-        { name: 'ນ້ອງ ອານັນ', class: 'P1', qrCode: 'STU001', parentId: p1.id, teacherId: t1.id },
-        { name: 'ນ້ອງ ສົມພອນ', class: 'P2', qrCode: 'STU002', parentId: p1.id, teacherId: t1.id },
-        { name: 'ນ້ອງ ພອນ', class: 'P1', qrCode: 'STU003', parentId: p2.id, teacherId: t1.id },
-        { name: 'ນ້ອງ ແກ້ວ', class: 'P3', qrCode: 'STU004', parentId: p2.id, teacherId: t2.id },
-        { name: 'ນ້ອງ ດາວ', class: 'P2', qrCode: 'STU005', parentId: p3.id, teacherId: t2.id }
+        { studentCode: 'STD-0001', firstName: 'ສົມສະໄໝ', lastName: 'ແກ້ວພິລາ', nickname: 'ນ້ອງໃໝ', classroomId: p31.id, parentName: 'ທ້າວ ສຸກສະຫວັນ', parentPhone: '02044444444' },
+        { studentCode: 'STD-0002', firstName: 'ວິໄລ', lastName: 'ສີສະຫວາດ', nickname: 'ນ້ອງຄຳ', classroomId: p31.id, parentName: 'ທ້າວ ສຸກສະຫວັນ', parentPhone: '02044444444' },
+        { studentCode: 'STD-0003', firstName: 'ບຸນທອງ', lastName: 'ພົມມະວົງ', nickname: 'ນ້ອງທອງ', classroomId: m11.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
+        { studentCode: 'STD-0004', firstName: 'ດາລາ', lastName: 'ສຸກສະຫວັນ', nickname: 'ນ້ອງດາ', classroomId: p11.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
+        { studentCode: 'STD-0005', firstName: 'ແກ້ວມະນີ', lastName: 'ຈັນທະລາ', nickname: 'ນ້ອງແກ້ວ', classroomId: p31.id, parentName: 'ທ້າວ ພູທອນ', parentPhone: '02066666666' },
       ]
     });
 
@@ -80,23 +77,67 @@ app.post('/api/seed', async (req, res) => {
   }
 });
 
-// Serve frontend static files in production
+// ====================================
+// Auto-escalation timer: ທຸກ 10 ວິນາທີ
+// ====================================
+setInterval(async () => {
+  try {
+    const expired = await prisma.pickupRequest.findMany({
+      where: {
+        status: 'waiting',
+        callType: { in: ['five_minutes', 'ten_minutes'] },
+        expiresAt: { lte: new Date() }
+      },
+      include: { student: { include: { classroom: true } } }
+    });
+
+    for (const call of expired) {
+      await prisma.pickupRequest.update({
+        where: { id: call.id },
+        data: { callType: 'arrived', status: 'announced', announcedAt: new Date(), expiresAt: null }
+      });
+
+      io.emit('call-escalated', {
+        callId: call.id,
+        studentId: call.studentId,
+        previousType: call.callType,
+        newType: 'arrived',
+        student: call.student
+      });
+
+      console.log(`⏰ Auto-escalated: ${call.student.nickname || call.student.firstName} → arrived`);
+    }
+
+    if (expired.length > 0) {
+      const queueData = await getQueueData();
+      io.emit('queue-update', queueData);
+    }
+  } catch (err) {
+    console.error('Auto-escalation error:', err.message);
+  }
+}, 10000);
+
+// ====================================
+// Socket.IO
+// ====================================
+setupSocketEvents(io);
+
+// ====================================
+// Serve frontend
+// ====================================
 const frontendPath = path.join(__dirname, '../../frontend/dist');
 app.use(express.static(frontendPath));
-
-// SPA fallback - all non-API routes serve index.html
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(frontendPath, 'index.html'));
   }
 });
 
-// Socket.io
-setupSocketEvents(io);
-
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📡 Socket.IO ready`);
+  console.log(`⏰ Auto-escalation timer active (every 10s)`);
 });
 
 module.exports = { app, server, io, prisma };
