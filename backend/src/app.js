@@ -74,9 +74,6 @@ const authMiddleware = require('./middleware/auth.middleware');
 
 app.put('/api/voice/:id', authMiddleware, async (req, res) => {
   try {
-    if (!req.user || !['admin', 'teacher'].includes(req.user.role)) {
-      return res.status(403).json({ error: 'ບໍ່ມີສິດ' });
-    }
     const { voiceRecording } = req.body;
     if (!voiceRecording || !voiceRecording.startsWith('data:audio/')) {
       return res.status(400).json({ error: 'Invalid audio data' });
@@ -99,9 +96,6 @@ app.put('/api/voice/:id', authMiddleware, async (req, res) => {
 // ====================================
 app.delete('/api/voice/:id', authMiddleware, async (req, res) => {
   try {
-    if (!req.user || !['admin', 'teacher'].includes(req.user.role)) {
-      return res.status(403).json({ error: 'ບໍ່ມີສິດ' });
-    }
     await prisma.student.update({
       where: { id: parseInt(req.params.id) },
       data: { voiceRecording: null }
