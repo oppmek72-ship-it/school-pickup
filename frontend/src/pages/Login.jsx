@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -7,6 +7,132 @@ const MODES = [
   { id: 'parent', label: 'ຜູ້ປົກຄອງ', icon: '👨‍👩‍👧', color: 'from-orange-500 to-amber-400' },
   { id: 'teacher', label: 'ຄູ / ແອດມິນ', icon: '👩‍🏫', color: 'from-blue-600 to-blue-400' },
 ];
+
+function InstallBanner() {
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showBanner, setShowBanner] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if already installed as PWA
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+      setIsInstalled(true);
+      return;
+    }
+
+    // Detect iOS
+    const ua = navigator.userAgent;
+    const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    setIsIOS(ios);
+
+    // For Android/Chrome — capture beforeinstallprompt
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowBanner(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
+    // If no prompt after 2s (iOS or already dismissed), show manual banner
+    const timer = setTimeout(() => {
+      if (!window.matchMedia('(display-mode: standalone)').matches) {
+        setShowBanner(true);
+      }
+    }, 2000);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') {
+        setShowBanner(false);
+        toast.success('ກຳລັງຕິດຕັ້ງ...');
+      }
+      setDeferredPrompt(null);
+    }
+  };
+
+  if (isInstalled || !showBanner) return null;
+
+  // iOS — show manual instructions
+  if (isIOS && !deferredPrompt) {
+    return (
+      <div className="mb-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/30 rounded-2xl p-4 backdrop-blur">
+        <div className="flex items-center gap-3 mb-2">
+          <img src="/favicon.ico" className="w-10 h-10 rounded-xl" alt="" />
+          <div>
+            <p className="text-white font-bold text-sm lao">📲 ຕິດຕັ້ງແອັບ</p>
+            <p className="text-blue-200 text-xs lao">ເຂົ້າໄວຂຶ້ນ ບໍ່ຕ້ອງເປີດ browser</p>
+          </div>
+        </div>
+        <div className="bg-white/10 rounded-xl p-3 space-y-2">
+          <p className="text-blue-100 text-xs lao">
+            <span className="font-bold">iPhone/iPad:</span>
+          </p>
+          <p className="text-blue-100 text-xs lao">
+            1. ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">⬆️ Share</span> (ປຸ່ມລຸ່ມ)
+          </p>
+          <p className="text-blue-100 text-xs lao">
+            2. ເລື່ອນລົງ ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">Add to Home Screen</span>
+          </p>
+          <p className="text-blue-100 text-xs lao">
+            3. ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">Add</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Android/Chrome — direct install button
+  if (deferredPrompt) {
+    return (
+      <div className="mb-6">
+        <button onClick={handleInstall}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-600 hover:to-emerald-500 text-white font-bold text-lg shadow-lg shadow-green-500/30 transition-all flex items-center justify-center gap-3 lao">
+          <span className="text-2xl">📲</span>
+          <div className="text-left">
+            <p className="font-bold">ດາວໂຫຼດແອັບ</p>
+            <p className="text-xs text-green-100 font-normal">ຕິດຕັ້ງໃສ່ໜ້າຈໍ ເຂົ້າໄວ</p>
+          </div>
+        </button>
+      </div>
+    );
+  }
+
+  // Fallback — show manual instructions for other browsers
+  return (
+    <div className="mb-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/30 rounded-2xl p-4 backdrop-blur">
+      <div className="flex items-center gap-3 mb-2">
+        <img src="/favicon.ico" className="w-10 h-10 rounded-xl" alt="" />
+        <div>
+          <p className="text-white font-bold text-sm lao">📲 ຕິດຕັ້ງແອັບ</p>
+          <p className="text-blue-200 text-xs lao">ເຂົ້າໄວຂຶ້ນ ບໍ່ຕ້ອງເປີດ browser</p>
+        </div>
+      </div>
+      <div className="bg-white/10 rounded-xl p-3 space-y-2">
+        <p className="text-blue-100 text-xs lao">
+          <span className="font-bold">Android:</span>
+        </p>
+        <p className="text-blue-100 text-xs lao">
+          1. ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">⋮</span> (3 ຈຸດ ມຸມຂວາເທິງ)
+        </p>
+        <p className="text-blue-100 text-xs lao">
+          2. ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">Add to Home screen</span>
+        </p>
+        <p className="text-blue-100 text-xs lao">
+          3. ກົດ <span className="inline-block bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">Install</span>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function Login() {
   const [mode, setMode] = useState('parent');
@@ -44,6 +170,9 @@ export default function Login() {
           <h1 className="text-2xl font-bold text-white lao">ໂຮງຮຽນ ເພັດດາຣາ</h1>
           <p className="text-blue-300 text-sm mt-1 lao">ລະບົບເອີ້ນນັກຮຽນກັບບ້ານ</p>
         </div>
+
+        {/* Install App Banner */}
+        <InstallBanner />
 
         {/* Mode selector */}
         <div className="flex gap-2 mb-6 bg-white/5 p-1 rounded-xl">
