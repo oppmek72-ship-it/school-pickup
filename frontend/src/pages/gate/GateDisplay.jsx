@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
 // ===== AUDIO ANNOUNCEMENT SYSTEM =====
-// ຫຼິ້ນແຕ່ສຽງທີ່ອັດເອງເທົ່ານັ້ນ (ບໍ່ມີ AI/TTS)
-const speechQueue = []; // { studentId }
+// ຫຼິ້ນສຽງອັດເອງອັດຕະໂນມັດ ເມື່ອນັກຮຽນຂຶ້ນຄິວ
+let speechQueue = []; // { studentId, callId }
 let isSpeaking = false;
+let setSpeakingIdCallback = null; // callback to update React state
 
-// Play custom recorded audio from DB
 function playCustomVoice(studentId) {
   return new Promise((resolve, reject) => {
     if (!studentId) return reject();
@@ -19,33 +19,63 @@ function playCustomVoice(studentId) {
   });
 }
 
+function playChimeSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq; osc.type = 'sine';
+      const t = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.5, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+      osc.start(t); osc.stop(t + 0.6);
+    });
+    setTimeout(() => ctx.close(), 2000);
+  } catch {}
+}
+
 async function processSpeechQueue() {
   if (isSpeaking || speechQueue.length === 0) return;
   isSpeaking = true;
+
   while (speechQueue.length > 0) {
     const item = speechQueue.shift();
-    console.log('🔊 Announcing student:', item.studentId);
+    if (!item.studentId) continue;
 
-    // ຫຼິ້ນສຽງ custom ເທົ່ານັ້ນ — ຖ້າບໍ່ມີກໍ່ຂ້າມ
-    if (item.studentId) {
-      try {
-        await playCustomVoice(item.studentId);
-        console.log('✅ Played custom voice for student', item.studentId);
-      } catch {
-        console.log('⚠️ No custom voice for student', item.studentId, '— skipped');
-      }
+    console.log('🔊 Auto-announcing student:', item.studentId);
+
+    // Chime ກ່ອນ
+    playChimeSound();
+    await new Promise(r => setTimeout(r, 900));
+
+    // Highlight row
+    if (setSpeakingIdCallback) setSpeakingIdCallback(item.studentId);
+
+    // ຫຼິ້ນສຽງ
+    try {
+      await playCustomVoice(item.studentId);
+      console.log('✅ Played voice for student', item.studentId);
+    } catch {
+      console.log('⚠️ No voice for student', item.studentId);
     }
-    await new Promise(r => setTimeout(r, 800));
+
+    // Clear highlight
+    if (setSpeakingIdCallback) setSpeakingIdCallback(null);
+
+    // ພັກລະຫວ່າງຄິວ
+    await new Promise(r => setTimeout(r, 1000));
   }
+
   isSpeaking = false;
 }
 
-function queueAnnouncement(item) {
-  if (typeof item === 'string') {
-    // ຂໍ້ຄວາມລະບົບ (ບໍ່ມີ studentId) → ຂ້າມ, ບໍ່ຫຼິ້ນ
-    return;
-  }
-  speechQueue.push(item);
+function queueAnnouncement(studentId, callId) {
+  // ບໍ່ເພີ່ມຊ້ຳ
+  if (speechQueue.some(q => q.callId === callId)) return;
+  speechQueue.push({ studentId, callId });
   processSpeechQueue();
 }
 
@@ -121,7 +151,6 @@ function QueueRow({ item, index, isSpeakingThis, onAnnounce, voiceEnabled }) {
         <p className="text-white/50 text-sm lao">{classroom}</p>
       </div>
       <div className="flex items-center gap-3 shrink-0">
-        {/* Manual announce button — always visible */}
         {voiceEnabled && (
           <button onClick={() => onAnnounce(item)}
             className="bg-yellow-500/80 hover:bg-yellow-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition">
@@ -146,7 +175,7 @@ export default function GateDisplay() {
   const [announcement, setAnnouncement] = useState(null);
   const [clock, setClock] = useState('');
   const [voiceEnabled, setVoiceEnabled] = useState(() => {
-    return localStorage.getItem('monitor-voice') !== 'false'; // default ON
+    return localStorage.getItem('monitor-voice') !== 'false';
   });
   const [voiceReady, setVoiceReady] = useState(() => {
     return localStorage.getItem('monitor-voice-ready') === 'true';
@@ -156,6 +185,12 @@ export default function GateDisplay() {
   const voiceReadyRef = useRef(voiceReady);
   const announcedCallsRef = useRef(new Set());
   const socketRef = useRef(null);
+
+  // Link React state to speech queue system
+  useEffect(() => {
+    setSpeakingIdCallback = setSpeakingStudentId;
+    return () => { setSpeakingIdCallback = null; };
+  }, []);
 
   useEffect(() => {
     voiceEnabledRef.current = voiceEnabled;
@@ -175,49 +210,41 @@ export default function GateDisplay() {
     return () => clearInterval(t);
   }, []);
 
-  const playChime = useCallback(() => {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      [523, 659, 784, 1047].forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.frequency.value = freq; osc.type = 'sine';
-        const t = ctx.currentTime + i * 0.18;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.5, t + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
-        osc.start(t); osc.stop(t + 0.6);
-      });
-      setTimeout(() => ctx.close(), 2000);
-    } catch {}
-  }, []);
-
-  // Auto-announce student
-  const announceWithVoice = useCallback((student, callType, callId) => {
+  // Auto-announce: ເມື່ອມີ call ໃໝ່ (socket ຫຼື queue update)
+  const tryAnnounce = useCallback((callId, studentId) => {
     if (!voiceEnabledRef.current || !voiceReadyRef.current) return;
+    if (!callId || !studentId) return;
     if (announcedCallsRef.current.has(callId)) return;
     announcedCallsRef.current.add(callId);
+    queueAnnouncement(studentId, callId);
+  }, []);
 
-    playChime();
-    setTimeout(() => {
-      if (!voiceEnabledRef.current) return;
-      const studentId = student?.id || null;
-      setSpeakingStudentId(studentId);
-      queueAnnouncement({ studentId });
-      setTimeout(() => setSpeakingStudentId(null), 8000);
-    }, 900);
-  }, [playChime]);
+  // ກວດຄິວ ແລະ auto-announce ຄິວທີ່ຍັງບໍ່ໄດ້ປະກາດ
+  const announceNewCalls = useCallback((data) => {
+    if (!voiceEnabledRef.current || !voiceReadyRef.current) return;
+    const allItems = [
+      ...(data.arrived || []),
+      ...(data.fiveMinutes || []),
+      ...(data.tenMinutes || []),
+    ];
+    allItems.forEach(item => {
+      tryAnnounce(item.id, item.student?.id || item.studentId);
+    });
+  }, [tryAnnounce]);
 
   const fetchQueue = useCallback(() => {
     fetch('/api/pickup/active')
       .then(r => r.json())
       .then(d => {
-        if (d.fiveMinutes) setQueue(d);
-        else setQueue({ fiveMinutes: [], tenMinutes: [], arrived: d || [] });
+        const qData = d.fiveMinutes
+          ? d
+          : { fiveMinutes: [], tenMinutes: [], arrived: d || [] };
+        setQueue(qData);
+        // Auto-announce ຄິວທີ່ມີຢູ່ແລ້ວ
+        announceNewCalls(qData);
       })
       .catch(() => {});
-  }, []);
+  }, [announceNewCalls]);
 
   useEffect(() => { fetchQueue(); }, [fetchQueue]);
 
@@ -242,15 +269,21 @@ export default function GateDisplay() {
     });
 
     socket.on('queue-update', (data) => {
-      setQueue({ fiveMinutes: data.fiveMinutes || [], tenMinutes: data.tenMinutes || [], arrived: data.arrived || [] });
+      const qData = {
+        fiveMinutes: data.fiveMinutes || [],
+        tenMinutes: data.tenMinutes || [],
+        arrived: data.arrived || [],
+      };
+      setQueue(qData);
+      announceNewCalls(qData);
     });
 
     socket.on('new-call', (data) => {
       console.log('📢 new-call:', data);
       if (data.student) {
-        announceWithVoice(data.student, data.callType, data.callId);
+        tryAnnounce(data.callId, data.student.id);
       }
-      // Banner for arrived
+      // Banner
       if (data.callType === 'arrived') {
         const name = data.student?.firstName || '';
         const lastName = data.student?.lastName || '';
@@ -264,14 +297,14 @@ export default function GateDisplay() {
     socket.on('call-cancelled', () => fetchQueue());
 
     socket.on('call-escalated', (data) => {
-      if (data.student) announceWithVoice(data.student, 'arrived', `esc_${data.callId}`);
+      if (data.student) tryAnnounce(`esc_${data.callId}`, data.student.id);
       const name = data.student?.firstName || '';
       setAnnouncement({ text: `ນ້ອງ ${name} — ຜູ້ປົກຄອງຮອດແລ້ວ!`, id: Date.now() });
       setTimeout(() => setAnnouncement(null), 8000);
     });
 
     return () => socket.close();
-  }, [fetchQueue, announceWithVoice]);
+  }, [fetchQueue, announceNewCalls, tryAnnounce]);
 
   // Polling fallback
   useEffect(() => {
@@ -293,6 +326,8 @@ export default function GateDisplay() {
       osc.start(); osc.stop(ctx.currentTime + 0.01);
       setTimeout(() => ctx.close(), 100);
     } catch {}
+    // ຫຼິ້ນທຸກຄິວທີ່ມີຢູ່ເລີຍ
+    setTimeout(() => fetchQueue(), 300);
   };
 
   const toggleVoice = () => {
@@ -308,13 +343,9 @@ export default function GateDisplay() {
   const manualAnnounce = (item) => {
     if (!voiceReady) { activateVoice(); return; }
     if (!voiceEnabled) return;
-    playChime();
-    setTimeout(() => {
-      const studentId = item.student?.id || null;
-      setSpeakingStudentId(studentId);
-      queueAnnouncement({ studentId });
-      setTimeout(() => setSpeakingStudentId(null), 8000);
-    }, 900);
+    // Force re-announce: ລຶບຈາກ announced set ແລ້ວ queue ໃໝ່
+    announcedCallsRef.current.delete(item.id);
+    queueAnnouncement(item.student?.id, item.id);
   };
 
   const toggleFullscreen = () => {
@@ -334,15 +365,14 @@ export default function GateDisplay() {
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden lao" style={{ backgroundColor: '#0D1B2A' }}>
-      {/* Voice Activation — only shows ONCE, then saved */}
+      {/* Voice Activation — only shows ONCE */}
       {!voiceReady && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center"
           onClick={activateVoice}>
           <div className="text-center px-8">
             <div className="text-8xl mb-6 animate-bounce">🔊</div>
             <h2 className="text-3xl font-bold text-white mb-3">ກົດເພື່ອເປີດສຽງປະກາດ</h2>
-            <p className="text-blue-300 text-lg mb-4">ລະບົບຈະອ່ານຊື່ນັກຮຽນອັດຕະໂນມັດ</p>
-            <p className="text-blue-200 text-sm mb-8">ຕົວຢ່າງ: "ນ້ອງ ສົມສະໄໝ ແກ້ວພິລາ ປະຖົມ 3 ກັບບ້ານ ຜູ້ປົກຄອງມາຮັບແລ້ວ"</p>
+            <p className="text-blue-300 text-lg mb-4">ລະບົບຈະຫຼິ້ນສຽງອັດຕະໂນມັດ ເມື່ອນັກຮຽນຂຶ້ນຄິວ</p>
             <button onClick={activateVoice}
               className="px-10 py-5 bg-gradient-to-r from-green-500 to-emerald-400 rounded-2xl text-white text-2xl font-bold shadow-2xl shadow-green-500/40 hover:scale-105 transition-transform">
               🔊 ເປີດສຽງປະກາດ
@@ -403,7 +433,7 @@ export default function GateDisplay() {
           <div className="flex flex-col items-center justify-center h-full text-white/30">
             <p className="text-7xl mb-4">😴</p>
             <p className="text-2xl">ບໍ່ມີນ້ອງໃນຄິວ</p>
-            {voiceEnabled && voiceReady && <p className="text-sm mt-2 text-green-400/60">🔊 ລະບົບປະກາດສຽງພ້ອມແລ້ວ — ຈະອ່ານຊື່ອັດຕະໂນມັດ</p>}
+            {voiceEnabled && voiceReady && <p className="text-sm mt-2 text-green-400/60">🔊 ລະບົບປະກາດສຽງພ້ອມແລ້ວ — ຈະຫຼິ້ນສຽງອັດຕະໂນມັດ</p>}
           </div>
         ) : (
           <AnimatePresence>
