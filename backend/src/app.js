@@ -41,50 +41,51 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Dat
 // ====================================
 // TTS endpoint — proxy Google Translate TTS
 // ====================================
-app.get('/api/tts', async (req, res) => {
-  try {
-    const text = req.query.text || '';
-    const lang = req.query.lang || 'lo'; // lo = Lao, th = Thai
-    if (!text) return res.status(400).json({ error: 'Missing text parameter' });
+app.get('/api/tts', (req, res) => {
+  const https = require('https');
+  const text = (req.query.text || '').substring(0, 200);
+  const lang = req.query.lang || 'lo';
+  if (!text) return res.status(400).json({ error: 'Missing text' });
 
-    const encoded = encodeURIComponent(text.substring(0, 200));
+  const encoded = encodeURIComponent(text);
+  const langs = [lang, 'th']; // Try requested lang first, then Thai fallback
+  let tried = 0;
 
-    // Try multiple TTS sources
-    const urls = [
-      `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encoded}`,
-      `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${encoded}`,
-    ];
-
-    let audioBuffer = null;
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Referer': 'https://translate.google.com/',
-          }
-        });
-        if (response.ok) {
-          audioBuffer = Buffer.from(await response.arrayBuffer());
-          break;
-        }
-      } catch {}
-    }
-
-    if (audioBuffer) {
-      res.set({
-        'Content-Type': 'audio/mpeg',
-        'Content-Length': audioBuffer.length,
-        'Cache-Control': 'public, max-age=86400',
-      });
-      return res.send(audioBuffer);
-    }
-
-    res.status(503).json({ error: 'TTS service unavailable' });
-  } catch (error) {
-    console.error('TTS error:', error);
-    res.status(500).json({ error: 'TTS failed' });
+  function tryLang(l) {
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${l}&client=tw-ob&q=${encoded}`;
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Referer': 'https://translate.google.com/',
+      }
+    }, (proxyRes) => {
+      // Handle redirect
+      if (proxyRes.statusCode >= 300 && proxyRes.statusCode < 400 && proxyRes.headers.location) {
+        https.get(proxyRes.headers.location, (rRes) => {
+          res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400' });
+          rRes.pipe(res);
+        }).on('error', () => nextLang());
+        return;
+      }
+      if (proxyRes.statusCode === 200) {
+        res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400' });
+        proxyRes.pipe(res);
+      } else {
+        nextLang();
+      }
+    }).on('error', () => nextLang());
   }
+
+  function nextLang() {
+    tried++;
+    if (tried < langs.length) {
+      tryLang(langs[tried]);
+    } else {
+      res.status(503).json({ error: 'TTS unavailable' });
+    }
+  }
+
+  tryLang(langs[0]);
 });
 
 // ====================================
