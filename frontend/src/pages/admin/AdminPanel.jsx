@@ -5,6 +5,7 @@ import AdminQueue from './AdminQueue';
 import AdminStudents from './AdminStudents';
 import AdminClassrooms from './AdminClassrooms';
 import AdminUsers from './AdminUsers';
+import AdminVoiceRecording from './AdminVoiceRecording';
 
 const NAV_ITEMS = [
   { to: '', label: '📊 ສະຖິຕິ', end: true },
@@ -12,6 +13,7 @@ const NAV_ITEMS = [
   { to: 'students', label: '👨‍🎓 ນັກຮຽນ' },
   { to: 'classrooms', label: '🏫 ຫ້ອງຮຽນ' },
   { to: 'users', label: '👤 Users' },
+  { to: 'voice', label: '🎙️ ບັນທຶກສຽງ' },
 ];
 
 export default function AdminPanel() {
@@ -63,6 +65,7 @@ export default function AdminPanel() {
           <Route path="students" element={<AdminStudents />} />
           <Route path="classrooms" element={<AdminClassrooms />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route path="voice" element={<AdminVoiceRecording />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </div>

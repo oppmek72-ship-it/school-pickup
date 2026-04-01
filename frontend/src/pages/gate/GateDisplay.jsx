@@ -2,33 +2,26 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
-// ===== TTS SYSTEM — uses backend /api/tts proxy =====
-const speechQueue = [];
+// ===== AUDIO ANNOUNCEMENT SYSTEM =====
+// Priority: 1. Custom recorded audio → 2. Google TTS → 3. Web Speech API
+const speechQueue = []; // { studentId, text }
 let isSpeaking = false;
 
-// Clean classroom name for reading aloud
-// "ຫ້ອງ ປ.3/1" → "ຫ້ອງ ປໍ 3 ຫ້ອງ 1"
+// Clean classroom name: "ຫ້ອງ ປ.3/1" → "ປະຖົມ 3 ຫ້ອງ 1"
 function cleanClassroomName(name) {
   if (!name) return '';
-  // Already contains "ຫ້ອງ", strip it to avoid double
   let clean = name.replace(/^ຫ້ອງ\s*/, '');
-  // Replace "ປ." with "ປະຖົມ"
   clean = clean.replace(/ປ\./g, 'ປະຖົມ ');
-  // Replace "ມ." with "ມັດທະຍົມ"
   clean = clean.replace(/ມ\./g, 'ມັດທະຍົມ ');
-  // Replace "/" with " ຫ້ອງ "
   clean = clean.replace(/\//g, ' ຫ້ອງ ');
-  // Replace "-" with space
   clean = clean.replace(/-/g, ' ');
   return clean.trim();
 }
 
-// Build announcement text in proper Lao
 function buildAnnouncementText(student, callType) {
   const firstName = student?.firstName || '';
   const lastName = student?.lastName || '';
-  const classroomRaw = student?.classroom?.className || '';
-  const classroom = cleanClassroomName(classroomRaw);
+  const classroom = cleanClassroomName(student?.classroom?.className || '');
 
   if (callType === 'arrived') {
     return `ນ້ອງ ${firstName} ${lastName}, ${classroom}, ກັບບ້ານ, ຜູ້ປົກຄອງມາຮັບແລ້ວ`;
@@ -40,35 +33,37 @@ function buildAnnouncementText(student, callType) {
   return `ນ້ອງ ${firstName} ${lastName}, ${classroom}`;
 }
 
-// Speak via backend TTS proxy (returns audio from Google TTS)
-function speakViaBackend(text) {
-  return new Promise((resolve) => {
-    const encoded = encodeURIComponent(text);
-    const url = `/api/tts?text=${encoded}&lang=lo`;
-    const audio = new Audio(url);
+// Method 1: Play custom recorded audio from DB
+function playCustomVoice(studentId) {
+  return new Promise((resolve, reject) => {
+    if (!studentId) return reject();
+    const audio = new Audio(`/api/students/${studentId}/voice?t=${Date.now()}`);
     audio.volume = 1.0;
     audio.onended = () => resolve();
-    audio.onerror = () => {
-      console.warn('Backend TTS failed, trying Thai...');
-      // Fallback: try Thai language
-      const url2 = `/api/tts?text=${encoded}&lang=th`;
-      const audio2 = new Audio(url2);
-      audio2.volume = 1.0;
-      audio2.onended = () => resolve();
-      audio2.onerror = () => {
-        console.warn('Thai TTS also failed, trying Web Speech...');
-        speakViaWebSpeech(text).then(resolve);
-      };
-      audio2.play().catch(() => resolve());
-    };
-    audio.play().catch(() => {
-      // If autoplay blocked, try Web Speech
-      speakViaWebSpeech(text).then(resolve);
-    });
+    audio.onerror = () => reject();
+    audio.play().catch(() => reject());
   });
 }
 
-// Fallback: Web Speech API
+// Method 2: Google TTS via backend proxy
+function speakViaBackend(text) {
+  return new Promise((resolve) => {
+    const encoded = encodeURIComponent(text);
+    const audio = new Audio(`/api/tts?text=${encoded}&lang=lo`);
+    audio.volume = 1.0;
+    audio.onended = () => resolve();
+    audio.onerror = () => {
+      const audio2 = new Audio(`/api/tts?text=${encoded}&lang=th`);
+      audio2.volume = 1.0;
+      audio2.onended = () => resolve();
+      audio2.onerror = () => speakViaWebSpeech(text).then(resolve);
+      audio2.play().catch(() => resolve());
+    };
+    audio.play().catch(() => speakViaWebSpeech(text).then(resolve));
+  });
+}
+
+// Method 3: Web Speech API fallback
 function speakViaWebSpeech(text) {
   return new Promise((resolve) => {
     if (!('speechSynthesis' in window)) { resolve(); return; }
@@ -77,8 +72,7 @@ function speakViaWebSpeech(text) {
     u.rate = 0.8;
     u.volume = 1.0;
     const voices = speechSynthesis.getVoices();
-    const v = voices.find(v => v.lang.startsWith('lo')) ||
-              voices.find(v => v.lang.startsWith('th'));
+    const v = voices.find(v => v.lang.startsWith('lo')) || voices.find(v => v.lang.startsWith('th'));
     if (v) u.voice = v;
     u.onend = () => resolve();
     u.onerror = () => resolve();
@@ -90,16 +84,29 @@ async function processSpeechQueue() {
   if (isSpeaking || speechQueue.length === 0) return;
   isSpeaking = true;
   while (speechQueue.length > 0) {
-    const text = speechQueue.shift();
-    console.log('🔊 Speaking:', text);
-    await speakViaBackend(text);
+    const item = speechQueue.shift();
+    console.log('🔊 Announcing:', item);
+
+    // Try custom voice first → then TTS fallback
+    try {
+      await playCustomVoice(item.studentId);
+      console.log('✅ Played custom voice for student', item.studentId);
+    } catch {
+      console.log('⚠️ No custom voice, using TTS for:', item.text);
+      await speakViaBackend(item.text);
+    }
     await new Promise(r => setTimeout(r, 800));
   }
   isSpeaking = false;
 }
 
-function queueAnnouncement(text) {
-  speechQueue.push(text);
+function queueAnnouncement(item) {
+  // Accept both string and { studentId, text } object
+  if (typeof item === 'string') {
+    speechQueue.push({ studentId: null, text: item });
+  } else {
+    speechQueue.push(item);
+  }
   processSpeechQueue();
 }
 
@@ -267,7 +274,7 @@ export default function GateDisplay() {
       const studentId = student?.id || null;
       setSpeakingStudentId(studentId);
       const text = buildAnnouncementText(student, callType);
-      queueAnnouncement(text);
+      queueAnnouncement({ studentId, text });
       setTimeout(() => setSpeakingStudentId(null), 8000);
     }, 900);
   }, [playChime]);
@@ -378,8 +385,9 @@ export default function GateDisplay() {
     if (!voiceEnabled) return;
     playChime();
     setTimeout(() => {
-      setSpeakingStudentId(item.student?.id || null);
-      queueAnnouncement(buildAnnouncementText(item.student, item.callType));
+      const studentId = item.student?.id || null;
+      setSpeakingStudentId(studentId);
+      queueAnnouncement({ studentId, text: buildAnnouncementText(item.student, item.callType) });
       setTimeout(() => setSpeakingStudentId(null), 8000);
     }, 900);
   };

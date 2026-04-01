@@ -24,7 +24,7 @@ const io = new Server(server, {
 });
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '2mb' }));
 
 app.set('io', io);
 app.set('prisma', prisma);
@@ -37,6 +37,34 @@ app.use('/api/history', historyRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+
+// ====================================
+// Public voice endpoint (no auth — for Monitor)
+// ====================================
+app.get('/api/students/:id/voice', async (req, res) => {
+  try {
+    const student = await prisma.student.findUnique({
+      where: { id: parseInt(req.params.id) },
+      select: { voiceRecording: true }
+    });
+    if (!student?.voiceRecording) return res.status(404).json({ error: 'No voice recording' });
+
+    // Parse data URL: "data:audio/webm;base64,GkXfo..."
+    const matches = student.voiceRecording.match(/^data:(audio\/[^;]+);base64,(.+)$/);
+    if (!matches) return res.status(400).json({ error: 'Invalid audio data' });
+
+    const contentType = matches[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+    res.set({
+      'Content-Type': contentType,
+      'Content-Length': buffer.length,
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get voice' });
+  }
+});
 
 // ====================================
 // TTS endpoint — proxy Google Translate TTS

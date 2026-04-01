@@ -161,4 +161,45 @@ router.put('/pickup/:id/cancel', async (req, res) => {
   }
 });
 
+// ====================================
+// Voice Recording — Upload
+// ====================================
+router.put('/students/:id/voice', async (req, res) => {
+  try {
+    const { voiceRecording } = req.body;
+    if (!voiceRecording || !voiceRecording.startsWith('data:audio/')) {
+      return res.status(400).json({ error: 'Invalid audio data' });
+    }
+    if (voiceRecording.length > 500000) {
+      return res.status(400).json({ error: 'Audio too large (max ~10 seconds)' });
+    }
+    const { PrismaClient } = require('@prisma/client');
+    const p = new PrismaClient();
+    await p.student.update({
+      where: { id: parseInt(req.params.id) },
+      data: { voiceRecording }
+    });
+    res.json({ success: true, message: 'ບັນທຶກສຽງສຳເລັດ' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ====================================
+// Voice Recording — Delete
+// ====================================
+router.delete('/students/:id/voice', async (req, res) => {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const p = new PrismaClient();
+    await p.student.update({
+      where: { id: parseInt(req.params.id) },
+      data: { voiceRecording: null }
+    });
+    res.json({ success: true, message: 'ລຶບສຽງສຳເລັດ' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

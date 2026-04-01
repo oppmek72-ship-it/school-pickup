@@ -36,7 +36,13 @@ const getStudents = async (req, res) => {
       orderBy: { firstName: 'asc' }
     });
 
-    res.json(students);
+    // Strip voiceRecording data, add hasVoiceRecording flag
+    const result = students.map(s => ({
+      ...s,
+      hasVoiceRecording: !!s.voiceRecording,
+      voiceRecording: undefined
+    }));
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'ດຶງຂໍ້ມູນນັກຮຽນບໍ່ສຳເລັດ' });

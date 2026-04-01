@@ -63,8 +63,9 @@ model Student {
   nickname    String?
   classroomId Int?
   classroom   Classroom?    @relation(fields: [classroomId], references: [id])
-  photo       String?
-  parentPhone String?
+  photo          String?
+  voiceRecording String?  @db.Text  // base64 audio data URL
+  parentPhone    String?
   parentName  String?
   isActive    Boolean       @default(true)
   createdAt   DateTime      @default(now())
