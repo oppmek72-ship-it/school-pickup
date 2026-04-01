@@ -74,6 +74,72 @@ function CallCard({ call, onConfirm, loading }) {
   );
 }
 
+// ===== ALARM SYSTEM =====
+// Play loud alarm sound using Web Audio API
+function playAlarm(type = 'normal') {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    if (type === 'urgent') {
+      // URGENT: 3 loud rapid beeps (arrived!)
+      [0, 0.3, 0.6].forEach((delay) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 1000;
+        osc.type = 'square';
+        gain.gain.setValueAtTime(0.8, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.25);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.25);
+      });
+      // Extra high pitch alert
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.frequency.value = 1400;
+      osc2.type = 'sawtooth';
+      gain2.gain.setValueAtTime(0.6, ctx.currentTime + 1.0);
+      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
+      osc2.start(ctx.currentTime + 1.0);
+      osc2.stop(ctx.currentTime + 1.5);
+    } else {
+      // NORMAL: 2 beeps
+      [0, 0.35].forEach((delay) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.7, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.3);
+      });
+    }
+
+    // Auto close context after sounds finish
+    setTimeout(() => ctx.close(), 2000);
+  } catch (e) {
+    console.warn('Audio failed:', e);
+  }
+}
+
+// Vibrate phone
+function vibratePhone(type = 'normal') {
+  if (!navigator.vibrate) return;
+  if (type === 'urgent') {
+    // Long strong vibration pattern for urgent
+    navigator.vibrate([300, 100, 300, 100, 500]);
+  } else {
+    // Normal vibration
+    navigator.vibrate([200, 100, 200]);
+  }
+}
+
 // Request notification permission
 function requestNotifPermission() {
   if ('Notification' in window && Notification.permission === 'default') {
@@ -81,57 +147,86 @@ function requestNotifPermission() {
   }
 }
 
-// Send browser notification (works when tab is in background / phone screen off)
+// Send browser notification
 function sendNotification(title, body) {
+  // Try service worker notification first (works better on mobile)
+  if (navigator.serviceWorker?.controller) {
+    navigator.serviceWorker.ready.then(reg => {
+      reg.showNotification(title, {
+        body,
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        vibrate: [300, 100, 300, 100, 300],
+        tag: 'teacher-call-' + Date.now(),
+        requireInteraction: true,
+        renotify: true,
+      });
+    }).catch(() => {});
+  }
+  // Also try regular Notification as fallback
   if ('Notification' in window && Notification.permission === 'granted') {
     try {
       const notif = new Notification(title, {
         body,
         icon: '/icon-192.png',
         badge: '/icon-192.png',
-        vibrate: [200, 100, 200],
-        tag: 'teacher-call-' + Date.now(),
+        tag: 'teacher-notif-' + Date.now(),
         requireInteraction: true,
       });
       notif.onclick = () => { window.focus(); notif.close(); };
-    } catch {
-      // Mobile Safari doesn't support new Notification(), use SW
-      if (navigator.serviceWorker?.ready) {
-        navigator.serviceWorker.ready.then(reg => {
-          reg.showNotification(title, {
-            body,
-            icon: '/icon-192.png',
-            vibrate: [200, 100, 200],
-            tag: 'teacher-call-' + Date.now(),
-          });
-        });
-      }
-    }
+    } catch {}
   }
+}
+
+// Full alert: sound + vibrate + notification
+function triggerAlert(callType, studentName) {
+  const isUrgent = callType === 'arrived';
+  const callLabel = callType === 'five_minutes' ? '5 ນາທີ' : callType === 'ten_minutes' ? '10 ນາທີ' : 'ຮອດແລ້ວ!';
+
+  // 1. Play alarm sound
+  playAlarm(isUrgent ? 'urgent' : 'normal');
+
+  // 2. Vibrate phone
+  vibratePhone(isUrgent ? 'urgent' : 'normal');
+
+  // 3. Toast notification (in-app)
+  if (isUrgent) {
+    toast(`🔴 ${studentName} — ຜູ້ປົກຄອງຮອດແລ້ວ!`, { icon: '🚨', duration: 6000, style: { background: '#FEE2E2', color: '#991B1B', fontWeight: 'bold' } });
+  } else {
+    toast(`📢 ${studentName} — ຜູ້ປົກຄອງ ${callLabel}`, { icon: '🔔', duration: 4000 });
+  }
+
+  // 4. Browser/push notification (works in background)
+  const title = isUrgent ? '🚨 ຜູ້ປົກຄອງຮອດແລ້ວ!' : '📢 ເອີ້ນນັກຮຽນ';
+  sendNotification(title, `${studentName} — ${callLabel}`);
 }
 
 export default function TeacherDashboard() {
   const { user, logout } = useAuth();
   const [calls, setCalls] = useState([]);
   const { confirmPickup, loading } = usePickup();
-  const audioCtx = useRef(null);
-  const prevCallCount = useRef(0);
+  const [notifPermission, setNotifPermission] = useState(
+    'Notification' in window ? Notification.permission : 'denied'
+  );
 
   // Request notification permission on mount
-  useEffect(() => { requestNotifPermission(); }, []);
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(p => setNotifPermission(p));
+    }
+  }, []);
 
-  const playBeep = () => {
-    try {
-      if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-      const ctx = audioCtx.current;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = 880; osc.type = 'sine';
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      osc.start(); osc.stop(ctx.currentTime + 0.4);
-    } catch {}
+  const handleRequestPermission = async () => {
+    if ('Notification' in window) {
+      const p = await Notification.requestPermission();
+      setNotifPermission(p);
+      if (p === 'granted') {
+        toast.success('ເປີດການແຈ້ງເຕືອນສຳເລັດ!');
+        // Test sound+vibrate on permission grant
+        playAlarm('normal');
+        vibratePhone('normal');
+      }
+    }
   };
 
   const fetchCalls = useCallback(async () => {
@@ -149,19 +244,14 @@ export default function TeacherDashboard() {
 
   useEffect(() => { fetchCalls(); }, [fetchCalls]);
 
-  // Refresh when tab becomes visible again (after phone screen off/switch app)
+  // Refresh when tab becomes visible again
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         fetchCalls();
-        // Resume audio context if suspended
-        if (audioCtx.current?.state === 'suspended') {
-          audioCtx.current.resume();
-        }
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
-    // Also listen for page focus
     window.addEventListener('focus', fetchCalls);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
@@ -169,44 +259,42 @@ export default function TeacherDashboard() {
     };
   }, [fetchCalls]);
 
-  // Fallback polling every 8 seconds (in case socket misses events)
+  // Fallback polling every 8 seconds
   useEffect(() => {
     const t = setInterval(fetchCalls, 8000);
     return () => clearInterval(t);
   }, [fetchCalls]);
 
-  // Socket events
+  // ===== SOCKET EVENTS =====
   useSocketEvent('queue-update', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('call-completed', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('call-cancelled', useCallback(() => fetchCalls(), [fetchCalls]));
+
+  // NEW CALL — main alert handler
   useSocketEvent('new-call', useCallback((data) => {
-    if (!user?.classroomId || data.student?.classroomId === user.classroomId) {
-      playBeep();
-      const name = data.student?.nickname || data.student?.firstName || '';
-      const callLabel = data.callType === 'five_minutes' ? '5 ນາທີ' : data.callType === 'ten_minutes' ? '10 ນາທີ' : 'ຮອດແລ້ວ!';
-      toast(`📢 ເອີ້ນ ${name}`, { icon: '🔔' });
-      // Send browser notification (works in background)
-      sendNotification(
-        '📢 ເອີ້ນນັກຮຽນ',
-        `${name} — ຜູ້ປົກຄອງ ${callLabel}`
-      );
+    console.log('🔔 new-call received:', data);
+    const myClassroom = !user?.classroomId || data.student?.classroomId === user.classroomId;
+    if (myClassroom) {
+      const name = data.student?.nickname || data.student?.firstName || 'ນັກຮຽນ';
+      triggerAlert(data.callType, name);
     }
     fetchCalls();
   }, [fetchCalls, user?.classroomId]));
 
+  // ESCALATED — urgent alert
   useSocketEvent('call-escalated', useCallback((data) => {
-    playBeep();
-    const name = data.student?.nickname || data.student?.firstName || '';
-    sendNotification(
-      '🔴 ຜູ້ປົກຄອງຮອດແລ້ວ!',
-      `${name} — ກະລຸນາກຽມສົ່ງນ້ອງ`
-    );
+    console.log('🚨 call-escalated received:', data);
+    const name = data.student?.nickname || data.student?.firstName || 'ນັກຮຽນ';
+    triggerAlert('arrived', name);
     fetchCalls();
   }, [fetchCalls]));
 
-  // Also send notification via socket classroom event
+  // CLASSROOM NOTIFICATION
   useSocketEvent('notification:new', useCallback((data) => {
-    toast(data.message, { icon: '🔔' });
+    console.log('📢 notification:new received:', data);
+    playAlarm('normal');
+    vibratePhone('normal');
+    toast(data.message, { icon: '🔔', duration: 5000 });
     sendNotification('🔔 ແຈ້ງເຕືອນ', data.message);
     fetchCalls();
   }, [fetchCalls]));
@@ -241,12 +329,18 @@ export default function TeacherDashboard() {
 
       <div className="max-w-2xl mx-auto px-4 py-4">
         {/* Notification permission banner */}
-        {'Notification' in window && Notification.permission === 'default' && (
-          <button onClick={requestNotifPermission}
-            className="w-full mb-4 py-3 px-4 bg-yellow-50 border border-yellow-300 rounded-xl text-yellow-800 text-sm font-semibold lao text-center">
-            🔔 ກົດເພື່ອເປີດການແຈ້ງເຕືອນ — ຈະໄດ້ຮັບແຈ້ງເຕືອນແມ້ພັບຈໍ
+        {notifPermission === 'default' && (
+          <button onClick={handleRequestPermission}
+            className="w-full mb-4 py-3 px-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-400 rounded-xl text-yellow-800 text-sm font-bold lao text-center animate-pulse">
+            🔔 ກົດເພື່ອເປີດສຽງ + ການສັ່ນ — ແຈ້ງເຕືອນແມ້ພັບຈໍ!
           </button>
         )}
+
+        {/* Test sound button (for debugging) */}
+        <button onClick={() => { playAlarm('urgent'); vibratePhone('urgent'); toast('🔊 ທົດສອບສຽງ + ສັ່ນ', { icon: '✅' }); }}
+          className="w-full mb-4 py-2 px-4 bg-gray-100 border border-gray-300 rounded-xl text-gray-600 text-xs lao text-center">
+          🔊 ທົດສອບສຽງແຈ້ງເຕືອນ
+        </button>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-4">
