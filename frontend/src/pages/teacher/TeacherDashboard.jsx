@@ -112,6 +112,8 @@ export default function TeacherDashboard() {
   useEffect(() => { fetchCalls(); }, [fetchCalls]);
 
   useSocketEvent('queue-update', useCallback(() => fetchCalls(), [fetchCalls]));
+  useSocketEvent('call-completed', useCallback(() => fetchCalls(), [fetchCalls]));
+  useSocketEvent('call-cancelled', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('new-call', useCallback((data) => {
     if (!user?.classroomId || data.student?.classroomId === user.classroomId) {
       playBeep();

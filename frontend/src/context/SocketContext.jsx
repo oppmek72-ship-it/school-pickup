@@ -9,27 +9,40 @@ export function SocketProvider({ children }) {
   const { user, token } = useAuth();
 
   useEffect(() => {
-    if (token) {
-      const newSocket = io('/', {
-        transports: ['websocket', 'polling']
-      });
+    // Connect socket for ALL users (including unauthenticated monitor)
+    const newSocket = io(window.location.origin, {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+    });
 
-      newSocket.on('connect', () => {
-        console.log('Socket connected');
-        if (user?.role === 'teacher') {
-          newSocket.emit('join:teacher');
-        } else if (user?.role === 'parent') {
-          newSocket.emit('join:parent', user.id);
-        }
-      });
+    newSocket.on('connect', () => {
+      console.log('Socket connected:', newSocket.id);
+      // Join appropriate rooms based on role
+      if (user?.role === 'teacher' && user?.classroomId) {
+        newSocket.emit('join-classroom', { classroomId: user.classroomId });
+      } else if (user?.role === 'parent') {
+        newSocket.emit('join-parent', user.id);
+      }
+    });
 
-      setSocket(newSocket);
+    newSocket.on('reconnect', () => {
+      console.log('Socket reconnected');
+      if (user?.role === 'teacher' && user?.classroomId) {
+        newSocket.emit('join-classroom', { classroomId: user.classroomId });
+      } else if (user?.role === 'parent') {
+        newSocket.emit('join-parent', user.id);
+      }
+    });
 
-      return () => {
-        newSocket.close();
-      };
-    }
-  }, [token, user]);
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.close();
+    };
+  }, [token, user?.role, user?.classroomId, user?.id]);
 
   return (
     <SocketContext.Provider value={socket}>

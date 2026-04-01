@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
@@ -51,18 +51,13 @@ function QueueRow({ item, index }) {
       transition={{ duration: 0.3 }}
       className={`flex items-center gap-4 px-5 py-3.5 border-l-4 ${c.border} ${c.rowBg} border-b border-white/5`}
     >
-      {/* Queue number */}
       <div className="text-white/40 font-mono text-lg font-bold w-8 text-center shrink-0">
         #{item.queuePosition || index + 1}
       </div>
-
-      {/* Call type badge */}
       <div className={`${c.bg} text-white text-xs font-bold px-3 py-1.5 rounded-full shrink-0 lao flex items-center gap-1.5`}>
         <span>{c.icon}</span>
         <span>{c.label}</span>
       </div>
-
-      {/* Avatar */}
       {item.student?.photo ? (
         <img src={item.student.photo} className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-white/20" />
       ) : (
@@ -70,14 +65,10 @@ function QueueRow({ item, index }) {
           {initials}
         </div>
       )}
-
-      {/* Student info */}
       <div className="flex-1 min-w-0">
         <p className="text-white font-bold text-xl lao truncate">{name} {lastName}</p>
         <p className="text-white/50 text-sm lao">{classroom}</p>
       </div>
-
-      {/* Countdown or call time */}
       <div className="shrink-0">
         {item.expiresAt ? (
           <Countdown expiresAt={item.expiresAt} />
@@ -96,6 +87,7 @@ export default function GateDisplay() {
   const [announcement, setAnnouncement] = useState(null);
   const [clock, setClock] = useState('');
   const audioCtx = useRef(null);
+  const socketRef = useRef(null);
 
   useEffect(() => {
     const tick = () => {
@@ -107,7 +99,7 @@ export default function GateDisplay() {
     return () => clearInterval(t);
   }, []);
 
-  const playChime = () => {
+  const playChime = useCallback(() => {
     try {
       if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
       const ctx = audioCtx.current;
@@ -125,9 +117,9 @@ export default function GateDisplay() {
         osc.start(t); osc.stop(t + 0.6);
       });
     } catch {}
-  };
+  }, []);
 
-  useEffect(() => {
+  const fetchQueue = useCallback(() => {
     fetch('/api/pickup/active')
       .then(r => r.json())
       .then(d => {
@@ -137,9 +129,32 @@ export default function GateDisplay() {
       .catch(() => {});
   }, []);
 
+  // Initial load
+  useEffect(() => { fetchQueue(); }, [fetchQueue]);
+
+  // Socket connection with robust reconnection
   useEffect(() => {
-    const socket = io('/', { transports: ['websocket', 'polling'] });
-    socket.emit('join-monitor');
+    const socket = io(window.location.origin, {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+    });
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('Monitor socket connected:', socket.id);
+      socket.emit('join-monitor');
+      // Refresh queue on reconnect to catch missed updates
+      fetchQueue();
+    });
+
+    socket.on('reconnect', () => {
+      console.log('Monitor socket reconnected');
+      socket.emit('join-monitor');
+      fetchQueue();
+    });
 
     socket.on('queue-update', (data) => {
       setQueue({
@@ -151,6 +166,15 @@ export default function GateDisplay() {
 
     socket.on('new-call', () => { playChime(); });
 
+    socket.on('call-completed', () => {
+      // Immediately fetch fresh data when a call is completed
+      fetchQueue();
+    });
+
+    socket.on('call-cancelled', () => {
+      fetchQueue();
+    });
+
     socket.on('call-escalated', (data) => {
       playChime();
       const name = data.student?.nickname || data.student?.firstName || '';
@@ -159,17 +183,20 @@ export default function GateDisplay() {
       setTimeout(() => setAnnouncement(null), 8000);
     });
 
-    socket.on('call-completed', () => {});
-
     return () => socket.close();
-  }, []);
+  }, [fetchQueue, playChime]);
+
+  // Fallback polling every 10s in case socket misses
+  useEffect(() => {
+    const t = setInterval(fetchQueue, 10000);
+    return () => clearInterval(t);
+  }, [fetchQueue]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) document.documentElement.requestFullscreen();
     else document.exitFullscreen();
   };
 
-  // Merge all into single sorted list: arrived first, then five_minutes, then ten_minutes
   const allCalls = [
     ...(queue.arrived || []).map(c => ({ ...c, callType: c.callType || 'arrived' })),
     ...(queue.fiveMinutes || []).map(c => ({ ...c, callType: c.callType || 'five_minutes' })),
@@ -183,8 +210,6 @@ export default function GateDisplay() {
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden lao" style={{ backgroundColor: '#0D1B2A' }}>
-
-      {/* Announcement banner */}
       <AnimatePresence>
         {announcement && (
           <motion.div key={announcement.id}
@@ -200,7 +225,6 @@ export default function GateDisplay() {
         )}
       </AnimatePresence>
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-4 flex items-center justify-between border-b border-white/10">
         <div className="flex items-center gap-3">
           <span className="text-3xl">🏫</span>
@@ -210,7 +234,6 @@ export default function GateDisplay() {
           </div>
         </div>
         <div className="flex items-center gap-6">
-          {/* Summary badges */}
           <div className="hidden md:flex items-center gap-3">
             <span className="bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-sm font-bold">🔴 {arrivedCount}</span>
             <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-sm font-bold">🟠 {fiveCount}</span>
@@ -223,7 +246,6 @@ export default function GateDisplay() {
         </div>
       </div>
 
-      {/* Single scrollable queue list */}
       <div className="overflow-y-auto" style={{ height: 'calc(100vh - 85px)' }}>
         {totalCount === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-white/30">
@@ -239,7 +261,6 @@ export default function GateDisplay() {
         )}
       </div>
 
-      {/* Fullscreen button */}
       <button onClick={toggleFullscreen}
         className="fixed bottom-4 right-4 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
