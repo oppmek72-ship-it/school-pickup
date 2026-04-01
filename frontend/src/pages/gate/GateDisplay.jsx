@@ -2,31 +2,69 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
-// ===== TEXT-TO-SPEECH SYSTEM =====
+// ===== TEXT-TO-SPEECH SYSTEM (Google TTS + Web Speech fallback) =====
 const speechQueue = [];
 let isSpeaking = false;
 
-function speakText(text, lang = 'th-TH') {
-  if (!('speechSynthesis' in window)) return;
-
+// Method 1: Google TTS via Audio element (most reliable for Thai/Lao)
+function speakWithGoogle(text) {
   return new Promise((resolve) => {
+    try {
+      const encoded = encodeURIComponent(text);
+      const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${encoded}`;
+      const audio = new Audio(url);
+      audio.volume = 1.0;
+      audio.onended = resolve;
+      audio.onerror = () => resolve(); // fallback on error
+      audio.play().catch(() => resolve());
+    } catch {
+      resolve();
+    }
+  });
+}
+
+// Method 2: Web Speech API fallback
+function speakWithWebSpeech(text) {
+  return new Promise((resolve) => {
+    if (!('speechSynthesis' in window)) { resolve(); return; }
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
+    utterance.lang = 'th-TH';
     utterance.rate = 0.85;
-    utterance.pitch = 1.0;
     utterance.volume = 1.0;
-
-    // Try to find a Thai/Lao voice (Lao uses Thai voice on most devices)
     const voices = speechSynthesis.getVoices();
-    const thaiVoice = voices.find(v => v.lang.startsWith('th')) ||
-                      voices.find(v => v.lang.startsWith('lo')) ||
-                      voices.find(v => v.lang.includes('TH'));
-    if (thaiVoice) utterance.voice = thaiVoice;
-
+    const voice = voices.find(v => v.lang.startsWith('th')) ||
+                  voices.find(v => v.lang.startsWith('lo'));
+    if (voice) utterance.voice = voice;
     utterance.onend = resolve;
-    utterance.onerror = resolve;
+    utterance.onerror = () => resolve();
     speechSynthesis.speak(utterance);
   });
+}
+
+// Try Google TTS first, fallback to Web Speech
+async function speakText(text) {
+  // Try Google TTS (works best for Thai/Lao)
+  try {
+    const encoded = encodeURIComponent(text);
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${encoded}`;
+    const audio = new Audio(url);
+    audio.volume = 1.0;
+
+    await new Promise((resolve, reject) => {
+      audio.onended = resolve;
+      audio.onerror = reject;
+      audio.oncanplaythrough = () => audio.play().catch(reject);
+      audio.load();
+      // Timeout after 5 seconds
+      setTimeout(reject, 5000);
+    });
+    return; // Success with Google TTS
+  } catch {
+    // Google TTS failed, try Web Speech
+  }
+
+  // Fallback: Web Speech API
+  await speakWithWebSpeech(text);
 }
 
 async function processSpeechQueue() {
@@ -35,8 +73,7 @@ async function processSpeechQueue() {
   while (speechQueue.length > 0) {
     const text = speechQueue.shift();
     await speakText(text);
-    // Small pause between announcements
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise(r => setTimeout(r, 600));
   }
   isSpeaking = false;
 }
@@ -53,11 +90,11 @@ function announceStudent(student, callType) {
 
   let announcement = '';
   if (callType === 'arrived') {
-    announcement = `${name} ${lastName}, ${classroom}, ກັບບ້ານ, ຜູ້ປົກຄອງມາຮັບແລ້ວ`;
+    announcement = `ນ້ອງ ${name} ${lastName}, ຫ້ອງ ${classroom}, ກັບບ້ານ, ຜູ້ປົກຄອງມາຮັບແລ້ວ`;
   } else if (callType === 'five_minutes') {
-    announcement = `${name} ${lastName}, ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ 5 ນາທີ, ກະລຸນາກຽມຕົວ`;
+    announcement = `ນ້ອງ ${name} ${lastName}, ຫ້ອງ ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ 5 ນາທີ, ກະລຸນາກຽມຕົວ`;
   } else if (callType === 'ten_minutes') {
-    announcement = `${name} ${lastName}, ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ 10 ນາທີ`;
+    announcement = `ນ້ອງ ${name} ${lastName}, ຫ້ອງ ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ 10 ນາທີ`;
   }
 
   if (announcement) queueAnnouncement(announcement);
@@ -156,20 +193,26 @@ export default function GateDisplay() {
   const [clock, setClock] = useState('');
   const [voiceEnabled, setVoiceEnabled] = useState(() => {
     const saved = localStorage.getItem('monitor-voice');
-    return saved !== null ? saved === 'true' : true; // default ON
+    return saved !== null ? saved === 'true' : true;
   });
+  const [voiceReady, setVoiceReady] = useState(false); // User must tap to activate
   const [speakingStudentId, setSpeakingStudentId] = useState(null);
   const voiceEnabledRef = useRef(voiceEnabled);
+  const voiceReadyRef = useRef(false);
   const announcedCallsRef = useRef(new Set());
   const socketRef = useRef(null);
 
-  // Keep ref in sync
+  // Keep refs in sync
   useEffect(() => {
     voiceEnabledRef.current = voiceEnabled;
     localStorage.setItem('monitor-voice', String(voiceEnabled));
   }, [voiceEnabled]);
 
-  // Load voices (needed for some browsers)
+  useEffect(() => {
+    voiceReadyRef.current = voiceReady;
+  }, [voiceReady]);
+
+  // Load voices
   useEffect(() => {
     if ('speechSynthesis' in window) {
       speechSynthesis.getVoices();
@@ -210,20 +253,16 @@ export default function GateDisplay() {
 
   // Announce a student with chime + TTS
   const announceWithVoice = useCallback((student, callType, callId) => {
-    if (!voiceEnabledRef.current) return;
+    if (!voiceEnabledRef.current || !voiceReadyRef.current) return;
     if (announcedCallsRef.current.has(callId)) return;
     announcedCallsRef.current.add(callId);
 
-    // Play chime first
     playChime();
-
-    // Then speak after chime
     setTimeout(() => {
       if (!voiceEnabledRef.current) return;
       setSpeakingStudentId(student?.id || null);
       announceStudent(student, callType);
-      // Clear speaking indicator after estimated speech time
-      setTimeout(() => setSpeakingStudentId(null), 5000);
+      setTimeout(() => setSpeakingStudentId(null), 6000);
     }, 900);
   }, [playChime]);
 
@@ -237,7 +276,6 @@ export default function GateDisplay() {
       .catch(() => {});
   }, []);
 
-  // Initial load
   useEffect(() => { fetchQueue(); }, [fetchQueue]);
 
   // Socket connection
@@ -258,7 +296,6 @@ export default function GateDisplay() {
     });
 
     socket.on('reconnect', () => {
-      console.log('Monitor socket reconnected');
       socket.emit('join-monitor');
       fetchQueue();
     });
@@ -273,12 +310,9 @@ export default function GateDisplay() {
 
     socket.on('new-call', (data) => {
       console.log('📢 Monitor new-call:', data);
-      // Announce the student name
       if (data.student) {
         announceWithVoice(data.student, data.callType, data.callId);
       }
-
-      // Show banner for arrived
       if (data.callType === 'arrived' || !data.callType) {
         const name = data.student?.nickname || data.student?.firstName || '';
         const cls = data.student?.classroom?.className || '';
@@ -291,20 +325,19 @@ export default function GateDisplay() {
     socket.on('call-cancelled', () => fetchQueue());
 
     socket.on('call-escalated', (data) => {
-      console.log('📢 Monitor call-escalated:', data);
       if (data.student) {
         announceWithVoice(data.student, 'arrived', `escalated_${data.callId}`);
       }
       const name = data.student?.nickname || data.student?.firstName || '';
       const cls = data.student?.classroom?.className || '';
-      setAnnouncement({ text: `${name} ${cls} — ຜູ້ປົກຄອງຮອດແລ້ວ! ກະລຸນາກຽມຕົວ`, id: Date.now() });
+      setAnnouncement({ text: `${name} ${cls} — ຜູ້ປົກຄອງຮອດແລ້ວ!`, id: Date.now() });
       setTimeout(() => setAnnouncement(null), 8000);
     });
 
     return () => socket.close();
   }, [fetchQueue, announceWithVoice]);
 
-  // Fallback polling every 10s
+  // Fallback polling
   useEffect(() => {
     const t = setInterval(fetchQueue, 10000);
     return () => clearInterval(t);
@@ -315,28 +348,58 @@ export default function GateDisplay() {
     else document.exitFullscreen();
   };
 
+  // Activate voice — must be triggered by user tap (browser policy)
+  const activateVoice = () => {
+    setVoiceReady(true);
+    setVoiceEnabled(true);
+    // Test with a short audio to unlock autoplay
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      osc.start(); osc.stop(ctx.currentTime + 0.01);
+      setTimeout(() => ctx.close(), 100);
+    } catch {}
+    // Test Google TTS
+    queueAnnouncement('ເປີດສຽງປະກາດແລ້ວ');
+  };
+
   const toggleVoice = () => {
+    if (!voiceReady) {
+      activateVoice();
+      return;
+    }
     const newVal = !voiceEnabled;
     setVoiceEnabled(newVal);
     if (newVal) {
-      // Test voice on enable
-      speechSynthesis.cancel();
       queueAnnouncement('ເປີດສຽງປະກາດແລ້ວ');
     } else {
-      speechSynthesis.cancel();
       speechQueue.length = 0;
       isSpeaking = false;
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
     }
   };
 
-  // Manual announce button for a specific student
   const manualAnnounce = (item) => {
-    if (!voiceEnabled) return;
+    if (!voiceReady) {
+      activateVoice();
+      setTimeout(() => {
+        playChime();
+        setTimeout(() => {
+          setSpeakingStudentId(item.student?.id || null);
+          announceStudent(item.student, item.callType);
+          setTimeout(() => setSpeakingStudentId(null), 6000);
+        }, 900);
+      }, 2000);
+      return;
+    }
     playChime();
     setTimeout(() => {
       setSpeakingStudentId(item.student?.id || null);
       announceStudent(item.student, item.callType);
-      setTimeout(() => setSpeakingStudentId(null), 5000);
+      setTimeout(() => setSpeakingStudentId(null), 6000);
     }, 900);
   };
 
@@ -353,6 +416,25 @@ export default function GateDisplay() {
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden lao" style={{ backgroundColor: '#0D1B2A' }}>
+      {/* Voice Activation Overlay — shown until user taps */}
+      {!voiceReady && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center"
+          onClick={activateVoice}>
+          <div className="text-center px-8">
+            <div className="text-8xl mb-6 animate-bounce">🔊</div>
+            <h2 className="text-3xl font-bold text-white mb-3">ກົດເພື່ອເປີດສຽງປະກາດ</h2>
+            <p className="text-blue-300 text-lg mb-8">ລະບົບຈະອ່ານຊື່ນັກຮຽນອັດຕະໂນມັດ</p>
+            <button
+              onClick={activateVoice}
+              className="px-10 py-5 bg-gradient-to-r from-green-500 to-emerald-400 rounded-2xl text-white text-2xl font-bold shadow-2xl shadow-green-500/40 hover:scale-105 transition-transform"
+            >
+              🔊 ເປີດສຽງ
+            </button>
+            <p className="text-white/40 text-sm mt-6">ຫຼື ກົດບ່ອນໃດກໍໄດ້ເທິງໜ້າຈໍ</p>
+          </div>
+        </div>
+      )}
+
       {/* Announcement Banner */}
       <AnimatePresence>
         {announcement && (
@@ -383,12 +465,12 @@ export default function GateDisplay() {
           <button
             onClick={toggleVoice}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm transition-all ${
-              voiceEnabled
+              voiceEnabled && voiceReady
                 ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30'
                 : 'bg-white/10 hover:bg-white/20 text-white/60'
             }`}
           >
-            {voiceEnabled ? (
+            {voiceEnabled && voiceReady ? (
               <>
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M14.016 3.234a.75.75 0 01.484.698v16.136a.75.75 0 01-1.21.593L7.688 16.5H4.5a2.25 2.25 0 01-2.25-2.25v-4.5A2.25 2.25 0 014.5 7.5h3.188l5.602-4.161a.75.75 0 01.726-.105z" />
@@ -426,7 +508,7 @@ export default function GateDisplay() {
           <div className="flex flex-col items-center justify-center h-full text-white/30">
             <p className="text-7xl mb-4">😴</p>
             <p className="text-2xl">ບໍ່ມີນ້ອງໃນຄິວ</p>
-            {voiceEnabled && <p className="text-sm mt-2 text-white/20">🔊 ສຽງປະກາດເປີດຢູ່ — ຈະອ່ານຊື່ເມື່ອມີນັກຮຽນ</p>}
+            {voiceEnabled && voiceReady && <p className="text-sm mt-2 text-green-400/60">🔊 ສຽງປະກາດເປີດຢູ່ — ຈະອ່ານຊື່ອັດຕະໂນມັດເມື່ອມີນັກຮຽນ</p>}
           </div>
         ) : (
           <AnimatePresence>
@@ -434,7 +516,7 @@ export default function GateDisplay() {
               <div key={item.id} className="relative group">
                 <QueueRow item={item} index={i} isSpeakingThis={speakingStudentId === item.student?.id} />
                 {/* Manual re-announce button */}
-                {voiceEnabled && (
+                {voiceReady && (
                   <button
                     onClick={() => manualAnnounce(item)}
                     className="absolute right-20 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition-all"
