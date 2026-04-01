@@ -3,37 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
 // ===== AUDIO ANNOUNCEMENT SYSTEM =====
-// Priority: 1. Custom recorded audio → 2. Google TTS → 3. Web Speech API
-const speechQueue = []; // { studentId, text }
+// ຫຼິ້ນແຕ່ສຽງທີ່ອັດເອງເທົ່ານັ້ນ (ບໍ່ມີ AI/TTS)
+const speechQueue = []; // { studentId }
 let isSpeaking = false;
 
-// Clean classroom name: "ຫ້ອງ ປ.3/1" → "ປະຖົມ 3 ຫ້ອງ 1"
-function cleanClassroomName(name) {
-  if (!name) return '';
-  let clean = name.replace(/^ຫ້ອງ\s*/, '');
-  clean = clean.replace(/ປ\./g, 'ປະຖົມ ');
-  clean = clean.replace(/ມ\./g, 'ມັດທະຍົມ ');
-  clean = clean.replace(/\//g, ' ຫ້ອງ ');
-  clean = clean.replace(/-/g, ' ');
-  return clean.trim();
-}
-
-function buildAnnouncementText(student, callType) {
-  const firstName = student?.firstName || '';
-  const lastName = student?.lastName || '';
-  const classroom = cleanClassroomName(student?.classroom?.className || '');
-
-  if (callType === 'arrived') {
-    return `ນ້ອງ ${firstName} ${lastName}, ${classroom}, ກັບບ້ານ, ຜູ້ປົກຄອງມາຮັບແລ້ວ`;
-  } else if (callType === 'five_minutes') {
-    return `ນ້ອງ ${firstName} ${lastName}, ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ ຫ້ານາທີ, ກະລຸນາກຽມຕົວ`;
-  } else if (callType === 'ten_minutes') {
-    return `ນ້ອງ ${firstName} ${lastName}, ${classroom}, ຜູ້ປົກຄອງຈະມາຮັບໃນ ສິບນາທີ`;
-  }
-  return `ນ້ອງ ${firstName} ${lastName}, ${classroom}`;
-}
-
-// Method 1: Play custom recorded audio from DB
+// Play custom recorded audio from DB
 function playCustomVoice(studentId) {
   return new Promise((resolve, reject) => {
     if (!studentId) return reject();
@@ -45,55 +19,21 @@ function playCustomVoice(studentId) {
   });
 }
 
-// Method 2: Google TTS via backend proxy
-function speakViaBackend(text) {
-  return new Promise((resolve) => {
-    const encoded = encodeURIComponent(text);
-    const audio = new Audio(`/api/tts?text=${encoded}&lang=lo`);
-    audio.volume = 1.0;
-    audio.onended = () => resolve();
-    audio.onerror = () => {
-      const audio2 = new Audio(`/api/tts?text=${encoded}&lang=th`);
-      audio2.volume = 1.0;
-      audio2.onended = () => resolve();
-      audio2.onerror = () => speakViaWebSpeech(text).then(resolve);
-      audio2.play().catch(() => resolve());
-    };
-    audio.play().catch(() => speakViaWebSpeech(text).then(resolve));
-  });
-}
-
-// Method 3: Web Speech API fallback
-function speakViaWebSpeech(text) {
-  return new Promise((resolve) => {
-    if (!('speechSynthesis' in window)) { resolve(); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'th-TH';
-    u.rate = 0.8;
-    u.volume = 1.0;
-    const voices = speechSynthesis.getVoices();
-    const v = voices.find(v => v.lang.startsWith('lo')) || voices.find(v => v.lang.startsWith('th'));
-    if (v) u.voice = v;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    speechSynthesis.speak(u);
-  });
-}
-
 async function processSpeechQueue() {
   if (isSpeaking || speechQueue.length === 0) return;
   isSpeaking = true;
   while (speechQueue.length > 0) {
     const item = speechQueue.shift();
-    console.log('🔊 Announcing:', item);
+    console.log('🔊 Announcing student:', item.studentId);
 
-    // Try custom voice first → then TTS fallback
-    try {
-      await playCustomVoice(item.studentId);
-      console.log('✅ Played custom voice for student', item.studentId);
-    } catch {
-      console.log('⚠️ No custom voice, using TTS for:', item.text);
-      await speakViaBackend(item.text);
+    // ຫຼິ້ນສຽງ custom ເທົ່ານັ້ນ — ຖ້າບໍ່ມີກໍ່ຂ້າມ
+    if (item.studentId) {
+      try {
+        await playCustomVoice(item.studentId);
+        console.log('✅ Played custom voice for student', item.studentId);
+      } catch {
+        console.log('⚠️ No custom voice for student', item.studentId, '— skipped');
+      }
     }
     await new Promise(r => setTimeout(r, 800));
   }
@@ -101,12 +41,11 @@ async function processSpeechQueue() {
 }
 
 function queueAnnouncement(item) {
-  // Accept both string and { studentId, text } object
   if (typeof item === 'string') {
-    speechQueue.push({ studentId: null, text: item });
-  } else {
-    speechQueue.push(item);
+    // ຂໍ້ຄວາມລະບົບ (ບໍ່ມີ studentId) → ຂ້າມ, ບໍ່ຫຼິ້ນ
+    return;
   }
+  speechQueue.push(item);
   processSpeechQueue();
 }
 
@@ -228,14 +167,6 @@ export default function GateDisplay() {
     if (voiceReady) localStorage.setItem('monitor-voice-ready', 'true');
   }, [voiceReady]);
 
-  // Load speech voices
-  useEffect(() => {
-    if ('speechSynthesis' in window) {
-      speechSynthesis.getVoices();
-      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-    }
-  }, []);
-
   // Clock
   useEffect(() => {
     const tick = () => setClock(new Date().toLocaleTimeString('lo-LA', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
@@ -273,8 +204,7 @@ export default function GateDisplay() {
       if (!voiceEnabledRef.current) return;
       const studentId = student?.id || null;
       setSpeakingStudentId(studentId);
-      const text = buildAnnouncementText(student, callType);
-      queueAnnouncement({ studentId, text });
+      queueAnnouncement({ studentId });
       setTimeout(() => setSpeakingStudentId(null), 8000);
     }, 900);
   }, [playChime]);
@@ -353,7 +283,7 @@ export default function GateDisplay() {
   const activateVoice = () => {
     setVoiceReady(true);
     setVoiceEnabled(true);
-    // Unlock audio context + test TTS
+    // Unlock audio context
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -363,20 +293,15 @@ export default function GateDisplay() {
       osc.start(); osc.stop(ctx.currentTime + 0.01);
       setTimeout(() => ctx.close(), 100);
     } catch {}
-    // Test speak
-    setTimeout(() => queueAnnouncement('ເປີດລະບົບປະກາດສຽງແລ້ວ'), 300);
   };
 
   const toggleVoice = () => {
     if (!voiceReady) { activateVoice(); return; }
     const newVal = !voiceEnabled;
     setVoiceEnabled(newVal);
-    if (newVal) {
-      queueAnnouncement('ເປີດສຽງປະກາດ');
-    } else {
+    if (!newVal) {
       speechQueue.length = 0;
       isSpeaking = false;
-      if ('speechSynthesis' in window) speechSynthesis.cancel();
     }
   };
 
@@ -387,7 +312,7 @@ export default function GateDisplay() {
     setTimeout(() => {
       const studentId = item.student?.id || null;
       setSpeakingStudentId(studentId);
-      queueAnnouncement({ studentId, text: buildAnnouncementText(item.student, item.callType) });
+      queueAnnouncement({ studentId });
       setTimeout(() => setSpeakingStudentId(null), 8000);
     }, 900);
   };
