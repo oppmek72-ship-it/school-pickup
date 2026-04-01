@@ -74,11 +74,51 @@ function CallCard({ call, onConfirm, loading }) {
   );
 }
 
+// Request notification permission
+function requestNotifPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+// Send browser notification (works when tab is in background / phone screen off)
+function sendNotification(title, body) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      const notif = new Notification(title, {
+        body,
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        vibrate: [200, 100, 200],
+        tag: 'teacher-call-' + Date.now(),
+        requireInteraction: true,
+      });
+      notif.onclick = () => { window.focus(); notif.close(); };
+    } catch {
+      // Mobile Safari doesn't support new Notification(), use SW
+      if (navigator.serviceWorker?.ready) {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification(title, {
+            body,
+            icon: '/icon-192.png',
+            vibrate: [200, 100, 200],
+            tag: 'teacher-call-' + Date.now(),
+          });
+        });
+      }
+    }
+  }
+}
+
 export default function TeacherDashboard() {
   const { user, logout } = useAuth();
   const [calls, setCalls] = useState([]);
   const { confirmPickup, loading } = usePickup();
   const audioCtx = useRef(null);
+  const prevCallCount = useRef(0);
+
+  // Request notification permission on mount
+  useEffect(() => { requestNotifPermission(); }, []);
 
   const playBeep = () => {
     try {
@@ -97,12 +137,10 @@ export default function TeacherDashboard() {
   const fetchCalls = useCallback(async () => {
     try {
       const { data } = await api.get('/pickup/queue');
-      // Filter: teacher sees only their classroom
       let filtered = data.all || [];
       if (user?.classroomId) {
         filtered = filtered.filter(c => c.student?.classroomId === user.classroomId);
       }
-      // Sort: arrived first, then 5min, then 10min; then by queuePosition
       const priority = { arrived: 0, five_minutes: 1, ten_minutes: 2 };
       filtered.sort((a, b) => (priority[a.callType] ?? 9) - (priority[b.callType] ?? 9) || a.queuePosition - b.queuePosition);
       setCalls(filtered);
@@ -111,18 +149,65 @@ export default function TeacherDashboard() {
 
   useEffect(() => { fetchCalls(); }, [fetchCalls]);
 
+  // Refresh when tab becomes visible again (after phone screen off/switch app)
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        fetchCalls();
+        // Resume audio context if suspended
+        if (audioCtx.current?.state === 'suspended') {
+          audioCtx.current.resume();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    // Also listen for page focus
+    window.addEventListener('focus', fetchCalls);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', fetchCalls);
+    };
+  }, [fetchCalls]);
+
+  // Fallback polling every 8 seconds (in case socket misses events)
+  useEffect(() => {
+    const t = setInterval(fetchCalls, 8000);
+    return () => clearInterval(t);
+  }, [fetchCalls]);
+
+  // Socket events
   useSocketEvent('queue-update', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('call-completed', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('call-cancelled', useCallback(() => fetchCalls(), [fetchCalls]));
   useSocketEvent('new-call', useCallback((data) => {
     if (!user?.classroomId || data.student?.classroomId === user.classroomId) {
       playBeep();
-      toast(`📢 ເອີ້ນ ${data.student?.nickname || data.student?.firstName}`, { icon: '🔔' });
+      const name = data.student?.nickname || data.student?.firstName || '';
+      const callLabel = data.callType === 'five_minutes' ? '5 ນາທີ' : data.callType === 'ten_minutes' ? '10 ນາທີ' : 'ຮອດແລ້ວ!';
+      toast(`📢 ເອີ້ນ ${name}`, { icon: '🔔' });
+      // Send browser notification (works in background)
+      sendNotification(
+        '📢 ເອີ້ນນັກຮຽນ',
+        `${name} — ຜູ້ປົກຄອງ ${callLabel}`
+      );
     }
     fetchCalls();
   }, [fetchCalls, user?.classroomId]));
+
   useSocketEvent('call-escalated', useCallback((data) => {
     playBeep();
+    const name = data.student?.nickname || data.student?.firstName || '';
+    sendNotification(
+      '🔴 ຜູ້ປົກຄອງຮອດແລ້ວ!',
+      `${name} — ກະລຸນາກຽມສົ່ງນ້ອງ`
+    );
+    fetchCalls();
+  }, [fetchCalls]));
+
+  // Also send notification via socket classroom event
+  useSocketEvent('notification:new', useCallback((data) => {
+    toast(data.message, { icon: '🔔' });
+    sendNotification('🔔 ແຈ້ງເຕືອນ', data.message);
     fetchCalls();
   }, [fetchCalls]));
 
@@ -155,6 +240,14 @@ export default function TeacherDashboard() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4">
+        {/* Notification permission banner */}
+        {'Notification' in window && Notification.permission === 'default' && (
+          <button onClick={requestNotifPermission}
+            className="w-full mb-4 py-3 px-4 bg-yellow-50 border border-yellow-300 rounded-xl text-yellow-800 text-sm font-semibold lao text-center">
+            🔔 ກົດເພື່ອເປີດການແຈ້ງເຕືອນ — ຈະໄດ້ຮັບແຈ້ງເຕືອນແມ້ພັບຈໍ
+          </button>
+        )}
+
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="bg-white rounded-xl shadow-sm p-4 text-center">

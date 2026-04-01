@@ -1,9 +1,9 @@
-const CACHE_NAME = 'school-pickup-v1';
+const CACHE_NAME = 'school-pickup-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg'
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // Install - cache static assets
@@ -50,8 +50,8 @@ self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
   const options = {
     body: data.body || 'ມີການແຈ້ງເຕືອນໃໝ່',
-    icon: '/icon-192.svg',
-    badge: '/icon-192.svg',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
     vibrate: [200, 100, 200],
     tag: data.tag || 'school-pickup',
     data: { url: data.url || '/' }

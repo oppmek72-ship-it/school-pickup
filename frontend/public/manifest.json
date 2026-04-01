@@ -13,12 +13,6 @@
   "scope": "/",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "256x256",
-      "type": "image/x-icon",
-      "purpose": "any"
-    },
-    {
       "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
@@ -31,9 +25,9 @@
       "purpose": "any"
     },
     {
-      "src": "/favicon.ico",
-      "sizes": "256x256",
-      "type": "image/x-icon",
+      "src": "/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
@@ -43,19 +37,19 @@
       "name": "Parent - ຜູ້ປົກຄອງ",
       "short_name": "Parent",
       "url": "/parent",
-      "icons": [{"src": "/favicon.ico", "sizes": "256x256"}]
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Teacher - ຄູ",
       "short_name": "Teacher",
       "url": "/teacher",
-      "icons": [{"src": "/favicon.ico", "sizes": "256x256"}]
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Gate Display - ປ້າຍປະຕູ",
       "short_name": "Gate",
       "url": "/gate",
-      "icons": [{"src": "/favicon.ico", "sizes": "256x256"}]
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
     }
   ]
 }
