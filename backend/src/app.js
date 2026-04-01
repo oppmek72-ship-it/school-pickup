@@ -39,7 +39,7 @@ app.use('/api/admin', adminRoutes);
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
 // ====================================
-// Public voice endpoint (no auth — for Monitor)
+// Voice: GET — ຫຼິ້ນສຽງ (public, ບໍ່ຕ້ອງ login — ສຳລັບ Monitor)
 // ====================================
 app.get('/api/students/:id/voice', async (req, res) => {
   try {
@@ -49,7 +49,6 @@ app.get('/api/students/:id/voice', async (req, res) => {
     });
     if (!student?.voiceRecording) return res.status(404).json({ error: 'No voice recording' });
 
-    // Parse data URL: "data:audio/webm;base64,GkXfo..."
     const matches = student.voiceRecording.match(/^data:(audio\/[^;]+);base64,(.+)$/);
     if (!matches) return res.status(400).json({ error: 'Invalid audio data' });
 
@@ -67,53 +66,48 @@ app.get('/api/students/:id/voice', async (req, res) => {
 });
 
 // ====================================
-// TTS endpoint — proxy Google Translate TTS
+// Voice: PUT — ບັນທຶກສຽງ (ຕ້ອງ login, admin ຫຼື teacher)
 // ====================================
-app.get('/api/tts', (req, res) => {
-  const https = require('https');
-  const text = (req.query.text || '').substring(0, 200);
-  const lang = req.query.lang || 'lo';
-  if (!text) return res.status(400).json({ error: 'Missing text' });
+const authMiddleware = require('./middleware/auth.middleware');
 
-  const encoded = encodeURIComponent(text);
-  const langs = [lang, 'th']; // Try requested lang first, then Thai fallback
-  let tried = 0;
-
-  function tryLang(l) {
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${l}&client=tw-ob&q=${encoded}`;
-    https.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Referer': 'https://translate.google.com/',
-      }
-    }, (proxyRes) => {
-      // Handle redirect
-      if (proxyRes.statusCode >= 300 && proxyRes.statusCode < 400 && proxyRes.headers.location) {
-        https.get(proxyRes.headers.location, (rRes) => {
-          res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400' });
-          rRes.pipe(res);
-        }).on('error', () => nextLang());
-        return;
-      }
-      if (proxyRes.statusCode === 200) {
-        res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400' });
-        proxyRes.pipe(res);
-      } else {
-        nextLang();
-      }
-    }).on('error', () => nextLang());
-  }
-
-  function nextLang() {
-    tried++;
-    if (tried < langs.length) {
-      tryLang(langs[tried]);
-    } else {
-      res.status(503).json({ error: 'TTS unavailable' });
+app.put('/api/voice/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!req.user || !['admin', 'teacher'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'ບໍ່ມີສິດ' });
     }
+    const { voiceRecording } = req.body;
+    if (!voiceRecording || !voiceRecording.startsWith('data:audio/')) {
+      return res.status(400).json({ error: 'Invalid audio data' });
+    }
+    if (voiceRecording.length > 2000000) {
+      return res.status(400).json({ error: 'Audio too large' });
+    }
+    await prisma.student.update({
+      where: { id: parseInt(req.params.id) },
+      data: { voiceRecording }
+    });
+    res.json({ success: true, message: 'ບັນທຶກສຽງສຳເລັດ' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+});
 
-  tryLang(langs[0]);
+// ====================================
+// Voice: DELETE — ລຶບສຽງ (ຕ້ອງ login, admin ຫຼື teacher)
+// ====================================
+app.delete('/api/voice/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!req.user || !['admin', 'teacher'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'ບໍ່ມີສິດ' });
+    }
+    await prisma.student.update({
+      where: { id: parseInt(req.params.id) },
+      data: { voiceRecording: null }
+    });
+    res.json({ success: true, message: 'ລຶບສຽງສຳເລັດ' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // ====================================

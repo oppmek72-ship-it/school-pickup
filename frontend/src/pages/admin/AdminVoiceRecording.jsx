@@ -97,7 +97,7 @@ function RecordModal({ student, onClose, onSaved }) {
     if (!audioDataUrl) return;
     setSaving(true);
     try {
-      await api.put(`/admin/students/${student.id}/voice`, { voiceRecording: audioDataUrl });
+      await api.put(`/voice/${student.id}`, { voiceRecording: audioDataUrl });
       toast.success(`ບັນທຶກສຽງ ${student.firstName} ສຳເລັດ!`);
       setHasExisting(true);
       onSaved();
@@ -110,7 +110,7 @@ function RecordModal({ student, onClose, onSaved }) {
   const deleteRecording = async () => {
     if (!confirm('ລຶບສຽງຂອງ ' + student.firstName + '?')) return;
     try {
-      await api.delete(`/admin/students/${student.id}/voice`);
+      await api.delete(`/voice/${student.id}`);
       toast.success('ລຶບສຽງສຳເລັດ');
       setHasExisting(false);
       onSaved();
