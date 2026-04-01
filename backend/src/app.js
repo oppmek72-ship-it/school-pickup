@@ -49,10 +49,12 @@ app.get('/api/students/:id/voice', async (req, res) => {
     });
     if (!student?.voiceRecording) return res.status(404).json({ error: 'No voice recording' });
 
-    const matches = student.voiceRecording.match(/^data:(audio\/[^;]+);base64,(.+)$/);
+    // Handle: data:audio/webm;codecs=opus;base64,xxx OR data:audio/wav;base64,xxx
+    const matches = student.voiceRecording.match(/^data:(audio\/[^;]+(?:;[^;]+)*);base64,(.+)$/);
     if (!matches) return res.status(400).json({ error: 'Invalid audio data' });
 
-    const contentType = matches[1];
+    const fullMimeType = matches[1]; // e.g. "audio/webm;codecs=opus"
+    const contentType = fullMimeType.split(';')[0]; // e.g. "audio/webm"
     const buffer = Buffer.from(matches[2], 'base64');
     res.set({
       'Content-Type': contentType,
