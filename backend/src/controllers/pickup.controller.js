@@ -28,12 +28,13 @@ const createRequest = async (req, res) => {
     });
     const queuePosition = (lastQueue?.queuePosition || 0) + 1;
 
-    const parentId = req.user.role === 'parent' ? (req.user.userId || req.user.id) : null;
+    // parentId ອ້າງອີງ User.id — parent login ບໍ່ມີ User record, ສະນັ້ນ set null
+    const parentId = (req.user.role !== 'parent' && req.user.id) ? req.user.id : null;
 
     const request = await prisma.pickupRequest.create({
       data: {
         studentId: parseInt(studentId),
-        parentId: parentId || null,
+        parentId: parentId,
         callType: callType || 'arrived',
         status: 'waiting',
         expiresAt,
@@ -103,10 +104,16 @@ const confirmPickup = async (req, res) => {
       }
     });
 
+    // ຫາ admin user ເປັນ fallback parentId (PickupHistory.parentId ບັງຄັບ)
+    let historyParentId = request.parentId;
+    if (!historyParentId) {
+      const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
+      historyParentId = admin?.id || req.user?.id;
+    }
     await prisma.pickupHistory.create({
       data: {
         studentId: request.studentId,
-        parentId: request.parentId || 1,
+        parentId: historyParentId,
         teacherId: req.user?.id || null,
         callType: request.callType,
         carPlate: request.carPlate
