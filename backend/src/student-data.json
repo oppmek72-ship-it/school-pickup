@@ -1,0 +1,4013 @@
+[
+{
+"origId": 118,
+"firstName": "ທະນະໂຊກ",
+"lastName": "ກອງທິພາວົງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0118"
+},
+{
+"origId": 462,
+"firstName": "ແກ້ວມະນີໂຊກ",
+"lastName": "ຄຳພັນທິລາດ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0462"
+},
+{
+"origId": 495,
+"firstName": "ວາດສະໜາ",
+"lastName": "ບົວສີພັນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0495"
+},
+{
+"origId": 418,
+"firstName": "ວາດສະໜາ",
+"lastName": "ພັນວິໄລ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0418"
+},
+{
+"origId": 156,
+"firstName": "ວານິດາ",
+"lastName": "ໄຊຍະວັນຄໍາ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0156"
+},
+{
+"origId": 519,
+"firstName": "ວານິດາ",
+"lastName": "ສົມພາວັນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0519"
+},
+{
+"origId": 520,
+"firstName": "ວໍລະວະວັນ",
+"lastName": "ມະນີວັນ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0520"
+},
+{
+"origId": 523,
+"firstName": "ຫຼີຊິງອີ",
+"lastName": "ລຳພູສາ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0523"
+},
+{
+"origId": 524,
+"firstName": "ໃບເຂົ້າ",
+"lastName": "ຈູມມະລີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0524"
+},
+{
+"origId": 159,
+"firstName": "ສຸຊາດາ",
+"lastName": "ແສງອາຄົມ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0159"
+},
+{
+"origId": 526,
+"firstName": "ເກດສະນະພອນ",
+"lastName": "ຈັນທະວົງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0526"
+},
+{
+"origId": 239,
+"firstName": "ເອລິນດາ",
+"lastName": "ປັນຍາວົງ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0239"
+},
+{
+"origId": 456,
+"firstName": "ພາວະດີ",
+"lastName": "ພອນສະຫວັນ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0456"
+},
+{
+"origId": 314,
+"firstName": "ສຸກນະພາ",
+"lastName": "ເທື້ອມບຸນມີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0314"
+},
+{
+"origId": 461,
+"firstName": "ນິລັດດາ",
+"lastName": "ມີໄຊຫລ້າ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0461"
+},
+{
+"origId": 311,
+"firstName": "ທິບພະສອນ",
+"lastName": "ພາດີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0311"
+},
+{
+"origId": 528,
+"firstName": "ລັກສີກາ",
+"lastName": "ພັນສາສຸລິດ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0528"
+},
+{
+"origId": 529,
+"firstName": "ນະພາພອນ",
+"lastName": "ວັນນະວົງ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0529"
+},
+{
+"origId": 499,
+"firstName": "ກຸນທິດາ",
+"lastName": "ໄຊຍະວົງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0499"
+},
+{
+"origId": 471,
+"firstName": "ສົງການ",
+"lastName": "ພູມີປະເສີດ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0471"
+},
+{
+"origId": 215,
+"firstName": "ຮຸ່ງອາລຸນ",
+"lastName": "ຈັນທະລາ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0215"
+},
+{
+"origId": 321,
+"firstName": "ທະນະໂຊກ",
+"lastName": "ພັນທະສັກ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0321"
+},
+{
+"origId": 139,
+"firstName": "ໂຊກປັນຍາ",
+"lastName": "ສຸວັນນະພິທີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0139"
+},
+{
+"origId": 122,
+"firstName": "ອາຄິນ",
+"lastName": "",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0122"
+},
+{
+"origId": 530,
+"firstName": "ທະນູສິນ",
+"lastName": "ດີມະນີວົງ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0530"
+},
+{
+"origId": 246,
+"firstName": "ນັນທາດາ",
+"lastName": "ສຸກປັນຍາ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0246"
+},
+{
+"origId": 532,
+"firstName": "ມິນລີສາ",
+"lastName": "ວົງຈາວເລືອງ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0532"
+},
+{
+"origId": 501,
+"firstName": "ສຸນິກອນ",
+"lastName": "ໂຄຕິເສນ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0501"
+},
+{
+"origId": 81,
+"firstName": "ມະນີສອນ",
+"lastName": "ພຽງສະຫວັນ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0081"
+},
+{
+"origId": 184,
+"firstName": "ລິນລະດາ",
+"lastName": "ກົງສະຈັກ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0184"
+},
+{
+"origId": 247,
+"firstName": "ທະນາກອນ",
+"lastName": "ວິຄຳຊາວ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0247"
+},
+{
+"origId": 237,
+"firstName": "ພອນປະດິດ",
+"lastName": "ສຸກຜາລີ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0237"
+},
+{
+"origId": 99,
+"firstName": "ວານິດາ",
+"lastName": "ສຸລິຍະແສງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0099"
+},
+{
+"origId": 137,
+"firstName": "ພິຣະພັດ",
+"lastName": "ຈັນທະມິດ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0137"
+},
+{
+"origId": 154,
+"firstName": "ຊີວາໂຊກ",
+"lastName": "ຍານວິນຍູ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0154"
+},
+{
+"origId": 188,
+"firstName": "ນັນທະສິນ",
+"lastName": "ໄຊຍະວົງສາ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0188"
+},
+{
+"origId": 205,
+"firstName": "ສາຍທະລາພອນ",
+"lastName": "ແກ້ວມະນຸວົງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0205"
+},
+{
+"origId": 245,
+"firstName": "ພົນຊະນະ",
+"lastName": "ເຣືອງຣິດ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0245"
+},
+{
+"origId": 256,
+"firstName": "ຄູນມີໄຊ",
+"lastName": "ສີສົງຄາມ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0256"
+},
+{
+"origId": 359,
+"firstName": "ແສງສະຫວັນ",
+"lastName": "ສີບຸນເຮືອງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0359"
+},
+{
+"origId": 470,
+"firstName": "ຄຳແກ້ວ",
+"lastName": "ແສນຄະຕິ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0470"
+},
+{
+"origId": 533,
+"firstName": "ທຳມະສອນ",
+"lastName": "ປັນຍານຸວົງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0533"
+},
+{
+"origId": 235,
+"firstName": "ສິດທິພອນ",
+"lastName": "ກົງສະຈັກ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0235"
+},
+{
+"origId": 508,
+"firstName": "ຊິນນະວັດ",
+"lastName": "ທອງລາ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0508"
+},
+{
+"origId": 534,
+"firstName": "ທະນາພົນ",
+"lastName": "ສົມພູຄຳ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0534"
+},
+{
+"origId": 535,
+"firstName": "ສາຍຟ້າ",
+"lastName": "ແສງຈັນ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0535"
+},
+{
+"origId": 78,
+"firstName": "ໄພລິນ",
+"lastName": "ວິຫວັນທອງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0078"
+},
+{
+"origId": 106,
+"firstName": "ກົດສະກອນ",
+"lastName": "ບຸນປະສົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0106"
+},
+{
+"origId": 134,
+"firstName": "ແສງແກ້ວ",
+"lastName": "ຄໍາພັນທິລາດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0134"
+},
+{
+"origId": 155,
+"firstName": "ອາລິສາ",
+"lastName": "ໄຊຍະວັນຄໍາ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0155"
+},
+{
+"origId": 176,
+"firstName": "ທິດາສະຫວັນ",
+"lastName": "ພຸດທະວົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0176"
+},
+{
+"origId": 304,
+"firstName": "ອາຣິຍາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0304"
+},
+{
+"origId": 313,
+"firstName": "ພອນທິດາ",
+"lastName": "ເທື້ອມບຸນມີ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0313"
+},
+{
+"origId": 362,
+"firstName": "ສຸພາພອນ",
+"lastName": "ວໍລະສານ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0362"
+},
+{
+"origId": 410,
+"firstName": "ວິການດາ",
+"lastName": "ອຳພາວັນ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0410"
+},
+{
+"origId": 437,
+"firstName": "ພູມປັນຍາ",
+"lastName": "ຕາມອງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0437"
+},
+{
+"origId": 443,
+"firstName": "ທະວີຊັບ",
+"lastName": "ໄຊຍະສິດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0443"
+},
+{
+"origId": 442,
+"firstName": "ຈັນທິດາ",
+"lastName": "ພຸດທະວົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0442"
+},
+{
+"origId": 453,
+"firstName": "ເບັນລາ",
+"lastName": "ສີວິໄລ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0453"
+},
+{
+"origId": 464,
+"firstName": "ບຸນຄ້ຳ",
+"lastName": "ສີສະຫວັດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0464"
+},
+{
+"origId": 506,
+"firstName": "ພອນທິດາ",
+"lastName": "ວັນນະວົງ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0506"
+},
+{
+"origId": 480,
+"firstName": "ກາຟິວ",
+"lastName": "ຫລ້າທອງຄຳ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0480"
+},
+{
+"origId": 489,
+"firstName": "ເພັດນະພາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0489"
+},
+{
+"origId": 536,
+"firstName": "ອົ້ນຄຳ",
+"lastName": "ມະນີວົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0536"
+},
+{
+"origId": 537,
+"firstName": "ແສງອາທິດ",
+"lastName": "ສາລະນີ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0537"
+},
+{
+"origId": 472,
+"firstName": "ທັນນະບັດ",
+"lastName": "ປະທຸມເງີນ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0472"
+},
+{
+"origId": 77,
+"firstName": "ພູວັນ",
+"lastName": "ບຸດສະຫວັດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0077"
+},
+{
+"origId": 505,
+"firstName": "ກຽດຕິສັກ",
+"lastName": "ສົມສີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0505"
+},
+{
+"origId": 478,
+"firstName": "ຄຳໃສ",
+"lastName": "ທອງສະໝຸດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0478"
+},
+{
+"origId": 331,
+"firstName": "ທິລະສັກ",
+"lastName": "ດວງແກ້ວປະເສີດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0331"
+},
+{
+"origId": 119,
+"firstName": "ສຸດດວງໃຈ",
+"lastName": "ນາມສາລີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0119"
+},
+{
+"origId": 123,
+"firstName": "ລິນດາ",
+"lastName": "",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0123"
+},
+{
+"origId": 151,
+"firstName": "ເພັດທິດາ",
+"lastName": "ໄຊຍະແສງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0151"
+},
+{
+"origId": 178,
+"firstName": "ສຸກທິດາ",
+"lastName": "ພັນຂັນຄໍາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0178"
+},
+{
+"origId": 190,
+"firstName": "ລັດຕະນາພອນ",
+"lastName": "ພິດທະນູສອນ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0190"
+},
+{
+"origId": 211,
+"firstName": "ຫົງແສງເດືອນ",
+"lastName": "ພົນໄຊຍະວົງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0211"
+},
+{
+"origId": 234,
+"firstName": "ມຸກດາລາ",
+"lastName": "ສືຣລອກ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0234"
+},
+{
+"origId": 298,
+"firstName": "ອາມິນດາ",
+"lastName": "ພົນວິໄຊ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0298"
+},
+{
+"origId": 416,
+"firstName": "ໂຊກມະນີແກ້ວ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0416"
+},
+{
+"origId": 420,
+"firstName": "ແກ້ວມະນີໂຊກ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0420"
+},
+{
+"origId": 473,
+"firstName": "ທິບພາພອນ",
+"lastName": "ມະນີປະກອນ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0473"
+},
+{
+"origId": 169,
+"firstName": "ທິດາລັດ",
+"lastName": "ລໍລອນຄໍາ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0169"
+},
+{
+"origId": 503,
+"firstName": "ຈິລະພາພອນ",
+"lastName": "ທອງສິງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0503"
+},
+{
+"origId": 539,
+"firstName": "ສຸກາ",
+"lastName": "ຫວງຽນແທນເຢີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0539"
+},
+{
+"origId": 486,
+"firstName": "ແສງພາສຸກ",
+"lastName": "ແກ້ວຄຳມາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0486"
+},
+{
+"origId": 360,
+"firstName": "ປາຣະມີ",
+"lastName": "ຈິດຕະວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0360"
+},
+{
+"origId": 53,
+"firstName": "ເມັດມະນີ",
+"lastName": "ພານປະເສີດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0053"
+},
+{
+"origId": 284,
+"firstName": "ພານຸກອນ",
+"lastName": "ພົນມະນີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0284"
+},
+{
+"origId": 128,
+"firstName": "ອານາວິນ",
+"lastName": "ໄຊຍະປັນຍາ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0128"
+},
+{
+"origId": 244,
+"firstName": "ນັດທະກອນ",
+"lastName": "ອຸ່ນມະນີສອນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0244"
+},
+{
+"origId": 513,
+"firstName": "ບຸນພະໄຊ",
+"lastName": "ສີສຸພັນນີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0513"
+},
+{
+"origId": 500,
+"firstName": "ພານິຊາ",
+"lastName": "ພິມມະສອນ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0500"
+},
+{
+"origId": 490,
+"firstName": "ຊັບທະວີ",
+"lastName": "ສີສົມຫວັງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0490"
+},
+{
+"origId": 479,
+"firstName": "ນິຊາ",
+"lastName": "ວິຫວັນທອງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0479"
+},
+{
+"origId": 213,
+"firstName": "ບຸນຈັນ",
+"lastName": "ຄອນມີໄຊ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0213"
+},
+{
+"origId": 481,
+"firstName": "ທະວີຊັບ",
+"lastName": "ສີຫລວງລາດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0481"
+},
+{
+"origId": 97,
+"firstName": "ທັດຊະວິນ",
+"lastName": "ວັນນະແສງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0097"
+},
+{
+"origId": 466,
+"firstName": "ພຸດມະນີ",
+"lastName": "ສີທອງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0466"
+},
+{
+"origId": 301,
+"firstName": "ສຸກວິໄລ",
+"lastName": "ວົງໄຊ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0301"
+},
+{
+"origId": 127,
+"firstName": "ສີອຳພອນ",
+"lastName": "ສີງຫາລາດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0127"
+},
+{
+"origId": 242,
+"firstName": "ນຸດທິດາ",
+"lastName": "ຈັນທະບູລີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0242"
+},
+{
+"origId": 540,
+"firstName": "ທະນາໄຊ",
+"lastName": "ຄຳມະນີວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0540"
+},
+{
+"origId": 541,
+"firstName": "ຄິນນະຄອນ",
+"lastName": "ເມກສະຫວັນ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0541"
+},
+{
+"origId": 542,
+"firstName": "ພຸດທະສອນ",
+"lastName": "ປັນຍານຸວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0542"
+},
+{
+"origId": 543,
+"firstName": "ສົ້ມຫວານ",
+"lastName": "ຫວງຽນແທນເຢີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0543"
+},
+{
+"origId": 544,
+"firstName": "ທະນາວິນ",
+"lastName": "ສີທະວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0544"
+},
+{
+"origId": 112,
+"firstName": "ສຸດາ",
+"lastName": "ສຸລິນພູມີ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0112"
+},
+{
+"origId": 144,
+"firstName": "ຈິນດາໄມ",
+"lastName": "ເທບສີລິຄຸນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0144"
+},
+{
+"origId": 303,
+"firstName": "ສາວິກາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0303"
+},
+{
+"origId": 336,
+"firstName": "ສຸກສະຫວັນ",
+"lastName": "ສິນໄຊ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0336"
+},
+{
+"origId": 374,
+"firstName": "ເທບທິດາ",
+"lastName": "ວອນທິວົງ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0374"
+},
+{
+"origId": 400,
+"firstName": "ລາລີວອນ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0400"
+},
+{
+"origId": 467,
+"firstName": "ນາລີນ",
+"lastName": "ອ່ອນພັນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0467"
+},
+{
+"origId": 545,
+"firstName": "ຮຸ່ງຟ້າ",
+"lastName": "ປານວົງຄຳ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0545"
+},
+{
+"origId": 546,
+"firstName": "ເມລິສາ",
+"lastName": "ຂຸນວິເສດ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0546"
+},
+{
+"origId": 547,
+"firstName": "ມະນິລາ",
+"lastName": "ຂຸນວິເສດ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0547"
+},
+{
+"origId": 32,
+"firstName": "ປາວີນາ",
+"lastName": "ວົງດາລາ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0032"
+},
+{
+"origId": 390,
+"firstName": "ປັນຍາທິບ",
+"lastName": "ພັນສາສຸລິດ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0390"
+},
+{
+"origId": 379,
+"firstName": "ສຸກດາວັນ",
+"lastName": "ໄຊຍະວົງ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0379"
+},
+{
+"origId": 149,
+"firstName": "ແສງນະຄອນ",
+"lastName": "ຫຼວງສິມມາ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0149"
+},
+{
+"origId": 158,
+"firstName": "ແສງພະຈັນ",
+"lastName": "ແສງອາຄົມ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0158"
+},
+{
+"origId": 221,
+"firstName": "ສຸພາໄຊ",
+"lastName": "ຈັນສົມພູ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0221"
+},
+{
+"origId": 414,
+"firstName": "ຊະນະໄຊ",
+"lastName": "ບຸນມີໄຊ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0414"
+},
+{
+"origId": 548,
+"firstName": "ພັດນັດດາ",
+"lastName": "ແກ່ນມະນີ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0548"
+},
+{
+"origId": 549,
+"firstName": "ສະຫະລັດ",
+"lastName": "ບຸນປະດິດ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0549"
+},
+{
+"origId": 550,
+"firstName": "ຮຸ່ງເພັດ",
+"lastName": "ປານວົງຄຳ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0550"
+},
+{
+"origId": 551,
+"firstName": "ໄຊມຸງຄຸນ",
+"lastName": "ພຸດທະວົງ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0551"
+},
+{
+"origId": 63,
+"firstName": "ຈັນທະພອນ",
+"lastName": "ມະນີປຸ່ນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0063"
+},
+{
+"origId": 206,
+"firstName": "ສາຍທະນາພອນ",
+"lastName": "ແກ້ວມະນຸວົງ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0206"
+},
+{
+"origId": 454,
+"firstName": "ກິດຊະດາ",
+"lastName": "ດາລາແສນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0454"
+},
+{
+"origId": 552,
+"firstName": "ສຸພັນສາ",
+"lastName": "ສີສຸພັນນີ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0552"
+},
+{
+"origId": 138,
+"firstName": "ຈັນທິດາ",
+"lastName": "ສຸວັນນະພິທີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0138"
+},
+{
+"origId": 140,
+"firstName": "ອັກສອນ",
+"lastName": "ຄູນປະເສີດ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0140"
+},
+{
+"origId": 474,
+"firstName": "ມິນລາດາ",
+"lastName": "ວົງຈາວເລືອງ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0474"
+},
+{
+"origId": 191,
+"firstName": "ສຸດທິດາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0191"
+},
+{
+"origId": 232,
+"firstName": "ສຸກພະໄທ",
+"lastName": "ໄຊຍະວົງສາ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0232"
+},
+{
+"origId": 224,
+"firstName": "ວິລະດາ",
+"lastName": "ອິນທະສອນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0224"
+},
+{
+"origId": 12,
+"firstName": "ຊະນະໄຊ",
+"lastName": "ພິລາວັນ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0012"
+},
+{
+"origId": 35,
+"firstName": "ປະກາຍເພັດ",
+"lastName": "ຈັນທະລາສີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0035"
+},
+{
+"origId": 64,
+"firstName": "ອຸດອນຊັບ",
+"lastName": "ທຳມະວົງ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0064"
+},
+{
+"origId": 171,
+"firstName": "ບົວລະພາ",
+"lastName": "ສີວິໄລ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0171"
+},
+{
+"origId": 257,
+"firstName": "ສີພອນ",
+"lastName": "ພັນທະວົງ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0257"
+},
+{
+"origId": 368,
+"firstName": "ນິວເຕີນ",
+"lastName": "ອິນທະວົງ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0368"
+},
+{
+"origId": 381,
+"firstName": "ປະກາຍເພັດ",
+"lastName": "ພົມເວຫາ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0381"
+},
+{
+"origId": 438,
+"firstName": "ເພັດສະຫວັນ",
+"lastName": "ມະນີປຸນ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0438"
+},
+{
+"origId": 555,
+"firstName": "ກິດຕິພູມ",
+"lastName": "ທຳມະວົງ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0555"
+},
+{
+"origId": 556,
+"firstName": "ໂດເລມອນ",
+"lastName": "ຫວງຽນແທນເຢີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0556"
+},
+{
+"origId": 557,
+"firstName": "ເພັດມີໄຊ",
+"lastName": "ຈັນທະວິໄຊ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0557"
+},
+{
+"origId": 560,
+"firstName": "ສິງຫາ",
+"lastName": "ໄພສະຫວັນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0560"
+},
+{
+"origId": 561,
+"firstName": "ພິນຍາມາດ",
+"lastName": "ບໍລິບູນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0561"
+},
+{
+"origId": 86,
+"firstName": "ມາລິສາ",
+"lastName": "ສະຫວັນທີ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0086"
+},
+{
+"origId": 36,
+"firstName": "ອາລັນຍາ",
+"lastName": "ຫລາດສີອຸດົມໄຊ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0036"
+},
+{
+"origId": 452,
+"firstName": "ໄດໂອນີ່",
+"lastName": "ເດັດທີບົວ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0452"
+},
+{
+"origId": 281,
+"firstName": "ນິລະດາ",
+"lastName": "ບຸດທະສອນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0281"
+},
+{
+"origId": 510,
+"firstName": "ນິລາ",
+"lastName": "ແກ້ວໝັ້ນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0510"
+},
+{
+"origId": 208,
+"firstName": "ເພັດສຸວັນ",
+"lastName": "ທອງອ້ວນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0208"
+},
+{
+"origId": 227,
+"firstName": "ອາລີນ້າ",
+"lastName": "ອ້ວນສະຫວັນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0227"
+},
+{
+"origId": 177,
+"firstName": "ສອນສະຫວັນ",
+"lastName": "ພັນຂັນຄໍາ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0177"
+},
+{
+"origId": 289,
+"firstName": "ເພັດມະນີ",
+"lastName": "ສີລານຸວົງ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0289"
+},
+{
+"origId": 157,
+"firstName": "ເພັດພອນໄຊ",
+"lastName": "ວິໄລພອນ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0157"
+},
+{
+"origId": 309,
+"firstName": "ທະວີຊັບ",
+"lastName": "ລໍວັນໄຊ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0309"
+},
+{
+"origId": 516,
+"firstName": "ຄະນິດສອນ",
+"lastName": "ບຸດສະດີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0516"
+},
+{
+"origId": 514,
+"firstName": "ໂບນິຕາ",
+"lastName": "ອິນທະສອນ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0514"
+},
+{
+"origId": 163,
+"firstName": "ປາລະມີ",
+"lastName": "ອິນທະລີ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0163"
+},
+{
+"origId": 447,
+"firstName": "ແມັກນ້ຳ",
+"lastName": "ຈະເລີນສຸກ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0447"
+},
+{
+"origId": 94,
+"firstName": "ກັນລະຍາ",
+"lastName": "ມີໄຊບົວ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0094"
+},
+{
+"origId": 220,
+"firstName": "ນັດດາໄນ",
+"lastName": "ແພງໄພວັນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0220"
+},
+{
+"origId": 222,
+"firstName": "ທູນທິດາ",
+"lastName": "ນາມກຽດແກ້ວ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0222"
+},
+{
+"origId": 475,
+"firstName": "ທິດາພອນ",
+"lastName": "ສີຫາລາດ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0475"
+},
+{
+"origId": 174,
+"firstName": "ລິນນະຄອນ",
+"lastName": "ບຸນທະລາ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0174"
+},
+{
+"origId": 357,
+"firstName": "ທະວີຊັບ",
+"lastName": "ພົມເພັດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0357"
+},
+{
+"origId": 243,
+"firstName": "ວາລັດດາ",
+"lastName": "ສີທອງຄໍາ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0243"
+},
+{
+"origId": 459,
+"firstName": "ນະຄອນຄໍາ",
+"lastName": "ທັນສະພັງທອງ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0459"
+},
+{
+"origId": 358,
+"firstName": "ລັດທິດາ",
+"lastName": "ສີອຸດົມ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0358"
+},
+{
+"origId": 337,
+"firstName": "ເພັດສະຫວັນ",
+"lastName": "ສົມສັກ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0337"
+},
+{
+"origId": 484,
+"firstName": "ເບວຕີ",
+"lastName": "ສີບຸນທຸມ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0484"
+},
+{
+"origId": 15,
+"firstName": "ລັດດາວັນ",
+"lastName": "ຄຳເພັງໄຊ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0015"
+},
+{
+"origId": 384,
+"firstName": "ທິບພາພອນ",
+"lastName": "ພິດທະນູສອນ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0384"
+},
+{
+"origId": 365,
+"firstName": "ປັນຍາຊັບ",
+"lastName": "ວິລະວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0365"
+},
+{
+"origId": 350,
+"firstName": "ໂຊກທະວີ",
+"lastName": "ອິນທະວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0350"
+},
+{
+"origId": 335,
+"firstName": "ແສງພະຈັນ",
+"lastName": "ສິນໄຊ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0335"
+},
+{
+"origId": 107,
+"firstName": "ນັດທະກອນ",
+"lastName": "ບຸນປະສົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0107"
+},
+{
+"origId": 564,
+"firstName": "ທະນາວິນ",
+"lastName": "ສົມພູຄຳ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0564"
+},
+{
+"origId": 55,
+"firstName": "ອານົນ",
+"lastName": "ຫລາດສີອຸດົມໄຊ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0055"
+},
+{
+"origId": 51,
+"firstName": "ທີຣະເດດ",
+"lastName": "ຊາພູວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0051"
+},
+{
+"origId": 85,
+"firstName": "ສຸລິຍາ",
+"lastName": "ສະຫວັນທີ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0085"
+},
+{
+"origId": 47,
+"firstName": "ອັດສະວິນ",
+"lastName": "ວັນທະດາວົງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0047"
+},
+{
+"origId": 392,
+"firstName": "ພອນທິດາ",
+"lastName": "ວົງອິນດາ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0392"
+},
+{
+"origId": 233,
+"firstName": "ພອນທິດາ",
+"lastName": "ສືຣລອກ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0233"
+},
+{
+"origId": 300,
+"firstName": "ຄິດສະໄໝ",
+"lastName": "ທອງສະໝຸດ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0300"
+},
+{
+"origId": 287,
+"firstName": "ສຸລິທອນ",
+"lastName": "ຜາສຸຍໄຊງາມ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0287"
+},
+{
+"origId": 342,
+"firstName": "ພອນນະພາ",
+"lastName": "ປະເສີດສັກ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0342"
+},
+{
+"origId": 116,
+"firstName": "ປາວິນາ",
+"lastName": "ຮັນທະວົງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0116"
+},
+{
+"origId": 389,
+"firstName": "ປັນຍາດາ",
+"lastName": "ພັນສາສຸລິດ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0389"
+},
+{
+"origId": 435,
+"firstName": "ມາສຸຣິ",
+"lastName": "ຕາມອງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0435"
+},
+{
+"origId": 120,
+"firstName": "ພິມລະດາ",
+"lastName": "ທອງລາ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0120"
+},
+{
+"origId": 349,
+"firstName": "ທິລິນນາ",
+"lastName": "ບຸນທະວົງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0349"
+},
+{
+"origId": 69,
+"firstName": "ກິດຕິພົງ",
+"lastName": "ໄຊຍະສິດ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0069"
+},
+{
+"origId": 356,
+"firstName": "ຈະເລີນຊັບ",
+"lastName": "ພົມເພັດ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0356"
+},
+{
+"origId": 286,
+"firstName": "ສຸກປະເສີດ",
+"lastName": "ວົງພັນທະນັນສີ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0286"
+},
+{
+"origId": 383,
+"firstName": "ເອກທິລາດ",
+"lastName": "ບົວບານ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0383"
+},
+{
+"origId": 439,
+"firstName": "ທິດາທິບ",
+"lastName": "ແພງພັນ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0439"
+},
+{
+"origId": 48,
+"firstName": "ວິດາພອນ",
+"lastName": "ແກ້ວມະນີ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0048"
+},
+{
+"origId": 100,
+"firstName": "ສຸພາພອນ",
+"lastName": "ສີສະນົນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0100"
+},
+{
+"origId": 223,
+"firstName": "ອາລິສາ",
+"lastName": "ອິນທະສອນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0223"
+},
+{
+"origId": 3,
+"firstName": "ມາລິສາ",
+"lastName": "ວົງຄຳອຸດ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0003"
+},
+{
+"origId": 288,
+"firstName": "ພຸດສະດີ",
+"lastName": "ສີລານຸວົງ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0288"
+},
+{
+"origId": 393,
+"firstName": "ຈະເລີນຊັບ",
+"lastName": "ສິດທິກຸນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0393"
+},
+{
+"origId": 307,
+"firstName": "ທິດາພອນ",
+"lastName": "ອິນທິລາດ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0307"
+},
+{
+"origId": 186,
+"firstName": "ຄູນທະວີຊັບ",
+"lastName": "ສຸວັນຄໍາ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0186"
+},
+{
+"origId": 203,
+"firstName": "ຈັນມີໄຊ",
+"lastName": "ພິລາພອນ\n ພິລາພອນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0203"
+},
+{
+"origId": 74,
+"firstName": "ທິດສາຄອນ",
+"lastName": "ສຸກສະຫວັດ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0074"
+},
+{
+"origId": 147,
+"firstName": "ລົກຊຸນ",
+"lastName": "ມົວດາວອນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0147"
+},
+{
+"origId": 175,
+"firstName": "ຄໍາຮັກ",
+"lastName": "ພຸດທະວົງ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0175"
+},
+{
+"origId": 172,
+"firstName": "ສຸລິວົງ",
+"lastName": "ສີວິໄລ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0172"
+},
+{
+"origId": 42,
+"firstName": "ສຸນິສາ",
+"lastName": "ວົງໄຊຍາ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0042"
+},
+{
+"origId": 61,
+"firstName": "ສຸດາພອນ",
+"lastName": "ທຳມະວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0061"
+},
+{
+"origId": 267,
+"firstName": "ພຸດທະສອນ",
+"lastName": "ສົມສີ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0267"
+},
+{
+"origId": 173,
+"firstName": "ລີຊ່າ",
+"lastName": "ຊົ້ງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0173"
+},
+{
+"origId": 218,
+"firstName": "ວັນປະດັບ",
+"lastName": "ທອງຈະເລີນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0218"
+},
+{
+"origId": 302,
+"firstName": "ມຸກດາວັນ",
+"lastName": "ປະທຸມມາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0302"
+},
+{
+"origId": 406,
+"firstName": "ສຸດສະດາ",
+"lastName": "ປະເສີດ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0406"
+},
+{
+"origId": 18,
+"firstName": "ທະວີໂຊກ",
+"lastName": "ກ້ານຂັນຕີ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0018"
+},
+{
+"origId": 95,
+"firstName": "ຈັນປະເສີດ",
+"lastName": "ໂສຍບຸນພັນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0095"
+},
+{
+"origId": 102,
+"firstName": "ປາລະມີ",
+"lastName": "ສຸທໍາມະວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0102"
+},
+{
+"origId": 143,
+"firstName": "ສຸກວິໄລ",
+"lastName": "ເທບສີລິຄຸນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0143"
+},
+{
+"origId": 265,
+"firstName": "ໄມກອງ",
+"lastName": "ພິມມະທອງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0265"
+},
+{
+"origId": 567,
+"firstName": "ຍຸດທະກອນ",
+"lastName": "ຂຽວພະຍາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0567"
+},
+{
+"origId": 347,
+"firstName": "ທິດນິລັນ",
+"lastName": "ບຸນເຖິງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0347"
+},
+{
+"origId": 109,
+"firstName": "ແມັກກີ້",
+"lastName": "ຈັນທະນຸວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0109"
+},
+{
+"origId": 568,
+"firstName": "ຈີລັນຍ້າ",
+"lastName": "ດາວສະຫວັນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0568"
+},
+{
+"origId": 266,
+"firstName": "ນັດນິຊາ",
+"lastName": "ພິມມະທອງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0266"
+},
+{
+"origId": 72,
+"firstName": "ສຸກພະສອນ",
+"lastName": "ສຸກສະຫວັດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0072"
+},
+{
+"origId": 424,
+"firstName": "ທິບກັນຍາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0424"
+},
+{
+"origId": 569,
+"firstName": "ວິພາດາ",
+"lastName": "ກຸນລະວຸດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0569"
+},
+{
+"origId": 305,
+"firstName": "ພຸດທະເສນ",
+"lastName": "ຫຼວງໂຄດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0305"
+},
+{
+"origId": 373,
+"firstName": "ປັນຍາ",
+"lastName": "ວອນທິວົງ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0373"
+},
+{
+"origId": 417,
+"firstName": "ສິງໂຕ",
+"lastName": "ທອງມະໄລວົງ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0417"
+},
+{
+"origId": 2,
+"firstName": "ວຽງນະຄອນ",
+"lastName": "ຂຸນວິເສດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0002"
+},
+{
+"origId": 209,
+"firstName": "ວັນນະເລດ",
+"lastName": "ພົມເວຫາ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0209"
+},
+{
+"origId": 324,
+"firstName": "ທະວີໂຊກ",
+"lastName": "ຜາທຸມມາ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0324"
+},
+{
+"origId": 571,
+"firstName": "ວົງຈິດ",
+"lastName": "ພູມສະຫວັນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0571"
+},
+{
+"origId": 152,
+"firstName": "ຈັນວາລາ",
+"lastName": "ຄູນປະເສີດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0152"
+},
+{
+"origId": 339,
+"firstName": "ສຸກທະວີຊັບ",
+"lastName": "ຄຳມະນີ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0339"
+},
+{
+"origId": 330,
+"firstName": "ວິໄຊໂຊກ",
+"lastName": "ພົມບັນດິດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0330"
+},
+{
+"origId": 259,
+"firstName": "ວານິດາ",
+"lastName": "ດາລາສະວົງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0259"
+},
+{
+"origId": 398,
+"firstName": "ພອນປະເສີດ",
+"lastName": "ພິດທະນູສອນ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0398"
+},
+{
+"origId": 329,
+"firstName": "ຕາວັນ",
+"lastName": "ຈັນທະວົງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0329"
+},
+{
+"origId": 168,
+"firstName": "ເພັດວິໄລ",
+"lastName": "ໂຄດຕະວົງສາ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0168"
+},
+{
+"origId": 282,
+"firstName": "ເພັດນ້ຳໜຶ່ງ",
+"lastName": "ໝື່ນດວງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0282"
+},
+{
+"origId": 296,
+"firstName": "ເມລິສາ",
+"lastName": "ວັນຄາມ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0296"
+},
+{
+"origId": 485,
+"firstName": "ແອ່ມມະລີ",
+"lastName": "ສີບຸນທຸມ (ລູກຄູຫລ້າ)",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0485"
+},
+{
+"origId": 432,
+"firstName": "ເພັດວິໄລ",
+"lastName": "ແສງດາລາ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0432"
+},
+{
+"origId": 465,
+"firstName": "ໄຊຕຸລາ",
+"lastName": "ບຸດຈັນທະລາດ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0465"
+},
+{
+"origId": 395,
+"firstName": "ບຸນທະວີ",
+"lastName": "ຣາຊະພົງ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0395"
+},
+{
+"origId": 346,
+"firstName": "ຄູນເລີດ",
+"lastName": "ບຸນເຖິງ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0346"
+},
+{
+"origId": 110,
+"firstName": "ອານຸກອນ",
+"lastName": "ຈັນທະນຸວົງ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0110"
+},
+{
+"origId": 280,
+"firstName": "ພອນນະພາ",
+"lastName": "ບຸດທະສອນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0280"
+},
+{
+"origId": 148,
+"firstName": "ໄດອານ່າ",
+"lastName": "ມົວດາວອນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0148"
+},
+{
+"origId": 9,
+"firstName": "ໂຊກໄຊ",
+"lastName": "ພິລາວັນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0009"
+},
+{
+"origId": 101,
+"firstName": "ຊັບທະວີ",
+"lastName": "ສຸທໍາມະວົງ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0101"
+},
+{
+"origId": 308,
+"firstName": "ເທບສະຫວັນ",
+"lastName": "ລໍວັນໄຊ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0308"
+},
+{
+"origId": 323,
+"firstName": "ພິສິດໄຊ",
+"lastName": "ປະທຸມມາ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0323"
+},
+{
+"origId": 394,
+"firstName": "ພູນປະເສີດ",
+"lastName": "ຣາສະພົງ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0394"
+},
+{
+"origId": 207,
+"firstName": "ສາຍທະວີພອນ",
+"lastName": "ສາຍນາສິນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0207"
+},
+{
+"origId": 573,
+"firstName": "ສິນທະວີ",
+"lastName": "ສີແສນດີ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0573"
+},
+{
+"origId": 391,
+"firstName": "ເມສາ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0391"
+},
+{
+"origId": 385,
+"firstName": "ທິດາພອນ",
+"lastName": "ພິດທະນູສອນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0385"
+},
+{
+"origId": 408,
+"firstName": "ພັດຊະລາກອນ",
+"lastName": "ລາດສະດີ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0408"
+},
+{
+"origId": 37,
+"firstName": "ທິດາສະຫວັນ",
+"lastName": "ໄຊຊະນະ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0037"
+},
+{
+"origId": 325,
+"firstName": "ປາລະມີ",
+"lastName": "ຜາທຸມມາ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0325"
+},
+{
+"origId": 421,
+"firstName": "ນັນທິດາ",
+"lastName": "ລາວຝັ່ງ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0421"
+},
+{
+"origId": 40,
+"firstName": "ອາລິສາ",
+"lastName": "ຈັນທະມາລາ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0040"
+},
+{
+"origId": 195,
+"firstName": "ອາລິສາ",
+"lastName": "ຫຼວງລາດ( ຫລານອຈຖອງ)",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0195"
+},
+{
+"origId": 217,
+"firstName": "ອາລຸນນີ",
+"lastName": "ທອງຈະເລີນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0217"
+},
+{
+"origId": 411,
+"firstName": "ວັນຜາສຸກ",
+"lastName": "ອຳພາວັນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0411"
+},
+{
+"origId": 162,
+"firstName": "ພາວະລິນ",
+"lastName": "ອິນທະລີ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0162"
+},
+{
+"origId": 21,
+"firstName": "ສຸທິນົນ",
+"lastName": "ອິນທະນາໄລ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0021"
+},
+{
+"origId": 341,
+"firstName": "ປະກາຍເພັດ",
+"lastName": "ວົງໄກສອນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0341"
+},
+{
+"origId": 98,
+"firstName": "ມັງກອນ",
+"lastName": "ລາດຊະວົງໄຊ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0098"
+},
+{
+"origId": 44,
+"firstName": "ສຸພາໄຊ",
+"lastName": "ໄຊຍະຄົມ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0044"
+},
+{
+"origId": 423,
+"firstName": "ເທບພາກອນ",
+"lastName": "ພູນວິໄຊ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0423"
+},
+{
+"origId": 487,
+"firstName": "ອາພິສິດ",
+"lastName": "ພັນທຸວົງ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0487"
+},
+{
+"origId": 271,
+"firstName": "ພອນມະນີ",
+"lastName": "ຫຼວງວິເສດ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0271"
+},
+{
+"origId": 441,
+"firstName": "ສຸລິສາ",
+"lastName": "ພິມມະສອນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0441"
+},
+{
+"origId": 34,
+"firstName": "ປະກາຍຟ້າ",
+"lastName": "ຈັນທະລາສີ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0034"
+},
+{
+"origId": 364,
+"firstName": "ປາວິນາ",
+"lastName": "ວິລະວົງ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0364"
+},
+{
+"origId": 348,
+"firstName": "ສຸດາລັດ",
+"lastName": "ຜາຍສະໝອນ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0348"
+},
+{
+"origId": 448,
+"firstName": "ພຸດທະສາ",
+"lastName": "ແພງພັນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0448"
+},
+{
+"origId": 328,
+"firstName": "ເພັດດາວັນ",
+"lastName": "ພົມບັນດິດ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0328"
+},
+{
+"origId": 376,
+"firstName": "ພອນທິດາ",
+"lastName": "ໄຊຍະສານ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0376"
+},
+{
+"origId": 103,
+"firstName": "ກອນສະຫວັນ",
+"lastName": "ພົມທະວີ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0103"
+},
+{
+"origId": 413,
+"firstName": "ໄຊຊະນະ",
+"lastName": "ແຫວນວົງໄຊ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0413"
+},
+{
+"origId": 199,
+"firstName": "ແສງອາທິດ",
+"lastName": "ແກ້ວຄໍາມາ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0199"
+},
+{
+"origId": 354,
+"firstName": "ທະນູສິນ",
+"lastName": "ຊະນະພານ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0354"
+},
+{
+"origId": 73,
+"firstName": "ເສົານະຄອນ",
+"lastName": "ສຸກສະຫວັດ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0073"
+},
+{
+"origId": 56,
+"firstName": "ໂຊກຈະເລີນໄຊ",
+"lastName": "ໄຊຍະສານ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0056"
+},
+{
+"origId": 334,
+"firstName": "ຄູນມີໄຊ",
+"lastName": "ເກດແກ້ວ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0334"
+},
+{
+"origId": 576,
+"firstName": "ເພັດມັງກອນ",
+"lastName": "ຈັນທະວິໄທ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0576"
+},
+{
+"origId": 197,
+"firstName": "ໄຊຍະລາດ",
+"lastName": "ວໍລະວົງ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0197"
+},
+{
+"origId": 363,
+"firstName": "ປະທຸມມາ",
+"lastName": "ສີທະຈັນ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0363"
+},
+{
+"origId": 7,
+"firstName": "ເຈນີວາ",
+"lastName": "ສີດາວັນ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0007"
+},
+{
+"origId": 578,
+"firstName": "ມະລິ",
+"lastName": "ອະລິຍະ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0578"
+},
+{
+"origId": 579,
+"firstName": "ໄຂ່ມຸກ",
+"lastName": "ອະລິຍະ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0579"
+},
+{
+"origId": 580,
+"firstName": "ນຸ່ນນີ່",
+"lastName": "ສີລິປະພັນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0580"
+},
+{
+"origId": 581,
+"firstName": "ຈັນທະວີ",
+"lastName": "ອາລຸນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0581"
+},
+{
+"origId": 582,
+"firstName": "ພອນທິດາ",
+"lastName": "ແຫວນວົງໄຊ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0582"
+},
+{
+"origId": 583,
+"firstName": "ກິດທິເດດ",
+"lastName": "ດວງສະຫວັນ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0583"
+},
+{
+"origId": 409,
+"firstName": "ພິດຊ້າພອນ",
+"lastName": "ສີຈະເລີນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0409"
+},
+{
+"origId": 202,
+"firstName": "ອາທິດ",
+"lastName": "ສີຈະເລີນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0202"
+},
+{
+"origId": 124,
+"firstName": "ສຸນິສອນ",
+"lastName": "ພອນວິໄລ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0124"
+},
+{
+"origId": 491,
+"firstName": "ນິຊາດາ",
+"lastName": "ຄົງສະພາ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0491"
+},
+{
+"origId": 30,
+"firstName": "ພາຄິນ",
+"lastName": "ຄົງສະພາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0030"
+},
+{
+"origId": 584,
+"firstName": "ຣຸ້ງນະພາ",
+"lastName": "ກຳມະວົງສາ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0584"
+},
+{
+"origId": 585,
+"firstName": "ລິນນະພາ",
+"lastName": "ຈະເລີນສຸກ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0585"
+},
+{
+"origId": 586,
+"firstName": "ນິຣະດາ",
+"lastName": "ສັນຕິສຸກ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0586"
+},
+{
+"origId": 587,
+"firstName": "ອາເມລາ",
+"lastName": "ລໍ່",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0587"
+},
+{
+"origId": 588,
+"firstName": "ອານິຊາ",
+"lastName": "ລໍ່",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0588"
+},
+{
+"origId": 332,
+"firstName": "ສຸດທິດາ",
+"lastName": "ຈັນທະວົງ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0332"
+},
+{
+"origId": 589,
+"firstName": "ດີຊ່າ",
+"lastName": "ສຸລິນດາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0589"
+},
+{
+"origId": 590,
+"firstName": "ຄິດຕິນ່າ",
+"lastName": "ສຸຂະຜາຍ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0590"
+},
+{
+"origId": 591,
+"firstName": "ສຸນິດຕາ",
+"lastName": "ສີພາວັນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0591"
+},
+{
+"origId": 367,
+"firstName": "ລິນດາ",
+"lastName": "ລີຫວ່າງຕົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0367"
+},
+{
+"origId": 366,
+"firstName": "ແອນນາ",
+"lastName": "ລີຫວ່າງຕົງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0366"
+},
+{
+"origId": 403,
+"firstName": "ໄຊຊະນະ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0403"
+},
+{
+"origId": 592,
+"firstName": "ນ້ຳທິບ",
+"lastName": "ໄຊບຸນເຮືອງ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0592"
+},
+{
+"origId": 593,
+"firstName": "ອານັນ",
+"lastName": "ສຸວັນນະລາດ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0593"
+},
+{
+"origId": 146,
+"firstName": "ສຸກສະຫວັນ",
+"lastName": "ນັນທະລາດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0146"
+},
+{
+"origId": 292,
+"firstName": "ສິດພະກອນ",
+"lastName": "ພົມມະຈັນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0292"
+},
+{
+"origId": 293,
+"firstName": "ທິດາພອນ",
+"lastName": "ພົມມະຈັນ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0293"
+},
+{
+"origId": 355,
+"firstName": "ຊັບສົມບັດ",
+"lastName": "ລາວຝັ່ງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0355"
+},
+{
+"origId": 594,
+"firstName": "ສົມໃຈ",
+"lastName": "ລາວວາງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0594"
+},
+{
+"origId": 595,
+"firstName": "ສົມຈິດ",
+"lastName": "ລາວວາງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0595"
+},
+{
+"origId": 596,
+"firstName": "ພອນທິບ",
+"lastName": "ຫລວງສຸພົມ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0596"
+},
+{
+"origId": 597,
+"firstName": "ຈັນວິໄຊ",
+"lastName": "ພົນມີຈິດ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0597"
+},
+{
+"origId": 598,
+"firstName": "ສຸດາພອນ",
+"lastName": "ຂຸນສີ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0598"
+},
+{
+"origId": 599,
+"firstName": "ພອນປະສິດ",
+"lastName": "ຂຸນສີ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0599"
+},
+{
+"origId": 105,
+"firstName": "ແມັກ",
+"lastName": "ໄຊຍະວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0105"
+},
+{
+"origId": 600,
+"firstName": "ມຸກອັນດາ",
+"lastName": "ອິນທະວົງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0600"
+},
+{
+"origId": 58,
+"firstName": "ດາວວອນ",
+"lastName": "ທອງລິວົງ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0058"
+},
+{
+"origId": 60,
+"firstName": "ອັກສອນ",
+"lastName": "ທອງລິວົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0060"
+},
+{
+"origId": 601,
+"firstName": "ແສງຕາວັນ",
+"lastName": "ດາລາວົງ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0601"
+},
+{
+"origId": 602,
+"firstName": "ພອນດາລາ",
+"lastName": "ຈັນທະວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0602"
+},
+{
+"origId": 603,
+"firstName": "ອານຸຊາ",
+"lastName": "ໄຊຍະລາດ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0603"
+},
+{
+"origId": 507,
+"firstName": "ພູຜາ",
+"lastName": "ລັດສະໝີທອງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0507"
+},
+{
+"origId": 604,
+"firstName": "ຈີລະນັນ",
+"lastName": "ສີຫາລາດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0604"
+},
+{
+"origId": 605,
+"firstName": "ເພັດລິນພອນ",
+"lastName": "ພານຸວົງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0605"
+},
+{
+"origId": 606,
+"firstName": "ທະວີຊັບ",
+"lastName": "ແສງວິໄລ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0606"
+},
+{
+"origId": 440,
+"firstName": "ທິບໄກສອນ",
+"lastName": "ແສງວິໄລ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0440"
+},
+{
+"origId": 607,
+"firstName": "ພຸດທະນາສິນ",
+"lastName": "ຈັນທະວົງ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0607"
+},
+{
+"origId": 608,
+"firstName": "ສຸດາພອນ",
+"lastName": "ສຸພາລີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0608"
+},
+{
+"origId": 609,
+"firstName": "ສຸນິດາ",
+"lastName": "ສຸພາລີ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0609"
+},
+{
+"origId": 291,
+"firstName": "ປາດຖະໜາ",
+"lastName": "ໄຊສົມພອນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0291"
+},
+{
+"origId": 338,
+"firstName": "ນ້ຳຝົນ",
+"lastName": "ດວງມະລິ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0338"
+},
+{
+"origId": 610,
+"firstName": "ຄຳປະສົງ",
+"lastName": "ທອງລີວົງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0610"
+},
+{
+"origId": 29,
+"firstName": "ທິບພະຈັນ",
+"lastName": "ປັນຍາຜົນ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0029"
+},
+{
+"origId": 611,
+"firstName": "ຣົດສະຣິນ",
+"lastName": "ພົມມະສີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0611"
+},
+{
+"origId": 612,
+"firstName": "ເພັດນະພາ",
+"lastName": "ພົມມະລາດ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0612"
+},
+{
+"origId": 613,
+"firstName": "ເພັດສຸດາ",
+"lastName": "ພົມມະລາດ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0613"
+},
+{
+"origId": 614,
+"firstName": "ເພັດທິດາ",
+"lastName": "ພົມມະລາດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0614"
+},
+{
+"origId": 429,
+"firstName": "ສຸພັນສາ",
+"lastName": "ແສນທະວີ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0429"
+},
+{
+"origId": 263,
+"firstName": "ສຸກສັນ",
+"lastName": "ໄຊຍາລາດ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0263"
+},
+{
+"origId": 615,
+"firstName": "ຣຸ່ງຣະດາ",
+"lastName": "ຈະເລີນສັກ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0615"
+},
+{
+"origId": 616,
+"firstName": "ຣຸ່ງຣືໄທ",
+"lastName": "ຈະເລີນສັກ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0616"
+},
+{
+"origId": 49,
+"firstName": "ອາລີຍາ",
+"lastName": "ພົມນິລາ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0049"
+},
+{
+"origId": 297,
+"firstName": "ອາລິສາ",
+"lastName": "ເພັດສະນີ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0297"
+},
+{
+"origId": 618,
+"firstName": "ບຸນມີ",
+"lastName": "ປະທຸມເງີນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0618"
+},
+{
+"origId": 241,
+"firstName": "ປາມີນາ",
+"lastName": "ຈັນທະບູລີ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0241"
+},
+{
+"origId": 84,
+"firstName": "ອັອບບີ້",
+"lastName": "ບຸບຜາຈຳປາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0084"
+},
+{
+"origId": 96,
+"firstName": "ພຸດທະສອນ",
+"lastName": "ວັນດາລາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0096"
+},
+{
+"origId": 397,
+"firstName": "ເອລິນດາ",
+"lastName": "ຖາວອນ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0397"
+},
+{
+"origId": 620,
+"firstName": "ແດນນີ້",
+"lastName": "ຊາວປະດິດ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0620"
+},
+{
+"origId": 431,
+"firstName": "ພຸດທິດາ",
+"lastName": "ອ່ອນພັນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0431"
+},
+{
+"origId": 621,
+"firstName": "ສຸກກັນຍາ",
+"lastName": "ແກ້ວບຸນມີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0621"
+},
+{
+"origId": 622,
+"firstName": "ອິ້ງຟ້າ",
+"lastName": "ແກ້ວບຸນມີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0622"
+},
+{
+"origId": 351,
+"firstName": "ທິບທິດາ",
+"lastName": "ປຣະສົມສຸກ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0351"
+},
+{
+"origId": 17,
+"firstName": "ນ້ຳມົນ",
+"lastName": "ພະສະຖານ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0017"
+},
+{
+"origId": 375,
+"firstName": "ກ້ອງນະພາ",
+"lastName": "ໄຊຍະສານ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0375"
+},
+{
+"origId": 295,
+"firstName": "ມາລີສາ",
+"lastName": "ໝື່ນສີ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0295"
+},
+{
+"origId": 623,
+"firstName": "ໄຊຕະກຸນ",
+"lastName": "ລັດທິປັນຍາ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0623"
+},
+{
+"origId": 575,
+"firstName": "ສຸກປະເສີດ",
+"lastName": "ອິນທະວົງ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0575"
+},
+{
+"origId": 624,
+"firstName": "ນິງນະພາ",
+"lastName": "ແກ້ວພົມມາ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0624"
+},
+{
+"origId": 625,
+"firstName": "ເມຣິສາ",
+"lastName": "ສີພາວັນ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0625"
+},
+{
+"origId": 5,
+"firstName": "ອິດທິພອນ",
+"lastName": "ມະນີໂຊດ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0005"
+},
+{
+"origId": 8,
+"firstName": "ອາລີນ້າ",
+"lastName": "ມະນີໂຊດ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0008"
+},
+{
+"origId": 11,
+"firstName": "ອານົນ",
+"lastName": "ມະນີໂຊດ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0011"
+},
+{
+"origId": 39,
+"firstName": "ເທບປັນຍາ",
+"lastName": "ຈັນທະມາລາ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0039"
+},
+{
+"origId": 626,
+"firstName": "ຈັນສຸດາ",
+"lastName": "ໄຊຍະເສນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0626"
+},
+{
+"origId": 76,
+"firstName": "ພອຍໄພລິນ",
+"lastName": "ພານຄຳ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0076"
+},
+{
+"origId": 627,
+"firstName": "ຊະນະໄຊ",
+"lastName": "ທອງສຸດີ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0627"
+},
+{
+"origId": 65,
+"firstName": "ທະນາສິດ",
+"lastName": "ຊະນະພັນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0065"
+},
+{
+"origId": 577,
+"firstName": "ຈັນພະເພັງ",
+"lastName": "ໝືນວົງສາ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0577"
+},
+{
+"origId": 628,
+"firstName": "ມະລິສາ",
+"lastName": "ເພັງເມືອງຄຸນ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0628"
+},
+{
+"origId": 629,
+"firstName": "ສຸພາລັກ",
+"lastName": "ຈັນທະລັງສີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0629"
+},
+{
+"origId": 630,
+"firstName": "ພະນິດພອນ",
+"lastName": "ເສັງຢ່າງ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0630"
+},
+{
+"origId": 497,
+"firstName": "ນະຄອນສະຫວັນ",
+"lastName": "ທັບພະລັດ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0497"
+},
+{
+"origId": 631,
+"firstName": "ສຸນິດາ",
+"lastName": "ລັດຕະນະ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0631"
+},
+{
+"origId": 632,
+"firstName": "ສອນທິດາ",
+"lastName": "ບຸນໄມທອງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0632"
+},
+{
+"origId": 115,
+"firstName": "ນິຣະດາ",
+"lastName": "ຈູມພະລີ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0115"
+},
+{
+"origId": 633,
+"firstName": "ມະນີຈັນ",
+"lastName": "ສີສົມບຸນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0633"
+},
+{
+"origId": 634,
+"firstName": "ນ້ຳຂິງ",
+"lastName": "ແກ້ວບົວບານ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0634"
+},
+{
+"origId": 635,
+"firstName": "ມັງກອນ",
+"lastName": "ແກ້ວບົວບານ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0635"
+},
+{
+"origId": 636,
+"firstName": "ລັດຕະນະພອນ",
+"lastName": "ບຸນທຳ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0636"
+},
+{
+"origId": 637,
+"firstName": "ໄຊຍະສອນ",
+"lastName": "ບຸນທຳ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0637"
+},
+{
+"origId": 104,
+"firstName": "ກິດຕິພົງ",
+"lastName": "ສີສະຫວັນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0104"
+},
+{
+"origId": 638,
+"firstName": "ເກສອນສະຫວັນ",
+"lastName": "ພົມມະຈັນ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0638"
+},
+{
+"origId": 639,
+"firstName": "ພອນທິບ",
+"lastName": "ທອງລິວົງ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0639"
+},
+{
+"origId": 38,
+"firstName": "ພອນໄພສານ",
+"lastName": "ຢ່າງ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0038"
+},
+{
+"origId": 71,
+"firstName": "ທິມທິດາ",
+"lastName": "ແກ້ວພັກດີ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0071"
+},
+{
+"origId": 306,
+"firstName": "ເອກກະສິດ",
+"lastName": "ພວງບຸນມີ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0306"
+},
+{
+"origId": 254,
+"firstName": "ສອນທະວີໄຊ",
+"lastName": "ສີຫາລາດ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0254"
+},
+{
+"origId": 642,
+"firstName": "ປາວິນາ",
+"lastName": "ສິດທິວົງ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0642"
+},
+{
+"origId": 643,
+"firstName": "ຟ້າໃສ",
+"lastName": "ທອງມະນີ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0643"
+},
+{
+"origId": 274,
+"firstName": "ເມກປັນຍາ",
+"lastName": "ພົມມະອິນ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0274"
+},
+{
+"origId": 273,
+"firstName": "ເມກມຸງຄຸນ",
+"lastName": "ພົມມະອິນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0273"
+},
+{
+"origId": 272,
+"firstName": "ເມກສະຫວັນ",
+"lastName": "ພົມມະອິນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0272"
+},
+{
+"origId": 113,
+"firstName": "ຄູນມີ",
+"lastName": "ຄູນສະຫວັດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0113"
+},
+{
+"origId": 644,
+"firstName": "ຈັນທະສິນ",
+"lastName": "ໄຊຍະເສນ",
+"room": "ອະນຸບານ 3 A",
+"studentCode": "STD-0644"
+},
+{
+"origId": 645,
+"firstName": "ສຸທິນັນ",
+"lastName": "ໄສດາລາ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0645"
+},
+{
+"origId": 28,
+"firstName": "ອາໝວຍ",
+"lastName": "ຖາວອນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0028"
+},
+{
+"origId": 26,
+"firstName": "ອາໝິງ",
+"lastName": "ຖາວອນ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0026"
+},
+{
+"origId": 399,
+"firstName": "ອານຸສະຫວັນ",
+"lastName": "ຫລ້າບຸນສານ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0399"
+},
+{
+"origId": 646,
+"firstName": "ວິມະໄລ",
+"lastName": "ໄຊຍະສານ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0646"
+},
+{
+"origId": 87,
+"firstName": "ໂຊກຈະເລີນ",
+"lastName": "ຫລວງລາດ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0087"
+},
+{
+"origId": 88,
+"firstName": "ໂຊກມີໄຊ",
+"lastName": "ຫລວງລາດ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0088"
+},
+{
+"origId": 647,
+"firstName": "ພອນສະຫວັນ",
+"lastName": "ຫານຊະນະ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0647"
+},
+{
+"origId": 648,
+"firstName": "ພານະຄອນ",
+"lastName": "ຫານຊະນະ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0648"
+},
+{
+"origId": 204,
+"firstName": "ທິດສະດີ",
+"lastName": "ພິລາພອນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0204"
+},
+{
+"origId": 649,
+"firstName": "ພອນວິໄລ",
+"lastName": "ອິນທະວົງ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0649"
+},
+{
+"origId": 75,
+"firstName": "ພະຫັດສອນ",
+"lastName": "ສຸກສະຫວັດ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0075"
+},
+{
+"origId": 652,
+"firstName": "ອາລິສາ",
+"lastName": "ສິດທິພັນທອງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0652"
+},
+{
+"origId": 46,
+"firstName": "ສິດທິເດດ",
+"lastName": "ແສງທອງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0046"
+},
+{
+"origId": 653,
+"firstName": "ລັດຕະນາ",
+"lastName": "ຜາຍສະໝອນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0653"
+},
+{
+"origId": 654,
+"firstName": "ລິນລັດດາ",
+"lastName": "ພິລະວົງ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0654"
+},
+{
+"origId": 22,
+"firstName": "ລີເຈນຮາ",
+"lastName": "ໄຊຍະຊ່າງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0022"
+},
+{
+"origId": 24,
+"firstName": "ລີຊັນນີ້",
+"lastName": "ໄຊຍະຊ້າງ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0024"
+},
+{
+"origId": 25,
+"firstName": "ລີມົວນ້າ",
+"lastName": "ໄຊຍະຊ້າງ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0025"
+},
+{
+"origId": 80,
+"firstName": "ວິສາຂາ",
+"lastName": "ແສງສຸນິກອນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0080"
+},
+{
+"origId": 79,
+"firstName": "ທິດາພອນ",
+"lastName": "ແສງສຸນິກອນ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0079"
+},
+{
+"origId": 117,
+"firstName": "ທະນູສິດ",
+"lastName": "ຕ໋ອຍມະນີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0117"
+},
+{
+"origId": 4,
+"firstName": "ນິພາພອນ",
+"lastName": "ອຸດອນ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0004"
+},
+{
+"origId": 229,
+"firstName": "ດີ່ນ່າ",
+"lastName": "ແກ້ວສຸກາ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0229"
+},
+{
+"origId": 655,
+"firstName": "ສະຫາລັດ",
+"lastName": "ເພັດສິລິ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0655"
+},
+{
+"origId": 255,
+"firstName": "ເດັ່ນ",
+"lastName": "ແກ້ວສຸກາ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0255"
+},
+{
+"origId": 656,
+"firstName": "ພະລິສອນ",
+"lastName": "ຈັນມະນີວົງ",
+"room": "ມັດທະຍົມ 1",
+"studentCode": "STD-0656"
+},
+{
+"origId": 657,
+"firstName": "ຊັບພູນສິນ",
+"lastName": "ອິນທະນາໄລ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0657"
+},
+{
+"origId": 658,
+"firstName": "ແສງພະຈັນ",
+"lastName": "ທຸມຫລ້າພັນ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0658"
+},
+{
+"origId": 554,
+"firstName": "ເພັນນະພາ",
+"lastName": "ວົງໄຊ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0554"
+},
+{
+"origId": 659,
+"firstName": "ບີນ່າ",
+"lastName": "ດາວສະຫວັນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0659"
+},
+{
+"origId": 660,
+"firstName": "ຈັນທະວີໄຊ",
+"lastName": "ພິລາວັນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0660"
+},
+{
+"origId": 661,
+"firstName": "ວາດສະໜາ",
+"lastName": "ຫີນດາລາ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0661"
+},
+{
+"origId": 662,
+"firstName": "ຢູ່ໂລ",
+"lastName": "ພູນ້ອຍ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0662"
+},
+{
+"origId": 664,
+"firstName": "ສີຫາ",
+"lastName": "ຈັນທະວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0664"
+},
+{
+"origId": 54,
+"firstName": "ບຸນທະວີ",
+"lastName": "ດີທອງພອນ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0054"
+},
+{
+"origId": 133,
+"firstName": "ອາຣີນຍາ",
+"lastName": "ລັດສະໝີທອງ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0133"
+},
+{
+"origId": 665,
+"firstName": "ນະທີ",
+"lastName": "ຊາມູນຕີ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0665"
+},
+{
+"origId": 161,
+"firstName": "ແສງທະວີບ",
+"lastName": "ມູນວົງສາ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0161"
+},
+{
+"origId": 160,
+"firstName": "ແສງສຸລີ",
+"lastName": "ມູນວົງສາ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0160"
+},
+{
+"origId": 666,
+"firstName": "ຈັນທະພອນ",
+"lastName": "ອຸດົມສິນ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0666"
+},
+{
+"origId": 322,
+"firstName": "ອາເລັນດາ",
+"lastName": "ຕາມອງ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0322"
+},
+{
+"origId": 344,
+"firstName": "ພູທະນາ",
+"lastName": "ຫຸມປະເສີດ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0344"
+},
+{
+"origId": 667,
+"firstName": "ອານັນດາ",
+"lastName": "ກົງສະຈັກ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0667"
+},
+{
+"origId": 82,
+"firstName": "ມຸກດາວັນ",
+"lastName": "ພຽງສະຫວັນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0082"
+},
+{
+"origId": 668,
+"firstName": "ທະນາກອນ",
+"lastName": "ໄຊຍະວົງສອນ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0668"
+},
+{
+"origId": 669,
+"firstName": "ນັນທິດາ",
+"lastName": "ພັນທະວົງ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0669"
+},
+{
+"origId": 285,
+"firstName": "ພິມລະດາ",
+"lastName": "ໝື່ນດວງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0285"
+},
+{
+"origId": 670,
+"firstName": "ປານິດາ",
+"lastName": "ຈິດຕະວົງ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0670"
+},
+{
+"origId": 671,
+"firstName": "ອັກສອນສະຫວັນ",
+"lastName": "ພາດີ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0671"
+},
+{
+"origId": 27,
+"firstName": "ສຸພາຈິດ",
+"lastName": "ຄໍາມະນີ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0027"
+},
+{
+"origId": 407,
+"firstName": "ພິມນະພາ",
+"lastName": "ລາດສະດີ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0407"
+},
+{
+"origId": 672,
+"firstName": "ສຸກສະໄໝ",
+"lastName": "ວົງພັກດີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0672"
+},
+{
+"origId": 377,
+"firstName": "ມາລິໂອ",
+"lastName": "ທອງມະໄລວົງ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0377"
+},
+{
+"origId": 673,
+"firstName": "ມີໂມ",
+"lastName": "ທອງມະໄລວົງ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0673"
+},
+{
+"origId": 371,
+"firstName": "ເທບປັນຍາ",
+"lastName": "ເທບພະລິດ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0371"
+},
+{
+"origId": 674,
+"firstName": "ສຸກຫົງ",
+"lastName": "ລັດສະໝີ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0674"
+},
+{
+"origId": 675,
+"firstName": "ຊົມພູ",
+"lastName": "ສົງລະທອງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0675"
+},
+{
+"origId": 326,
+"firstName": "ທິດາພອນ",
+"lastName": "ທອງວິໄລ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0326"
+},
+{
+"origId": 327,
+"firstName": "ວິພາພອນ",
+"lastName": "ທອງວິໄລ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0327"
+},
+{
+"origId": 248,
+"firstName": "ບຸນປອນ",
+"lastName": "ອຸດົມສິນ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0248"
+},
+{
+"origId": 312,
+"firstName": "ສຸຣິຕຣາ",
+"lastName": "ສີສະຫວາດ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0312"
+},
+{
+"origId": 57,
+"firstName": "ສຸນິສາ",
+"lastName": "ໄຊຍະສານ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0057"
+},
+{
+"origId": 41,
+"firstName": "ສຸນິຕາ",
+"lastName": "ວົງໄຊຍາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0041"
+},
+{
+"origId": 275,
+"firstName": "ຊັບທະວີ",
+"lastName": "ແສງມະນີ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0275"
+},
+{
+"origId": 276,
+"firstName": "ໂຊກທະວີ",
+"lastName": "ແສງມະນີ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0276"
+},
+{
+"origId": 260,
+"firstName": "ວິຣິຍາ",
+"lastName": "ດາລາສະວົງ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0260"
+},
+{
+"origId": 23,
+"firstName": "ສຸກສະຫວັນ",
+"lastName": "ເທບສຸລິຄຸນ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0023"
+},
+{
+"origId": 488,
+"firstName": "ຊີວາກອນ",
+"lastName": "ສີປະເສີດ",
+"room": "ປະຖົມ 1 C",
+"studentCode": "STD-0488"
+},
+{
+"origId": 676,
+"firstName": "ຂອງຂວັນ",
+"lastName": "ລາວພາ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0676"
+},
+{
+"origId": 677,
+"firstName": "ອາລິຍາ",
+"lastName": "ທຳມະວົງສາ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0677"
+},
+{
+"origId": 492,
+"firstName": "ອາທິສັກ",
+"lastName": "ພົງສະຫວັດ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0492"
+},
+{
+"origId": 678,
+"firstName": "ເພັດມີໄຊ",
+"lastName": "ພານຸວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0678"
+},
+{
+"origId": 679,
+"firstName": "ອາລິສາ",
+"lastName": "ທຳມະວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0679"
+},
+{
+"origId": 680,
+"firstName": "ປາລິດາ",
+"lastName": "ບຸນຍົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0680"
+},
+{
+"origId": 16,
+"firstName": "ເຈນທິດາ",
+"lastName": "ຄຳເພັງໄຊ",
+"room": "ອະນຸບານ 2 B",
+"studentCode": "STD-0016"
+},
+{
+"origId": 45,
+"firstName": "ບຸນມີໄຊ",
+"lastName": "ໄຊຍະຄົມ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0045"
+},
+{
+"origId": 681,
+"firstName": "ຢີ້ວື່",
+"lastName": "ວື່",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0681"
+},
+{
+"origId": 226,
+"firstName": "ປັນຍາທິບ",
+"lastName": "ມີມະໄລ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0226"
+},
+{
+"origId": 225,
+"firstName": "ອັກສອນສິນ",
+"lastName": "ມີມະໄລ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0225"
+},
+{
+"origId": 130,
+"firstName": "ນົບພະກອນ",
+"lastName": "ຈັນທະວົງພອນ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0130"
+},
+{
+"origId": 129,
+"firstName": "ພະນະຄອນ",
+"lastName": "ຈັນທະວົງພອນ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0129"
+},
+{
+"origId": 682,
+"firstName": "ແສນທະວີ",
+"lastName": "ສຸກອາລຸນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0682"
+},
+{
+"origId": 683,
+"firstName": "ໄຊຊະນະ",
+"lastName": "ສິດທິລາດ",
+"room": "ມັດທະຍົມ 2",
+"studentCode": "STD-0683"
+},
+{
+"origId": 684,
+"firstName": "ພອນທິດາ",
+"lastName": "ວົງມະນີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0684"
+},
+{
+"origId": 455,
+"firstName": "ເພັດມັງກອນ",
+"lastName": "ສົມປັນຍາ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0455"
+},
+{
+"origId": 187,
+"firstName": "ວິພາດາ",
+"lastName": "ໂພທິເສນ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0187"
+},
+{
+"origId": 270,
+"firstName": "ນິຣະດາ",
+"lastName": "ມາດມະນີວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0270"
+},
+{
+"origId": 353,
+"firstName": "ພົມມະສອນ",
+"lastName": "ຊະນະພານ",
+"room": "ປະຖົມ 5",
+"studentCode": "STD-0353"
+},
+{
+"origId": 372,
+"firstName": "ທັນວາ",
+"lastName": "ວອນທິວົງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0372"
+},
+{
+"origId": 228,
+"firstName": "ວານິດາ",
+"lastName": "ໃສແສງດີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0228"
+},
+{
+"origId": 444,
+"firstName": "ເທບທິດາ",
+"lastName": "ພູນວິໄຊ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0444"
+},
+{
+"origId": 445,
+"firstName": "ເທບດາລາ",
+"lastName": "ພູນວິໄຊ",
+"room": "ປະຖົມ 3 B",
+"studentCode": "STD-0445"
+},
+{
+"origId": 685,
+"firstName": "ປັນຍາທິບ",
+"lastName": "ພອນວິໄລ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0685"
+},
+{
+"origId": 686,
+"firstName": "ທິນະກອນ",
+"lastName": "ແພງພຸຍທາ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0686"
+},
+{
+"origId": 687,
+"firstName": "ອານຸຊາ",
+"lastName": "ໄພສະຫວັດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0687"
+},
+{
+"origId": 196,
+"firstName": "ອາລິລະດາ",
+"lastName": "ຫຼວງລາດ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0196"
+},
+{
+"origId": 688,
+"firstName": "ພູມມີຊັບ",
+"lastName": "ພົມດວງສີ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0688"
+},
+{
+"origId": 689,
+"firstName": "ຈັນທິດາ",
+"lastName": "ທຳມະໂນສຸດ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0689"
+},
+{
+"origId": 690,
+"firstName": "ຕາວັນ",
+"lastName": "ແກ້ວມະນີວົງ",
+"room": "ມັດທະຍົມ 3",
+"studentCode": "STD-0690"
+},
+{
+"origId": 214,
+"firstName": "ຫົງສະກຸນ",
+"lastName": "ຈັນທະລາ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0214"
+},
+{
+"origId": 691,
+"firstName": "ໄຊຊະນະ",
+"lastName": "ບຸນມີໄຊ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0691"
+},
+{
+"origId": 70,
+"firstName": "ອາລິສາ",
+"lastName": "ສຸທຳມະວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0070"
+},
+{
+"origId": 50,
+"firstName": "ອ່ອນສີ",
+"lastName": "ສີນາລັດ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0050"
+},
+{
+"origId": 131,
+"firstName": "ປະກາຍເພັດ",
+"lastName": "ສຸທໍາມະວົງ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0131"
+},
+{
+"origId": 692,
+"firstName": "ເພັດທະວີຊັບ",
+"lastName": "ຜາຈວງ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0692"
+},
+{
+"origId": 693,
+"firstName": "ສຸກປັນຍາ",
+"lastName": "ສີນາລັດ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0693"
+},
+{
+"origId": 422,
+"firstName": "ສາທິຕາ",
+"lastName": "ຈີນດາວົງ",
+"room": "ມັດທະຍົມ 4",
+"studentCode": "STD-0422"
+},
+{
+"origId": 696,
+"firstName": "ຫັດສະດີ",
+"lastName": "ຈັນທະປັນຍາ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0696"
+},
+{
+"origId": 697,
+"firstName": "ມິລິນ",
+"lastName": "ສີວິໄລ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0697"
+},
+{
+"origId": 640,
+"firstName": "ທິບພາພອນ",
+"lastName": "ລັດຕະນະ",
+"room": "ອະນຸບານ 1 B",
+"studentCode": "STD-0640"
+},
+{
+"origId": 698,
+"firstName": "ປາແປ້ງ",
+"lastName": "ຫລວງລາດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0698"
+},
+{
+"origId": 699,
+"firstName": "ສິຣິນພາ",
+"lastName": "ແສນຄະຕິ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0699"
+},
+{
+"origId": 700,
+"firstName": "ຫລິງເຫວີຍ",
+"lastName": "ຫຼີ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0700"
+},
+{
+"origId": 701,
+"firstName": "ວິພາວັນ",
+"lastName": "ວົງວີສຸກ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0701"
+},
+{
+"origId": 702,
+"firstName": "ເກດທະນູສອນ",
+"lastName": "ໂຄທິເສນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0702"
+},
+{
+"origId": 703,
+"firstName": "ສອນພະໄຊ",
+"lastName": "ພອນວິໄລ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0703"
+},
+{
+"origId": 704,
+"firstName": "ເດຍນາ",
+"lastName": "ດາວສະຫວັນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0704"
+},
+{
+"origId": 705,
+"firstName": "ໄພລິນ",
+"lastName": "ວົງໄຊ",
+"room": "ລ້ຽງເດັກອ່ອນ",
+"studentCode": "STD-0705"
+},
+{
+"origId": 707,
+"firstName": "ພອນສະຫວັນ",
+"lastName": "ບໍຄຳບານ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0707"
+},
+{
+"origId": 708,
+"firstName": "ອັນຊັນ",
+"lastName": "ແກ້ວປະເສີດ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0708"
+},
+{
+"origId": 709,
+"firstName": "ທະວີໂຊກ",
+"lastName": "ພຸດທະວົງ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0709"
+},
+{
+"origId": 711,
+"firstName": "ສຸລິນທາ",
+"lastName": "ສິດຄຳແສງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0711"
+},
+{
+"origId": 712,
+"firstName": "ສຸກພາໂຊກ",
+"lastName": "ຈັນທະວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0712"
+},
+{
+"origId": 502,
+"firstName": "ປາລິຕາ",
+"lastName": "ສີປະເສີດ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0502"
+},
+{
+"origId": 713,
+"firstName": "ອານຸໄຊ",
+"lastName": "ຈູມໂພຄຳ",
+"room": "ປະຖົມ 2 A",
+"studentCode": "STD-0713"
+},
+{
+"origId": 714,
+"firstName": "ໄຊສັກດາ",
+"lastName": "ຫຍຸຍວານິດຊະວົງ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0714"
+},
+{
+"origId": 716,
+"firstName": "ທະນູໄຊ",
+"lastName": "ຍົດທະວົງ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0716"
+},
+{
+"origId": 717,
+"firstName": "ທະວີໂຊກ",
+"lastName": "ສີຫຼວງລາດ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0717"
+},
+{
+"origId": 718,
+"firstName": "ປັດທະວີ",
+"lastName": "ລໍລອນວັນຄຳ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0718"
+},
+{
+"origId": 719,
+"firstName": "ກັນທິດາ",
+"lastName": "ລໍບຸນມີ",
+"room": "ປະຖົມ 1 B",
+"studentCode": "STD-0719"
+},
+{
+"origId": 720,
+"firstName": "ກິດຕິພົນ",
+"lastName": "ລໍບຸນມີ",
+"room": "ອະນຸບານ 1 A",
+"studentCode": "STD-0720"
+},
+{
+"origId": 721,
+"firstName": "ທິດມະນີ",
+"lastName": "ອິນທະພົງ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0721"
+},
+{
+"origId": 722,
+"firstName": "ແກ້ວພັນສາ",
+"lastName": "ພູນທິລັດ",
+"room": "ປະຖົມ 4B",
+"studentCode": "STD-0722"
+},
+{
+"origId": 723,
+"firstName": "ນ້ຳຫວານ",
+"lastName": "ເທພາວົງ",
+"room": "ປະຖົມ 2 B",
+"studentCode": "STD-0723"
+},
+{
+"origId": 725,
+"firstName": "ນິນ່າ",
+"lastName": "ສີບຸນຊອນ",
+"room": "ປະຖົມ 1 A",
+"studentCode": "STD-0725"
+},
+{
+"origId": 726,
+"firstName": "ເມລິສາ",
+"lastName": "ໄຊວັງເມືອງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0726"
+},
+{
+"origId": 727,
+"firstName": "ພິ້ງກີ້",
+"lastName": "ພົນວິໄຊ",
+"room": "ປະຖົມ 4A",
+"studentCode": "STD-0727"
+},
+{
+"origId": 728,
+"firstName": "ສຸວັນຄຳ",
+"lastName": "ສີພົມມະລັງກຸນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0728"
+},
+{
+"origId": 729,
+"firstName": "ສອນທິດາ",
+"lastName": "ໄຊປັນຍາ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0729"
+},
+{
+"origId": 730,
+"firstName": "ສຸຣິຈັກ",
+"lastName": "ສີສະຫວາດ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0730"
+},
+{
+"origId": 732,
+"firstName": "ເທບສຸວັນ",
+"lastName": "ໄຊເທບວົງສາ",
+"room": "ລ້ຽງເດັກໃຫຍ່ A",
+"studentCode": "STD-0732"
+},
+{
+"origId": 734,
+"firstName": "ເອກທະພົນ",
+"lastName": "ວົງວິຫານ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0734"
+},
+{
+"origId": 735,
+"firstName": "ທະນາກອນ",
+"lastName": "ແກ້ວບຸດດີ",
+"room": "ອະນຸບານ 2 A",
+"studentCode": "STD-0735"
+},
+{
+"origId": 736,
+"firstName": "ທະນັນດາ",
+"lastName": "ແກ້ວບຸດດີ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0736"
+},
+{
+"origId": 737,
+"firstName": "ຫລີຊິງຢູ",
+"lastName": "ລຳພູສາ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0737"
+},
+{
+"origId": 738,
+"firstName": "ຄຳມີ",
+"lastName": "ທີສຸພາບົງ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0738"
+},
+{
+"origId": 739,
+"firstName": "ພິມມະສອນ",
+"lastName": "ສອນລາພົນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0739"
+},
+{
+"origId": 740,
+"firstName": "ທະນາກອນ",
+"lastName": "ມູນສີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ A",
+"studentCode": "STD-0740"
+},
+{
+"origId": 741,
+"firstName": "ພິລະດອນ",
+"lastName": "ລຸນທະວີ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0741"
+},
+{
+"origId": 742,
+"firstName": "ສໍສະວິດ",
+"lastName": "ສູນດາລາ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0742"
+},
+{
+"origId": 743,
+"firstName": "ສຸພາພອນ",
+"lastName": "ທິຊະນະກອນ",
+"room": "ປະຖົມ 3 A",
+"studentCode": "STD-0743"
+},
+{
+"origId": 744,
+"firstName": "ແກ້ວກັນຍາ",
+"lastName": "ພູນທິລັດ",
+"room": "ອະນຸບານ 3 B",
+"studentCode": "STD-0744"
+},
+{
+"origId": 745,
+"firstName": "ນິດາ",
+"lastName": "ສີສະຫວັນ",
+"room": "ລ້ຽງເດັກກາງ",
+"studentCode": "STD-0745"
+},
+{
+"origId": 746,
+"firstName": "ພິລະກອນ",
+"lastName": "ລາດຊະວົງ",
+"room": "ລ້ຽງເດັກໃຫຍ່ B",
+"studentCode": "STD-0746"
+}
+]

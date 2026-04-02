@@ -107,62 +107,73 @@ app.delete('/api/voice/:id', authMiddleware, async (req, res) => {
 });
 
 // ====================================
-// Seed endpoint
+// Import students from JSON data
 // ====================================
-app.all('/api/seed', async (req, res) => {
+app.all('/api/import-students', async (req, res) => {
   try {
-    const bcrypt = require('bcryptjs');
+    const studentData = require('./student-data.json');
+
+    // 1. ລຶບ data ເກົ່າ (ເກັບ users ໄວ້)
     await prisma.notification.deleteMany();
     await prisma.pickupHistory.deleteMany();
     await prisma.pickupRequest.deleteMany();
     await prisma.student.deleteMany();
-    await prisma.user.deleteMany();
     await prisma.classroom.deleteMany();
 
+    // 2. ສ້າງ admin ຖ້າບໍ່ມີ
+    const bcrypt = require('bcryptjs');
     const hash = await bcrypt.hash('123456', 10);
+    const existingAdmin = await prisma.user.findFirst({ where: { username: 'admin' } });
+    if (!existingAdmin) {
+      await prisma.user.create({ data: { name: 'ແອັດມິນ', username: 'admin', role: 'admin', password: hash } });
+    }
 
-    const p11 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.1/1', gradeLevel: 'ປ.1', classCode: 'P1-1', teacherName: 'ຄູ ມະນີ' } });
-    const p12 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.1/2', gradeLevel: 'ປ.1', classCode: 'P1-2', teacherName: 'ຄູ ສີດາ' } });
-    const p21 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.2/1', gradeLevel: 'ປ.2', classCode: 'P2-1', teacherName: 'ຄູ ວັນນາ' } });
-    const p31 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.3/1', gradeLevel: 'ປ.3', classCode: 'P3-1', teacherName: 'ຄູ ສົມພອນ' } });
-    const p41 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.4/1', gradeLevel: 'ປ.4', classCode: 'P4-1', teacherName: 'ຄູ ຫຼ້າ' } });
-    const p51 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ປ.5/1', gradeLevel: 'ປ.5', classCode: 'P5-1', teacherName: 'ຄູ ພອນ' } });
-    const m11 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ມ.1/1', gradeLevel: 'ມ.1', classCode: 'M1-1', teacherName: 'ຄູ ບຸນມາ' } });
-    const m21 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ມ.2/1', gradeLevel: 'ມ.2', classCode: 'M2-1', teacherName: 'ຄູ ທອງຄຳ' } });
-    const m31 = await prisma.classroom.create({ data: { className: 'ຫ້ອງ ມ.3/1', gradeLevel: 'ມ.3', classCode: 'M3-1', teacherName: 'ຄູ ສົມສັກ' } });
+    // 3. ສ້າງ classroom ທັງໝົດ
+    const rooms = [...new Set(studentData.map(s => s.room))];
+    const classroomMap = {};
 
-    await prisma.user.create({ data: { name: 'ແອັດມິນ', username: 'admin', role: 'admin', password: hash } });
-    await prisma.user.create({ data: { name: 'ຄູ ມະນີ', username: 'P1-1', phone: '02010000001', role: 'teacher', password: hash, classroomId: p11.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ສີດາ', username: 'P1-2', phone: '02010000002', role: 'teacher', password: hash, classroomId: p12.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ວັນນາ', username: 'P2-1', phone: '02010000003', role: 'teacher', password: hash, classroomId: p21.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ສົມພອນ', username: 'P3-1', phone: '02010000004', role: 'teacher', password: hash, classroomId: p31.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ຫຼ້າ', username: 'P4-1', phone: '02010000005', role: 'teacher', password: hash, classroomId: p41.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ພອນ', username: 'P5-1', phone: '02010000006', role: 'teacher', password: hash, classroomId: p51.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ບຸນມາ', username: 'M1-1', phone: '02010000007', role: 'teacher', password: hash, classroomId: m11.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ທອງຄຳ', username: 'M2-1', phone: '02010000008', role: 'teacher', password: hash, classroomId: m21.id } });
-    await prisma.user.create({ data: { name: 'ຄູ ສົມສັກ', username: 'M3-1', phone: '02010000009', role: 'teacher', password: hash, classroomId: m31.id } });
+    for (const room of rooms) {
+      // ສ້າງ gradeLevel ແລະ classCode
+      let gradeLevel = room;
+      let classCode = room.replace(/\s+/g, '-');
 
-    await prisma.student.createMany({
-      data: [
-        { studentCode: 'STD-0001', firstName: 'ສົມສະໄໝ', lastName: 'ແກ້ວພິລາ', nickname: 'ນ້ອງໃໝ', classroomId: p31.id, parentName: 'ທ້າວ ສຸກສະຫວັນ', parentPhone: '02044444444' },
-        { studentCode: 'STD-0002', firstName: 'ວິໄລ', lastName: 'ແກ້ວພິລາ', nickname: 'ນ້ອງຄຳ', classroomId: p11.id, parentName: 'ທ້າວ ສຸກສະຫວັນ', parentPhone: '02044444444' },
-        { studentCode: 'STD-0003', firstName: 'ບຸນປ້ອ', lastName: 'ແກ້ວພິລາ', nickname: 'ນ້ອງປ້ອ', classroomId: m11.id, parentName: 'ທ້າວ ສຸກສະຫວັນ', parentPhone: '02044444444' },
-        { studentCode: 'STD-0004', firstName: 'ເດືອນ', lastName: 'ພິມມະສານ', nickname: 'ນ້ອງເດືອນ', classroomId: p12.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
-        { studentCode: 'STD-0005', firstName: 'ດາລາ', lastName: 'ພິມມະສານ', nickname: 'ນ້ອງດາ', classroomId: p21.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
-        { studentCode: 'STD-0006', firstName: 'ບຸນທອງ', lastName: 'ພິມມະສານ', nickname: 'ນ້ອງທອງ', classroomId: p41.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
-        { studentCode: 'STD-0007', firstName: 'ສຸພາ', lastName: 'ພິມມະສານ', nickname: 'ນ້ອງສຸ', classroomId: m21.id, parentName: 'ນາງ ບົວພາ', parentPhone: '02055555555' },
-        { studentCode: 'STD-0008', firstName: 'ແກ້ວມະນີ', lastName: 'ຈັນທະລາ', nickname: 'ນ້ອງແກ້ວ', classroomId: p31.id, parentName: 'ທ້າວ ພູທອນ', parentPhone: '02066666666' },
-        { studentCode: 'STD-0009', firstName: 'ວັນນາ', lastName: 'ຈັນທະລາ', nickname: 'ນ້ອງວັນ', classroomId: m21.id, parentName: 'ທ້າວ ພູທອນ', parentPhone: '02066666666' },
-        { studentCode: 'STD-0010', firstName: 'ນິນ', lastName: 'ສີສະຫວາດ', nickname: 'ນ້ອງນິນ', classroomId: p21.id, parentName: 'ນາງ ມະນີວັນ', parentPhone: '02077777777' },
-        { studentCode: 'STD-0011', firstName: 'ໂຊ', lastName: 'ສີສະຫວາດ', nickname: 'ນ້ອງໂຊ', classroomId: p51.id, parentName: 'ນາງ ມະນີວັນ', parentPhone: '02077777777' },
-        { studentCode: 'STD-0012', firstName: 'ພິມ', lastName: 'ສີສະຫວາດ', nickname: 'ນ້ອງພິມ', classroomId: m31.id, parentName: 'ນາງ ມະນີວັນ', parentPhone: '02077777777' },
-        { studentCode: 'STD-0013', firstName: 'ແສງ', lastName: 'ໄຊຍະພອນ', nickname: 'ນ້ອງແສງ', classroomId: p11.id, parentName: 'ທ້າວ ໄຊຍະສິດ', parentPhone: '02088888888' },
-        { studentCode: 'STD-0014', firstName: 'ຈັນ', lastName: 'ໄຊຍະພອນ', nickname: 'ນ້ອງຈັນ', classroomId: p41.id, parentName: 'ທ້າວ ໄຊຍະສິດ', parentPhone: '02088888888' },
-        { studentCode: 'STD-0015', firstName: 'ດາວ', lastName: 'ພົມມະຈັນ', nickname: 'ນ້ອງດາວ', classroomId: m11.id, parentName: 'ນາງ ພອນສະຫວັນ', parentPhone: '02099999999' },
-      ]
+      if (room.startsWith('ປະຖົມ')) gradeLevel = 'ປະຖົມ';
+      else if (room.startsWith('ມັດທະຍົມ')) gradeLevel = 'ມັດທະຍົມ';
+      else if (room.startsWith('ອະນຸບານ')) gradeLevel = 'ອະນຸບານ';
+      else if (room.startsWith('ລ້ຽງເດັກ')) gradeLevel = 'ລ້ຽງເດັກ';
+
+      const created = await prisma.classroom.create({
+        data: {
+          className: room,
+          gradeLevel: gradeLevel,
+          classCode: classCode,
+          teacherName: '',
+        }
+      });
+      classroomMap[room] = created.id;
+    }
+
+    // 4. ສ້າງ students ທັງໝົດ (batch 50)
+    let created = 0;
+    const batchSize = 50;
+    for (let i = 0; i < studentData.length; i += batchSize) {
+      const batch = studentData.slice(i, i + batchSize);
+      await prisma.student.createMany({
+        data: batch.map(s => ({
+          studentCode: s.studentCode,
+          firstName: s.firstName,
+          lastName: s.lastName,
+          classroomId: classroomMap[s.room],
+        }))
+      });
+      created += batch.length;
+    }
+
+    res.json({
+      success: true,
+      message: `Import ສຳເລັດ! ${created} ນັກຮຽນ, ${rooms.length} ຫ້ອງຮຽນ`,
+      stats: { students: created, classrooms: rooms.length, rooms }
     });
-
-    res.json({ success: true, message: 'Seed ສຳເລັດ! 6 ຄອບຄົວ, 15 ນັກຮຽນ, 10 users. Password: 123456' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
