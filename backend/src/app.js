@@ -235,11 +235,33 @@ app.get('*', (req, res) => {
   }
 });
 
+// ====================================
+// Ensure admin user exists on startup (idempotent)
+// ====================================
+async function ensureAdminUser() {
+  try {
+    const existing = await prisma.user.findFirst({ where: { username: 'admin' } });
+    if (!existing) {
+      const bcrypt = require('bcryptjs');
+      const hash = await bcrypt.hash('123456', 10);
+      await prisma.user.create({
+        data: { name: 'ແອັດມິນ', username: 'admin', role: 'admin', password: hash, isActive: true }
+      });
+      console.log('✅ Admin user created: admin / 123456');
+    } else {
+      console.log('✅ Admin user ready: admin / 123456');
+    }
+  } catch (e) {
+    console.error('⚠️ ensureAdminUser failed:', e.message);
+  }
+}
+
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 Socket.IO ready`);
   console.log(`⏰ Auto-escalation timer active (every 10s)`);
+  await ensureAdminUser();
 });
 
 module.exports = { app, server, io, prisma };
