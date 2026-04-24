@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -23,6 +24,7 @@ const io = new Server(server, {
   cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }
 });
 
+app.use(compression());
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 
@@ -228,9 +230,19 @@ setupSocketEvents(io);
 // Serve frontend
 // ====================================
 const frontendPath = path.join(__dirname, '../../frontend/dist');
-app.use(express.static(frontendPath));
+app.use(express.static(frontendPath, {
+  maxAge: '1y',
+  immutable: true,
+  setHeaders: (res, filePath) => {
+    const base = path.basename(filePath);
+    if (base === 'index.html' || base === 'sw.js' || base === 'manifest.json') {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.sendFile(path.join(frontendPath, 'index.html'));
   }
 });
