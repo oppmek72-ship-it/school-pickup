@@ -4,6 +4,7 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://school-pickup-sg.onrender.com/api/$1" },
+    { "source": "/socket.io/(.*)", "destination": "https://school-pickup-sg.onrender.com/socket.io/$1" },
     { "source": "/((?!assets|icon-|maskable|manifest|sw|favicon|launcher).*)", "destination": "/index.html" }
   ],
   "headers": [

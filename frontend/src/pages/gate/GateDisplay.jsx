@@ -251,11 +251,12 @@ export default function GateDisplay() {
   // Socket
   useEffect(() => {
     const socket = io(window.location.origin, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
+      timeout: 10000,
     });
     socketRef.current = socket;
 

@@ -11,11 +11,12 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     // Connect socket for ALL users (including unauthenticated monitor)
     const newSocket = io(window.location.origin, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
+      timeout: 10000,
     });
 
     newSocket.on('connect', () => {
