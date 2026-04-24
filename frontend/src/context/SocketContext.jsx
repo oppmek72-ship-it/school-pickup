@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import { SOCKET_URL } from '../api/config';
 
@@ -10,39 +9,40 @@ export function SocketProvider({ children }) {
   const { user, token } = useAuth();
 
   useEffect(() => {
-    // Connect socket for ALL users (including unauthenticated monitor)
-    const newSocket = io(SOCKET_URL, {
-      transports: ['polling', 'websocket'],
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      timeout: 10000,
-    });
+    if (!token) return;
 
-    newSocket.on('connect', () => {
-      console.log('Socket connected:', newSocket.id);
-      // Join appropriate rooms based on role
-      if (user?.role === 'teacher' && user?.classroomId) {
-        newSocket.emit('join-classroom', { classroomId: user.classroomId });
-      } else if (user?.role === 'parent') {
-        newSocket.emit('join-parent', user.id);
-      }
-    });
+    let newSocket;
+    let cancelled = false;
 
-    newSocket.on('reconnect', () => {
-      console.log('Socket reconnected');
-      if (user?.role === 'teacher' && user?.classroomId) {
-        newSocket.emit('join-classroom', { classroomId: user.classroomId });
-      } else if (user?.role === 'parent') {
-        newSocket.emit('join-parent', user.id);
-      }
-    });
+    import('socket.io-client').then(({ io }) => {
+      if (cancelled) return;
+      newSocket = io(SOCKET_URL, {
+        transports: ['polling', 'websocket'],
+        reconnection: true,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        timeout: 10000,
+      });
 
-    setSocket(newSocket);
+      const joinRooms = () => {
+        if (user?.role === 'teacher' && user?.classroomId) {
+          newSocket.emit('join-classroom', { classroomId: user.classroomId });
+        } else if (user?.role === 'parent') {
+          newSocket.emit('join-parent', user.id);
+        }
+      };
+
+      newSocket.on('connect', joinRooms);
+      newSocket.on('reconnect', joinRooms);
+
+      setSocket(newSocket);
+    });
 
     return () => {
-      newSocket.close();
+      cancelled = true;
+      if (newSocket) newSocket.close();
+      setSocket(null);
     };
   }, [token, user?.role, user?.classroomId, user?.id]);
 
