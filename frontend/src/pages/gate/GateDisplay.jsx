@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
+import { SOCKET_URL, API_BASE } from '../../api/config';
 
 // ===== AUDIO ANNOUNCEMENT SYSTEM =====
 // ຫຼິ້ນສຽງອັດເອງອັດຕະໂນມັດ ເມື່ອນັກຮຽນຂຶ້ນຄິວ
@@ -11,7 +12,7 @@ let setSpeakingIdCallback = null; // callback to update React state
 function playCustomVoice(studentId) {
   return new Promise((resolve, reject) => {
     if (!studentId) return reject();
-    const audio = new Audio(`/api/students/${studentId}/voice?t=${Date.now()}`);
+    const audio = new Audio(`${API_BASE}/students/${studentId}/voice?t=${Date.now()}`);
     audio.volume = 1.0;
     audio.onended = () => resolve();
     audio.onerror = () => reject();
@@ -233,7 +234,7 @@ export default function GateDisplay() {
   }, [tryAnnounce]);
 
   const fetchQueue = useCallback(() => {
-    fetch('/api/pickup/active')
+    fetch(`${API_BASE}/pickup/active`)
       .then(r => r.json())
       .then(d => {
         const qData = d.fiveMinutes
@@ -250,7 +251,7 @@ export default function GateDisplay() {
 
   // Socket
   useEffect(() => {
-    const socket = io(window.location.origin, {
+    const socket = io(SOCKET_URL, {
       transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionAttempts: Infinity,

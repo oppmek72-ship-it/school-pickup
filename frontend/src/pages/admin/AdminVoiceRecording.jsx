@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import api from '../../api/axios';
+import { API_BASE } from '../../api/config';
 import toast from 'react-hot-toast';
 
 function RecordModal({ student, onClose, onSaved }) {
@@ -120,7 +121,7 @@ function RecordModal({ student, onClose, onSaved }) {
   };
 
   const playExisting = () => {
-    const audio = new Audio(`/api/students/${student.id}/voice?t=${Date.now()}`);
+    const audio = new Audio(`${API_BASE}/students/${student.id}/voice?t=${Date.now()}`);
     audio.play().catch(() => toast.error('ຫຼິ້ນສຽງບໍ່ໄດ້'));
   };
 
@@ -317,7 +318,7 @@ export default function AdminVoiceRecording() {
                 {student.hasVoiceRecording && (
                   <button
                     onClick={() => {
-                      const audio = new Audio(`/api/students/${student.id}/voice?t=${Date.now()}`);
+                      const audio = new Audio(`${API_BASE}/students/${student.id}/voice?t=${Date.now()}`);
                       audio.play();
                     }}
                     className="bg-green-100 text-green-700 px-2 py-1.5 rounded-lg text-xs font-bold">

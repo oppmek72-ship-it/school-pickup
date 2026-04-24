@@ -3,7 +3,7 @@
   "appName": "School Pickup",
   "webDir": "dist",
   "server": {
-    "url": "https://school-pickup-t3lc.vercel.app",
+    "androidScheme": "https",
     "cleartext": true
   },
   "plugins": {

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
+import { SOCKET_URL } from '../api/config';
 
 const SocketContext = createContext(null);
 
@@ -10,7 +11,7 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     // Connect socket for ALL users (including unauthenticated monitor)
-    const newSocket = io(window.location.origin, {
+    const newSocket = io(SOCKET_URL, {
       transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionAttempts: Infinity,
