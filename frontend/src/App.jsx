@@ -4,8 +4,8 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import InstallPrompt from './components/InstallPrompt';
+import Login from './pages/Login';
 
-const Login = lazy(() => import('./pages/Login'));
 const ParentHome = lazy(() => import('./pages/parent/ParentHome'));
 const ParentHistory = lazy(() => import('./pages/parent/ParentHistory'));
 const ParentProfile = lazy(() => import('./pages/parent/ParentProfile'));
