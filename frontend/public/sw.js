@@ -1,4 +1,4 @@
-const CACHE_NAME = 'school-pickup-v2';
+const CACHE_NAME = 'school-pickup-v3';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   '/icon-512.png'
 ];
 
-// Install - cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
@@ -14,7 +13,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate - clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -24,28 +22,44 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET and API/socket requests
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/socket.io')) return;
 
+  // Hashed build assets: cache-first (immutable — filenames change on rebuild)
+  if (url.pathname.startsWith('/assets/')) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // HTML/manifest/icons: stale-while-revalidate — show cache instantly, refresh in background
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Cache successful responses
+    caches.match(event.request).then((cached) => {
+      const networkFetch = fetch(event.request).then((response) => {
         if (response.ok) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
         return response;
-      })
-      .catch(() => caches.match(event.request))
+      }).catch(() => cached);
+      return cached || networkFetch;
+    })
   );
 });
 
-// Push notifications
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
   const options = {
@@ -59,7 +73,6 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(data.title || 'School Pick-up', options));
 });
 
-// Notification click
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(clients.openWindow(event.notification.data.url));

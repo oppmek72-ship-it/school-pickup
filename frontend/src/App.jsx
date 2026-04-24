@@ -1,16 +1,26 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, NavLink } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
-import Login from './pages/Login';
-import ParentHome from './pages/parent/ParentHome';
-import ParentHistory from './pages/parent/ParentHistory';
-import ParentProfile from './pages/parent/ParentProfile';
-import TeacherDashboard from './pages/teacher/TeacherDashboard';
-import TeacherHistory from './pages/teacher/TeacherHistory';
-import GateDisplay from './pages/gate/GateDisplay';
-import AdminPanel from './pages/admin/AdminPanel';
 import InstallPrompt from './components/InstallPrompt';
+
+const Login = lazy(() => import('./pages/Login'));
+const ParentHome = lazy(() => import('./pages/parent/ParentHome'));
+const ParentHistory = lazy(() => import('./pages/parent/ParentHistory'));
+const ParentProfile = lazy(() => import('./pages/parent/ParentProfile'));
+const TeacherDashboard = lazy(() => import('./pages/teacher/TeacherDashboard'));
+const TeacherHistory = lazy(() => import('./pages/teacher/TeacherHistory'));
+const GateDisplay = lazy(() => import('./pages/gate/GateDisplay'));
+const AdminPanel = lazy(() => import('./pages/admin/AdminPanel'));
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+  );
+}
 
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, token } = useAuth();
@@ -103,7 +113,9 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <SocketProvider>
-          <AppRoutes />
+          <Suspense fallback={<PageLoader />}>
+            <AppRoutes />
+          </Suspense>
           <InstallPrompt />
           <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
         </SocketProvider>
