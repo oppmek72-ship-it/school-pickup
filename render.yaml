@@ -3,12 +3,14 @@ databases:
     plan: free
     databaseName: school_pickup
     user: pickup_user
+    region: oregon
 
 services:
   - type: web
     name: school-pickup-app
-    plan: free
+    plan: starter
     runtime: node
+    region: oregon
     buildCommand: cd frontend && npm install --legacy-peer-deps --include=dev && npx vite build && cd ../backend && npm install && npx prisma generate && npx prisma db push --accept-data-loss
     startCommand: cd backend && npm start
     envVars:
@@ -22,3 +24,5 @@ services:
         value: 10000
       - key: NODE_ENV
         value: production
+      - key: FRONTEND_URL
+        value: https://school-pickup-wheat.vercel.app
