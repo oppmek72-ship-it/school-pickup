@@ -3,7 +3,7 @@
   "appName": "School Pickup",
   "webDir": "dist",
   "server": {
-    "url": "https://school-pickup-wheat.vercel.app",
+    "url": "https://school-pickup-t3lc.vercel.app",
     "cleartext": true
   },
   "plugins": {
