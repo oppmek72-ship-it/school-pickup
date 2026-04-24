@@ -13,24 +13,59 @@
     <meta name="apple-mobile-web-app-title" content="School Pickup" />
     <link rel="manifest" href="/manifest.json" />
     <title>Smart School Pick-up</title>
+    <style>
+      html,body{margin:0;padding:0;background:#0F172A;font-family:'Noto Sans Lao',sans-serif;}
+      #splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 100%);padding:24px;box-sizing:border-box;text-align:center;}
+      #splash img{width:80px;height:80px;border-radius:20px;margin-bottom:24px;box-shadow:0 8px 32px rgba(59,130,246,0.3);object-fit:contain;}
+      #splash .t1{color:white;font-size:1.4rem;font-weight:700;margin:0 0 8px;}
+      #splash .t2{color:#93C5FD;font-size:0.9rem;margin:0 0 32px;}
+      #splash .sp{width:40px;height:40px;border:3px solid rgba(255,255,255,0.15);border-top-color:#3B82F6;border-radius:50%;animation:sp .8s linear infinite;}
+      @keyframes sp{to{transform:rotate(360deg)}}
+      #retry{display:none;margin-top:24px;padding:12px 24px;background:#3B82F6;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
+      #retry-msg{display:none;color:#FCA5A5;font-size:0.85rem;margin-top:16px;max-width:320px;}
+    </style>
   </head>
   <body>
     <div id="root">
-      <div id="splash" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 100%);font-family:'Noto Sans Lao',sans-serif;">
-        <img src="/favicon.ico" style="width:80px;height:80px;border-radius:20px;margin-bottom:24px;box-shadow:0 8px 32px rgba(59,130,246,0.3);object-fit:contain;" />
-        <p style="color:white;font-size:1.4rem;font-weight:700;margin:0 0 8px;">ໂຮງຮຽນ ເພັດດາຣາ</p>
-        <p style="color:#93C5FD;font-size:0.9rem;margin:0 0 32px;">ລະບົບເອີ້ນນັກຮຽນກັບບ້ານ</p>
-        <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.15);border-top-color:#3B82F6;border-radius:50%;animation:sp .8s linear infinite;"></div>
-        <style>@keyframes sp{to{transform:rotate(360deg)}}</style>
+      <div id="splash">
+        <img src="/favicon.ico" alt="logo" />
+        <p class="t1">ໂຮງຮຽນ ເພັດດາຣາ</p>
+        <p class="t2">ລະບົບເອີ້ນນັກຮຽນກັບບ້ານ</p>
+        <div class="sp" id="spinner"></div>
+        <p id="retry-msg">ການໂຫຼດໃຊ້ເວລາດົນກວ່າປົກກະຕິ — ລອງກົດປຸ່ມລຸ່ມນີ້</p>
+        <button id="retry" onclick="location.reload(true)">ລອງໃໝ່</button>
       </div>
     </div>
+    <script>
+      // Show retry button if app doesn't boot in 15 seconds
+      window.__appBootTimeout = setTimeout(function(){
+        var s = document.getElementById('spinner');
+        var r = document.getElementById('retry');
+        var m = document.getElementById('retry-msg');
+        if (s) s.style.display = 'none';
+        if (r) r.style.display = 'inline-block';
+        if (m) m.style.display = 'block';
+      }, 15000);
+      // Catch any script errors and show retry
+      window.addEventListener('error', function(e){
+        var r = document.getElementById('retry');
+        var m = document.getElementById('retry-msg');
+        var s = document.getElementById('spinner');
+        if (r && document.getElementById('splash')) {
+          if (s) s.style.display = 'none';
+          r.style.display = 'inline-block';
+          if (m) { m.style.display = 'block'; m.textContent = 'ເວັບໂຫຼດບໍ່ໄດ້ — ໃຫ້ລອງໃໝ່'; }
+        }
+      });
+    </script>
     <script type="module" src="/src/main.jsx"></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('SW registered:', reg.scope))
-            .catch(err => console.log('SW registration failed:', err));
+      // Register SW only if supported, never block page render, swallow errors
+      if ('serviceWorker' in navigator && window.isSecureContext) {
+        window.addEventListener('load', function(){
+          setTimeout(function(){
+            navigator.serviceWorker.register('/sw.js').catch(function(){});
+          }, 2000);
         });
       }
     </script>

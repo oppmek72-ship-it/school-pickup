@@ -15,7 +15,7 @@ export default defineConfig({
     }
   },
   build: {
-    target: 'es2020',
+    target: ['es2015', 'chrome80', 'safari13', 'firefox78'],
     cssCodeSplit: true,
     chunkSizeWarningLimit: 600,
     rollupOptions: {
