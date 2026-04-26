@@ -43,6 +43,18 @@ app.use(cors({
 app.options('*', cors());
 app.use(express.json({ limit: '2mb' }));
 
+// Lightweight HTTP request logger — only API routes, with timing
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api')) return next();
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    const flag = ms > 3000 ? '🐢' : ms > 1000 ? '⚠️' : '·';
+    console.log(`${flag} ${res.statusCode} ${req.method} ${req.path} ${ms}ms`);
+  });
+  next();
+});
+
 app.set('io', io);
 app.set('prisma', prisma);
 
@@ -53,7 +65,20 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+// Health check + DB warmup — first hit also warms the Prisma connection pool
+let dbWarmed = false;
+app.get('/api/health', async (req, res) => {
+  try {
+    // Warm DB pool on first call after cold-start
+    if (!dbWarmed) {
+      await prisma.$queryRaw`SELECT 1`;
+      dbWarmed = true;
+    }
+    res.json({ status: 'ok', db: 'ok', timestamp: new Date() });
+  } catch (e) {
+    res.status(503).json({ status: 'ok', db: 'cold', timestamp: new Date() });
+  }
+});
 
 // ====================================
 // Voice: GET — ຫຼິ້ນສຽງ (public, ບໍ່ຕ້ອງ login — ສຳລັບ Monitor)
@@ -278,6 +303,16 @@ server.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 Socket.IO ready`);
   console.log(`⏰ Auto-escalation timer active (every 10s)`);
+  // Pre-warm DB connection pool so first user request doesn't pay cold-start
+  try {
+    const t0 = Date.now();
+    await prisma.$connect();
+    await prisma.$queryRaw`SELECT 1`;
+    dbWarmed = true;
+    console.log(`🗄️  DB pool warm (${Date.now() - t0}ms)`);
+  } catch (e) {
+    console.error('⚠️ DB warmup failed:', e.message);
+  }
   await ensureAdminUser();
 });
 

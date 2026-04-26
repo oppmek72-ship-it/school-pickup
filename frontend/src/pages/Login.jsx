@@ -136,6 +136,50 @@ function InstallBanner() {
   );
 }
 
+function ConnectivityPill() {
+  const [status, setStatus] = useState('checking'); // 'checking' | 'ok' | 'slow' | 'down'
+  const [ms, setMs] = useState(0);
+
+  const check = async () => {
+    setStatus('checking');
+    const t0 = performance.now();
+    try {
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 12000);
+      const r = await fetch(`${API_BASE}/health`, { method: 'GET', cache: 'no-store', signal: ctrl.signal });
+      clearTimeout(to);
+      const elapsed = Math.round(performance.now() - t0);
+      setMs(elapsed);
+      if (!r.ok) { setStatus('slow'); return; }
+      setStatus(elapsed > 4000 ? 'slow' : 'ok');
+    } catch {
+      setMs(Math.round(performance.now() - t0));
+      setStatus('down');
+    }
+  };
+
+  useEffect(() => {
+    check();
+    const t = setInterval(check, 30000);
+    return () => clearInterval(t);
+  }, []);
+
+  const dot = { checking: '🟡', ok: '🟢', slow: '🟠', down: '🔴' }[status];
+  const label = {
+    checking: 'ກວດເຊີບເວີ້...',
+    ok: `ເຊີບເວີ້ພ້ອມ (${ms}ms)`,
+    slow: `ເຊີບເວີ້ຊ້າ (${ms}ms)`,
+    down: 'ເຊີບເວີ້ບໍ່ຕອບ — ກົດເພື່ອລອງໃໝ່',
+  }[status];
+
+  return (
+    <button onClick={check} type="button"
+      className="mb-4 mx-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-white/90 lao hover:bg-white/15 transition">
+      <span>{dot}</span><span>{label}</span>
+    </button>
+  );
+}
+
 export default function Login() {
   const [mode, setMode] = useState('parent');
   const [studentCode, setStudentCode] = useState('');
@@ -143,6 +187,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState(false);
   const [overlayMode, setOverlayMode] = useState('parent');
+  const [lastError, setLastError] = useState(null);
   const { parentLogin, staffLogin, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -166,15 +211,26 @@ export default function Login() {
     } catch (error) {
       setSuccess(false);
       let msg = error.response?.data?.error;
+      const code = error.code || '';
+      const status = error.response?.status;
       if (!msg) {
-        if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-          msg = 'ເຄືອຂ່າຍຊ້າເກີນໄປ — ລອງໃໝ່';
+        if (code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+          msg = 'ເຊີບເວີ້ຕອບຊ້າເກີນໄປ (>30s) — ລອງໃໝ່';
         } else if (error.message === 'Network Error' || !error.response) {
-          msg = `ເຊື່ອມຕໍ່ບໍ່ໄດ້: ${API_BASE} — ກວດເບິ່ງເນັດ`;
+          msg = 'ເຊື່ອມຕໍ່ເຊີບເວີ້ບໍ່ໄດ້ — ກວດເນັດ';
+        } else if (status === 401) {
+          msg = 'ລະຫັດນັກຮຽນບໍ່ຖືກຕ້ອງ';
         } else {
-          msg = 'ເຂົ້າສູ່ລະບົບບໍ່ສຳເລັດ';
+          msg = `ຜິດພາດ (${status || code || 'unknown'})`;
         }
       }
+      // Surface diagnostics so user/dev can see the real cause
+      setLastError({
+        message: msg,
+        code: code || (status ? `HTTP ${status}` : 'no-response'),
+        url: API_BASE,
+        time: new Date().toLocaleTimeString(),
+      });
       toast.error(msg);
     }
   };
@@ -190,6 +246,9 @@ export default function Login() {
           <h1 className="text-2xl font-bold text-white lao">ໂຮງຮຽນ ເພັດດາຣາ</h1>
           <p className="text-blue-300 text-sm mt-1 lao">ລະບົບເອີ້ນນັກຮຽນກັບບ້ານ</p>
         </div>
+
+        {/* Live connectivity status — tap to re-check */}
+        <div className="text-center"><ConnectivityPill /></div>
 
         {/* Install App Banner */}
         <InstallBanner />
@@ -280,6 +339,22 @@ export default function Login() {
             📺 ເຂົ້າໜ້າຈໍ Monitor →
           </a>
         </div>
+
+        {/* Diagnostic panel — only after a failed login */}
+        {lastError && (
+          <div className="mt-4 bg-red-500/10 border border-red-400/30 rounded-xl p-3 text-xs">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-red-300 font-bold lao">⚠️ ລາຍລະອຽດຂໍ້ຜິດພາດ</span>
+              <button onClick={() => setLastError(null)} className="text-red-300 hover:text-white">✕</button>
+            </div>
+            <div className="text-red-200 space-y-0.5 font-mono break-all">
+              <div>code: {lastError.code}</div>
+              <div>url:  {lastError.url}</div>
+              <div>time: {lastError.time}</div>
+              <div className="lao">msg:  {lastError.message}</div>
+            </div>
+          </div>
+        )}
 
         <p className="text-center text-xs text-gray-600 mt-4">Phetdara School Pick-up System v2.0</p>
       </div>

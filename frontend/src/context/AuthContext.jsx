@@ -38,7 +38,9 @@ export function AuthProvider({ children }) {
       // Kick off bundle preload in parallel — does not delay anything
       const bundlePromise = preloadParentBundle();
 
-      const { data } = await api.post('/auth/parent-login', { studentCode });
+      // Login itself uses a tighter timeout — if backend is genuinely down,
+      // surface the error fast instead of making the user wait 90s.
+      const { data } = await api.post('/auth/parent-login', { studentCode }, { timeout: 30000 });
 
       // Save token first so subsequent api calls have auth
       _save(data);
@@ -76,7 +78,7 @@ export function AuthProvider({ children }) {
   const staffLogin = async (username, password) => {
     setLoading(true);
     try {
-      const { data } = await api.post('/auth/staff-login', { username, password });
+      const { data } = await api.post('/auth/staff-login', { username, password }, { timeout: 30000 });
       _save(data);
 
       const role = data.user.role;
