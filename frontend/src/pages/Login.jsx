@@ -155,7 +155,16 @@ export default function Login() {
         else navigate('/teacher');
       }
     } catch (error) {
-      const msg = error.response?.data?.error || 'ເຂົ້າສູ່ລະບົບບໍ່ສຳເລັດ';
+      let msg = error.response?.data?.error;
+      if (!msg) {
+        if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+          msg = 'ເຄືອຂ່າຍຊ້າເກີນໄປ — ລອງໃໝ່';
+        } else if (error.message === 'Network Error' || !error.response) {
+          msg = 'ເຊື່ອມຕໍ່ server ບໍ່ໄດ້ — ກວດເບິ່ງເນັດ';
+        } else {
+          msg = 'ເຂົ້າສູ່ລະບົບບໍ່ສຳເລັດ';
+        }
+      }
       toast.error(msg);
     }
   };
