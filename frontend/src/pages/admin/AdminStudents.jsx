@@ -166,7 +166,7 @@ export default function AdminStudents() {
       )}
 
       {showExportModal && (
-        <ExportIdsModal students={students} onClose={() => setShowExportModal(false)} />
+        <ExportIdsModal students={students} classrooms={classrooms} onClose={() => setShowExportModal(false)} />
       )}
     </div>
   );
@@ -368,74 +368,149 @@ function GroupSiblingsModal({ allStudents, onClose, onSaved }) {
 /* ============================================================
    Export IDs Modal — CSV download + printable list
    ============================================================ */
-function ExportIdsModal({ students, onClose }) {
+function ExportIdsModal({ students, classrooms, onClose }) {
   const [search, setSearch] = useState('');
-  const filtered = useMemo(() => students.filter(s =>
-    !search || s.firstName.includes(search) || s.lastName.includes(search) ||
-    s.studentCode.includes(search.toUpperCase()) || (s.nickname || '').includes(search)
-  ), [students, search]);
+  const [classroomId, setClassroomId] = useState('all'); // 'all' | 'none' | <id> | 'each'
+  const [groupByRoom, setGroupByRoom] = useState(true);
 
-  const downloadCsv = () => {
+  // Filtered list (used by CSV/Copy/preview/Print when not 'each')
+  const filtered = useMemo(() => students.filter(s => {
+    if (classroomId === 'all') { /* no filter */ }
+    else if (classroomId === 'none') { if (s.classroomId) return false; }
+    else if (classroomId !== 'each') { if (String(s.classroomId) !== String(classroomId)) return false; }
+    if (search) {
+      const t = search; const u = t.toUpperCase();
+      if (!(s.firstName.includes(t) || s.lastName.includes(t) || s.studentCode.includes(u) || (s.nickname || '').includes(t))) return false;
+    }
+    return true;
+  }), [students, search, classroomId]);
+
+  // Group filtered students by classroom for grouped views
+  const grouped = useMemo(() => {
+    const map = new Map();
+    for (const s of filtered) {
+      const key = s.classroom?.className || '— ບໍ່ມີຫ້ອງ —';
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(s);
+    }
+    return Array.from(map.entries())
+      .map(([className, list]) => ({
+        className,
+        students: list.sort((a, b) => a.firstName.localeCompare(b.firstName))
+      }))
+      .sort((a, b) => a.className.localeCompare(b.className));
+  }, [filtered]);
+
+  const selectedClassName = useMemo(() => {
+    if (classroomId === 'all') return 'ທຸກຫ້ອງ';
+    if (classroomId === 'none') return 'ບໍ່ມີຫ້ອງ';
+    if (classroomId === 'each') return 'ແຍກທຸກຫ້ອງ';
+    const c = classrooms.find(x => String(x.id) === String(classroomId));
+    return c?.className || 'ຫ້ອງ';
+  }, [classroomId, classrooms]);
+
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const safeName = (s) => s.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_');
+
+  const buildCsv = (list) => {
     const header = ['StudentCode', 'FirstName', 'LastName', 'Nickname', 'Classroom', 'ParentName', 'ParentPhone'];
-    const rows = filtered.map(s => [
+    const rows = list.map(s => [
       s.studentCode, s.firstName, s.lastName, s.nickname || '',
       s.classroom?.className || '', s.parentName || '', s.parentPhone || '',
     ]);
-    const csv = [header, ...rows]
+    return [header, ...rows]
       .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
       .join('\n');
-    // Add BOM so Excel reads UTF-8 (Lao) correctly
+  };
+  const downloadBlob = (csv, name) => {
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `student-ids-${new Date().toISOString().slice(0, 10)}.csv`;
+    const a = document.createElement('a'); a.href = url; a.download = name;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast.success('ດາວໂຫລດ CSV ແລ້ວ');
+  };
+
+  const downloadCsv = () => {
+    if (classroomId === 'each') {
+      // One CSV per classroom — sequential downloads
+      let n = 0;
+      grouped.forEach((g, i) => {
+        setTimeout(() => {
+          downloadBlob(buildCsv(g.students), `students-${safeName(g.className)}-${dateStr}.csv`);
+        }, i * 250);
+        n += g.students.length;
+      });
+      toast.success(`ດາວໂຫລດ ${grouped.length} ໄຟລ໌ (${n} ຄົນ)`);
+      return;
+    }
+    downloadBlob(buildCsv(filtered), `students-${safeName(selectedClassName)}-${dateStr}.csv`);
+    toast.success(`ດາວໂຫລດ CSV ${filtered.length} ຄົນ`);
+  };
+
+  const buildPrintHtml = (groups) => {
+    const sections = groups.map(g => {
+      const rows = g.students.map(s => `
+        <tr>
+          <td><code>${s.studentCode}</code></td>
+          <td>${s.firstName} ${s.lastName}${s.nickname ? ` (${s.nickname})` : ''}</td>
+          <td>${s.parentName || '-'}</td>
+          <td>${s.parentPhone || '-'}</td>
+        </tr>`).join('');
+      return `
+        <section>
+          <h2>${g.className} <span class="cnt">(${g.students.length} ຄົນ)</span></h2>
+          <table>
+            <thead><tr><th style="width:110px">ລະຫັດ</th><th>ຊື່ ນາມສະກຸນ</th><th>ຜູ້ປົກຄອງ</th><th style="width:140px">ເບີໂທ</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </section>`;
+    }).join('');
+    return `
+      <!doctype html><html lang="lo"><head><meta charset="utf-8">
+      <title>ລາຍຊື່ນັກຮຽນ — ${selectedClassName}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;700&display=swap" rel="stylesheet">
+      <style>
+        body { font-family: 'Noto Sans Lao', sans-serif; padding: 24px; color:#111; }
+        h1 { font-size: 18px; margin: 0 0 4px; }
+        h2 { font-size: 15px; margin: 18px 0 6px; padding-bottom:4px; border-bottom: 2px solid #1E40AF; color:#1E40AF; }
+        .cnt { color:#6b7280; font-size:12px; font-weight:400; }
+        .meta { color: #666; font-size: 12px; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        th { background: #f3f4f6; }
+        code { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; background: #eff6ff; color:#1d4ed8; padding: 1px 5px; border-radius: 3px; font-weight:700; }
+        tr:nth-child(even) td { background: #fafafa; }
+        section { page-break-inside: avoid; }
+        section + section { page-break-before: always; }
+        @media print { .noprint { display: none; } body { padding: 12px; } }
+      </style></head><body>
+      <div class="noprint" style="margin-bottom:12px"><button onclick="window.print()" style="padding:8px 16px;font-size:14px;cursor:pointer;">🖨️ Print</button></div>
+      <h1>ລາຍຊື່ນັກຮຽນ — ໂຮງຮຽນ ເພັດດາຣາ</h1>
+      <p class="meta">${selectedClassName} · ທັງໝົດ ${groups.reduce((a,g)=>a+g.students.length,0)} ຄົນ · ${new Date().toLocaleString('lo-LA')}</p>
+      ${sections}
+      </body></html>`;
   };
 
   const printList = () => {
     const w = window.open('', '_blank');
     if (!w) { toast.error('ກະລຸນາອະນຸຍາດ pop-up'); return; }
-    const rows = filtered.map(s => `
-      <tr>
-        <td><code>${s.studentCode}</code></td>
-        <td>${s.firstName} ${s.lastName}${s.nickname ? ` (${s.nickname})` : ''}</td>
-        <td>${s.classroom?.className || '-'}</td>
-        <td>${s.parentPhone || '-'}</td>
-      </tr>
-    `).join('');
-    w.document.write(`
-      <!doctype html><html lang="lo"><head><meta charset="utf-8">
-      <title>ລາຍຊື່ນັກຮຽນ — ID</title>
-      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;700&display=swap" rel="stylesheet">
-      <style>
-        body { font-family: 'Noto Sans Lao', sans-serif; padding: 24px; }
-        h1 { font-size: 18px; margin: 0 0 4px; }
-        .meta { color: #666; font-size: 12px; margin-bottom: 16px; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
-        th { background: #f3f4f6; }
-        code { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
-        tr:nth-child(even) td { background: #fafafa; }
-        @media print { .noprint { display: none; } body { padding: 12px; } }
-      </style></head><body>
-      <div class="noprint" style="margin-bottom:12px"><button onclick="window.print()">🖨️ Print</button></div>
-      <h1>ລາຍຊື່ນັກຮຽນ — ໂຮງຮຽນ ເພັດດາຣາ</h1>
-      <p class="meta">ທັງໝົດ ${filtered.length} ຄົນ · ${new Date().toLocaleString('lo-LA')}</p>
-      <table>
-        <thead><tr><th>ລະຫັດ</th><th>ຊື່</th><th>ຫ້ອງ</th><th>ເບີຜູ້ປົກຄອງ</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      </body></html>
-    `);
+    // For 'each' OR groupByRoom → multiple sections; else single section
+    const groups = (classroomId === 'each' || groupByRoom) ? grouped : [{ className: selectedClassName, students: filtered }];
+    w.document.write(buildPrintHtml(groups));
     w.document.close();
     setTimeout(() => w.print(), 500);
   };
 
   const copyAll = async () => {
-    const text = filtered.map(s => `${s.studentCode}\t${s.firstName} ${s.lastName}${s.nickname ? ` (${s.nickname})` : ''}\t${s.classroom?.className || '-'}`).join('\n');
+    let text;
+    if (classroomId === 'each' || groupByRoom) {
+      text = grouped.map(g =>
+        `=== ${g.className} (${g.students.length}) ===\n` +
+        g.students.map(s => `${s.studentCode}\t${s.firstName} ${s.lastName}${s.nickname ? ` (${s.nickname})` : ''}`).join('\n')
+      ).join('\n\n');
+    } else {
+      text = filtered.map(s => `${s.studentCode}\t${s.firstName} ${s.lastName}${s.nickname ? ` (${s.nickname})` : ''}\t${s.classroom?.className || '-'}`).join('\n');
+    }
     try { await navigator.clipboard.writeText(text); toast.success(`ຄັດລອກ ${filtered.length} ລາຍການ`); }
     catch { toast.error('ຄັດລອກບໍ່ສຳເລັດ'); }
   };
@@ -449,23 +524,78 @@ function ExportIdsModal({ students, onClose }) {
         </div>
 
         <div className="p-5 space-y-3 flex-1 overflow-y-auto">
+          {/* Classroom filter */}
+          <div>
+            <label className="text-xs font-semibold text-gray-700 lao">ເລືອກຫ້ອງຮຽນ</label>
+            <select value={classroomId} onChange={e => setClassroomId(e.target.value)}
+              className="w-full mt-1 px-3 py-2.5 border rounded-xl text-sm lao bg-white">
+              <option value="all">📚 ທຸກຫ້ອງ ({students.length})</option>
+              <option value="each">📦 ແຍກທຸກຫ້ອງ (1 ໄຟລ໌/ຫ້ອງ)</option>
+              <option value="none">— ນັກຮຽນທີ່ບໍ່ມີຫ້ອງ —</option>
+              {classrooms.map(c => (
+                <option key={c.id} value={c.id}>
+                  🏫 {c.className} ({students.filter(s => String(s.classroomId) === String(c.id)).length})
+                </option>
+              ))}
+            </select>
+            {classroomId === 'each' && (
+              <p className="text-[11px] text-amber-700 lao mt-1">⚠ CSV: ດາວໂຫລດ {grouped.length} ໄຟລ໌ (1 ໄຟລ໌/ຫ້ອງ) · Print/Copy: ລວມໝົດໃນເອກະສານດຽວ ແຍກຫົວຂໍ້ຫ້ອງ</p>
+            )}
+          </div>
+
+          {/* Search */}
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder="ຊອກຫາ..." className="w-full px-3 py-2.5 border rounded-xl text-sm lao" />
+
+          {/* Group toggle (when not in 'each' mode) */}
+          {classroomId !== 'each' && classroomId !== 'none' && (
+            <label className="flex items-center gap-2 text-xs lao text-gray-700 cursor-pointer select-none">
+              <input type="checkbox" checked={groupByRoom} onChange={e => setGroupByRoom(e.target.checked)} className="w-4 h-4 accent-blue-600" />
+              ແຍກຫົວຂໍ້ຫ້ອງໃນ Print/Copy (CSV ສົ່ງອອກລວມ)
+            </label>
+          )}
+
+          {/* Action buttons */}
           <div className="grid grid-cols-3 gap-2">
             <button onClick={downloadCsv} className="py-3 rounded-xl bg-green-600 text-white text-sm font-bold lao">📊 CSV</button>
             <button onClick={printList} className="py-3 rounded-xl bg-blue-600 text-white text-sm font-bold lao">🖨️ Print</button>
             <button onClick={copyAll} className="py-3 rounded-xl bg-gray-700 text-white text-sm font-bold lao">📋 Copy</button>
           </div>
-          <p className="text-xs text-gray-500 lao text-center">ສົ່ງອອກ {filtered.length} ຄົນ</p>
+          <p className="text-xs text-gray-500 lao text-center">
+            {selectedClassName} · {filtered.length} ຄົນ
+            {(classroomId === 'each' || groupByRoom) && grouped.length > 1 && ` · ${grouped.length} ຫ້ອງ`}
+          </p>
 
-          <div className="border rounded-xl divide-y max-h-[40vh] overflow-y-auto">
-            {filtered.map(s => (
-              <div key={s.id} className="p-2.5 flex items-center gap-2">
-                <code className="text-xs font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">{s.studentCode}</code>
-                <span className="flex-1 text-sm lao truncate">{s.firstName} {s.lastName} {s.nickname && `(${s.nickname})`}</span>
-                <span className="text-xs text-gray-400 lao">{s.classroom?.className || '-'}</span>
+          {/* Preview — grouped or flat */}
+          <div className="border rounded-xl max-h-[40vh] overflow-y-auto">
+            {(classroomId === 'each' || groupByRoom) && grouped.length > 1 ? (
+              grouped.map(g => (
+                <div key={g.className}>
+                  <div className="bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-800 lao sticky top-0">
+                    🏫 {g.className} <span className="text-blue-500 font-normal">({g.students.length})</span>
+                  </div>
+                  <div className="divide-y">
+                    {g.students.map(s => (
+                      <div key={s.id} className="p-2.5 flex items-center gap-2">
+                        <code className="text-xs font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">{s.studentCode}</code>
+                        <span className="flex-1 text-sm lao truncate">{s.firstName} {s.lastName} {s.nickname && `(${s.nickname})`}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="divide-y">
+                {filtered.map(s => (
+                  <div key={s.id} className="p-2.5 flex items-center gap-2">
+                    <code className="text-xs font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">{s.studentCode}</code>
+                    <span className="flex-1 text-sm lao truncate">{s.firstName} {s.lastName} {s.nickname && `(${s.nickname})`}</span>
+                    <span className="text-xs text-gray-400 lao">{s.classroom?.className || '-'}</span>
+                  </div>
+                ))}
+                {filtered.length === 0 && <p className="text-center text-xs text-gray-400 py-6 lao">— ບໍ່ພົບ —</p>}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
