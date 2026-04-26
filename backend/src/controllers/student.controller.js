@@ -131,6 +131,63 @@ const deleteStudent = async (req, res) => {
   }
 };
 
+// Admin: ຈັດກຸ່ມອ້າຍເອື້ອຍນ້ອງ — ອັບເດດ parentPhone ໃຫ້ນັກຮຽນຫຼາຍຄົນເປັນເບີດຽວກັນ
+// Body: { studentIds: [int], parentPhone: string, parentName?: string }
+const groupSiblings = async (req, res) => {
+  try {
+    const { studentIds, parentPhone, parentName } = req.body;
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+      return res.status(400).json({ error: 'ກະລຸນາເລືອກນັກຮຽນຢ່າງໜ້ອຍ 1 ຄົນ' });
+    }
+    if (!parentPhone || !parentPhone.trim()) {
+      return res.status(400).json({ error: 'ກະລຸນາໃສ່ເບີໂທຜູ້ປົກຄອງ' });
+    }
+    const ids = studentIds.map(id => parseInt(id)).filter(n => !isNaN(n));
+    const data = { parentPhone: parentPhone.trim() };
+    if (parentName && parentName.trim()) data.parentName = parentName.trim();
+
+    const result = await prisma.student.updateMany({
+      where: { id: { in: ids } },
+      data,
+    });
+    res.json({ success: true, updated: result.count, parentPhone: data.parentPhone });
+  } catch (error) {
+    console.error('groupSiblings error:', error);
+    res.status(500).json({ error: 'ຈັດກຸ່ມອ້າຍເອື້ອຍນ້ອງບໍ່ສຳເລັດ' });
+  }
+};
+
+// Admin: ດຶງລາຍການກຸ່ມຄອບຄົວ (ຈັດກຸ່ມ student ຕາມ parentPhone)
+const getFamilies = async (req, res) => {
+  try {
+    const students = await prisma.student.findMany({
+      where: { isActive: true, parentPhone: { not: null } },
+      include: { classroom: true },
+      orderBy: { firstName: 'asc' }
+    });
+    const map = new Map();
+    for (const s of students) {
+      const key = (s.parentPhone || '').trim();
+      if (!key) continue;
+      if (!map.has(key)) map.set(key, { parentPhone: key, parentName: s.parentName || '', students: [] });
+      const family = map.get(key);
+      family.students.push({
+        id: s.id, studentCode: s.studentCode, firstName: s.firstName,
+        lastName: s.lastName, nickname: s.nickname, classroom: s.classroom?.className || null,
+      });
+      if (!family.parentName && s.parentName) family.parentName = s.parentName;
+    }
+    // Only return groups with >1 student (true sibling groups), plus all groups for management
+    const families = Array.from(map.values())
+      .map(f => ({ ...f, count: f.students.length }))
+      .sort((a, b) => b.count - a.count || a.parentPhone.localeCompare(b.parentPhone));
+    res.json(families);
+  } catch (error) {
+    console.error('getFamilies error:', error);
+    res.status(500).json({ error: 'ດຶງຂໍ້ມູນຄອບຄົວບໍ່ສຳເລັດ' });
+  }
+};
+
 // Classrooms list
 const getClassrooms = async (req, res) => {
   try {
@@ -145,4 +202,4 @@ const getClassrooms = async (req, res) => {
   }
 };
 
-module.exports = { getStudents, searchStudents, getStudent, createStudent, updateStudent, deleteStudent, getClassrooms };
+module.exports = { getStudents, searchStudents, getStudent, createStudent, updateStudent, deleteStudent, getClassrooms, groupSiblings, getFamilies };
