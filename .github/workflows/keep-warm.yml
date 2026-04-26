@@ -1,0 +1,40 @@
+name: Keep Render Warm
+
+# Pings the backend /api/health every ~14 minutes so Render's free
+# tier never reaches the 15-min idle threshold that triggers sleep.
+# Result: parents/teachers never wait for a 30-60s cold start.
+
+on:
+  schedule:
+    # GitHub cron runs in UTC. Every 14 min keeps us safely under
+    # Render's 15-min idle window. (Note: GitHub may delay scheduled
+    # runs by a few minutes during high load — that's fine here.)
+    - cron: '*/14 * * * *'
+  workflow_dispatch: {} # allow manual trigger from Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping /api/health
+        run: |
+          URL="https://school-pickup-sg.onrender.com/api/health"
+          echo "→ pinging $URL"
+          # First attempt — server may be cold-starting (up to ~60s)
+          for i in 1 2 3; do
+            HTTP=$(curl -s -o /tmp/body -w "%{http_code}" --max-time 90 "$URL" || echo "000")
+            BODY=$(cat /tmp/body 2>/dev/null | head -c 200)
+            echo "attempt $i → HTTP $HTTP"
+            echo "body: $BODY"
+            if [ "$HTTP" = "200" ]; then
+              echo "✅ awake"
+              exit 0
+            fi
+            echo "retrying in 15s..."
+            sleep 15
+          done
+          echo "⚠️ health check failed after 3 attempts — server may be down"
+          # Don't fail the workflow on transient failures; keep the
+          # schedule running so the next slot still tries to wake it.
+          exit 0
