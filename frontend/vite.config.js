@@ -28,6 +28,10 @@ export default defineConfig({
     target: ['es2015', 'chrome80', 'safari13', 'firefox78'],
     cssCodeSplit: true,
     chunkSizeWarningLimit: 600,
+    minify: 'esbuild',
+    cssMinify: true,
+    sourcemap: false,
+    reportCompressedSize: false, // skip gzip-size calc to speed up build
     rollupOptions: {
       output: {
         manualChunks(id) {

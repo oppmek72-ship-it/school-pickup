@@ -88,7 +88,7 @@ export default function SystemReadyGate({ children }) {
       <div style={{ visibility: 'hidden', position: 'absolute', inset: 0 }}>{children}</div>
 
       <div
-        className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center px-6 transition-opacity duration-500 ${
+        className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center px-6 ios-gpu transition-opacity duration-500 ${
           ready ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
         style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #0F172A 100%)' }}

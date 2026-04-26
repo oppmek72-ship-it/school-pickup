@@ -71,10 +71,10 @@ export default function LoginOverlay({ show, success = false, mode = 'parent' })
 
   return (
     <div
-      className={`fixed inset-0 z-[10000] flex flex-col items-center justify-center px-6 backdrop-blur-md transition-opacity duration-500 ${
+      className={`fixed inset-0 z-[10000] flex flex-col items-center justify-center px-6 backdrop-blur-md ios-gpu ios-solid-bg transition-opacity duration-500 ${
         success && pct >= 100 ? 'opacity-0' : 'opacity-100'
       }`}
-      style={{ background: 'rgba(15, 23, 42, 0.92)' }}
+      style={{ background: 'rgba(15, 23, 42, 0.96)' }}
     >
       <div className="w-full max-w-sm flex flex-col items-center">
         {/* Logo */}

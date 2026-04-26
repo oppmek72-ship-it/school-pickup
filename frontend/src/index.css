@@ -73,3 +73,36 @@ button, a {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   font-weight: 700;
 }
+
+/* ========================
+   iOS performance overrides
+   — backdrop-filter + heavy blur cause severe jank on iPhone Safari
+   — these classes are toggled by main.jsx via document.documentElement
+   ======================== */
+.is-ios .backdrop-blur,
+.is-ios .backdrop-blur-sm,
+.is-ios .backdrop-blur-md,
+.is-ios .backdrop-blur-lg,
+.is-ios .backdrop-blur-xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Promote heavy fixed overlays to GPU layer to keep scrolling smooth */
+.is-ios .ios-gpu {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+/* Disable shimmer + heavy gradients on low-power iOS devices */
+.is-low-power [style*="shimmer"],
+.is-low-power .animate-shimmer {
+  animation: none !important;
+}
+
+/* Use opaque dark background instead of blur on iOS so overlays don't lag */
+.is-ios .ios-solid-bg {
+  background: #0F172A !important;
+}
+
