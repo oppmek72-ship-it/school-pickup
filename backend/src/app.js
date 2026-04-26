@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -22,6 +23,16 @@ const prisma = new PrismaClient();
 const io = new Server(server, {
   cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }
 });
+
+// Gzip compression — reduces JSON payload 70-90% for slow Lao mobile networks
+app.use(compression({
+  level: 6,
+  threshold: 1024, // only compress responses >1KB
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  },
+}));
 
 app.use(cors({
   origin: '*',

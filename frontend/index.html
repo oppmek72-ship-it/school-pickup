@@ -62,11 +62,37 @@
     </script>
     <script type="module" src="/src/main.jsx"></script>
     <script>
-      // Register SW only if supported, never block page render, swallow errors
+      // Register SW + auto-update when new version detected (fixes stale-cache login bugs)
       if ('serviceWorker' in navigator && window.isSecureContext) {
         window.addEventListener('load', function(){
           setTimeout(function(){
-            navigator.serviceWorker.register('/sw.js').catch(function(){});
+            navigator.serviceWorker.register('/sw.js').then(function(reg){
+              if (!reg) return;
+              // Check for updates on every page load
+              reg.update().catch(function(){});
+
+              // When a new SW is found, activate it immediately
+              reg.addEventListener('updatefound', function(){
+                var nw = reg.installing;
+                if (!nw) return;
+                nw.addEventListener('statechange', function(){
+                  if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                    nw.postMessage('SKIP_WAITING');
+                  }
+                });
+              });
+
+              // When new SW takes control, reload once to get fresh JS bundles
+              var refreshing = false;
+              navigator.serviceWorker.addEventListener('controllerchange', function(){
+                if (refreshing) return;
+                refreshing = true;
+                window.location.reload();
+              });
+
+              // Also re-check for updates every 5 minutes while page is open
+              setInterval(function(){ reg.update().catch(function(){}); }, 5 * 60 * 1000);
+            }).catch(function(){});
           }, 2000);
         });
       }

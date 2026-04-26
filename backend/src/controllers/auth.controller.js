@@ -13,7 +13,14 @@ const parentLogin = async (req, res) => {
 
     const student = await prisma.student.findUnique({
       where: { studentCode: studentCode.trim().toUpperCase() },
-      include: { classroom: true }
+      include: {
+        classroom: true,
+        pickupRequests: {
+          where: { status: { in: ['waiting', 'announced'] } },
+          orderBy: { calledAt: 'desc' },
+          take: 1
+        }
+      }
     });
 
     if (!student || !student.isActive) {
@@ -27,6 +34,10 @@ const parentLogin = async (req, res) => {
       { expiresIn: '8h' }
     );
 
+    // Strip heavy voiceRecording payload — keep flag only
+    const { voiceRecording, ...studentLight } = student;
+    studentLight.hasVoiceRecording = !!voiceRecording;
+
     res.json({
       token,
       user: {
@@ -35,7 +46,7 @@ const parentLogin = async (req, res) => {
         role: 'parent',
         studentCode: student.studentCode
       },
-      student
+      student: studentLight
     });
   } catch (error) {
     console.error(error);

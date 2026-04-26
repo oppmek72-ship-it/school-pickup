@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../../api/axios';
+import { getCache, setCache } from '../../api/dataCache';
 import { useAuth } from '../../context/AuthContext';
 import { useSocketEvent } from '../../hooks/useSocket';
 import { usePickup } from '../../hooks/usePickup';
@@ -203,7 +204,18 @@ function triggerAlert(callType, studentName) {
 
 export default function TeacherDashboard() {
   const { user, logout } = useAuth();
-  const [calls, setCalls] = useState([]);
+  // Hydrate from cache for instant first paint
+  const [calls, setCalls] = useState(() => {
+    const cached = getCache('pickupQueue');
+    if (cached && Array.isArray(cached.all)) {
+      let filtered = cached.all;
+      if (user?.classroomId) filtered = filtered.filter(c => c.student?.classroomId === user.classroomId);
+      const priority = { arrived: 0, five_minutes: 1, ten_minutes: 2 };
+      return [...filtered].sort((a, b) => (priority[a.callType] ?? 9) - (priority[b.callType] ?? 9) || a.queuePosition - b.queuePosition);
+    }
+    return [];
+  });
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(() => !!getCache('pickupQueue'));
   const { confirmPickup, loading } = usePickup();
   const [notifPermission, setNotifPermission] = useState(
     'Notification' in window ? Notification.permission : 'denied'
@@ -232,6 +244,7 @@ export default function TeacherDashboard() {
   const fetchCalls = useCallback(async () => {
     try {
       const { data } = await api.get('/pickup/queue');
+      setCache('pickupQueue', data);
       let filtered = data.all || [];
       if (user?.classroomId) {
         filtered = filtered.filter(c => c.student?.classroomId === user.classroomId);
@@ -239,8 +252,12 @@ export default function TeacherDashboard() {
       const priority = { arrived: 0, five_minutes: 1, ten_minutes: 2 };
       filtered.sort((a, b) => (priority[a.callType] ?? 9) - (priority[b.callType] ?? 9) || a.queuePosition - b.queuePosition);
       setCalls(filtered);
-    } catch { toast.error('ໂຫຼດຄິວບໍ່ສຳເລັດ'); }
-  }, [user?.classroomId]);
+      setHasLoadedOnce(true);
+    } catch {
+      // Only show error if we have NO data at all (not even cache) — avoid scaring users
+      if (!hasLoadedOnce) toast.error('ກຳລັງລໍຖ້າເຄືອຂ່າຍ...');
+    }
+  }, [user?.classroomId, hasLoadedOnce]);
 
   useEffect(() => { fetchCalls(); }, [fetchCalls]);
 

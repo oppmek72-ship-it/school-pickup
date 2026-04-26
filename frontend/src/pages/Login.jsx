@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import LoginOverlay from '../components/LoginOverlay';
+import { API_BASE } from '../api/config';
 import toast from 'react-hot-toast';
 
 const MODES = [
@@ -139,28 +141,36 @@ export default function Login() {
   const [studentCode, setStudentCode] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [overlayMode, setOverlayMode] = useState('parent');
   const { parentLogin, staffLogin, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess(false);
+    setOverlayMode(mode); // tentative — may change for admin below
     try {
       if (mode === 'parent') {
         await parentLogin(studentCode.trim().toUpperCase());
-        navigate('/parent');
+        setSuccess(true);
+        // Wait for overlay to flash 100% then navigate
+        setTimeout(() => navigate('/parent'), 700);
       } else {
         const data = await staffLogin(username.trim(), password);
         const role = data.user.role;
-        if (role === 'admin') navigate('/admin');
-        else navigate('/teacher');
+        setOverlayMode(role === 'admin' ? 'admin' : 'teacher');
+        setSuccess(true);
+        setTimeout(() => navigate(role === 'admin' ? '/admin' : '/teacher'), 700);
       }
     } catch (error) {
+      setSuccess(false);
       let msg = error.response?.data?.error;
       if (!msg) {
         if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
           msg = 'ເຄືອຂ່າຍຊ້າເກີນໄປ — ລອງໃໝ່';
         } else if (error.message === 'Network Error' || !error.response) {
-          msg = 'ເຊື່ອມຕໍ່ server ບໍ່ໄດ້ — ກວດເບິ່ງເນັດ';
+          msg = `ເຊື່ອມຕໍ່ບໍ່ໄດ້: ${API_BASE} — ກວດເບິ່ງເນັດ`;
         } else {
           msg = 'ເຂົ້າສູ່ລະບົບບໍ່ສຳເລັດ';
         }
@@ -172,6 +182,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8"
       style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #0F172A 100%)' }}>
+      <LoginOverlay show={loading || success} success={success} mode={overlayMode} />
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">

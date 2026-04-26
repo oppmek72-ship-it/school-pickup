@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import InstallPrompt from './components/InstallPrompt';
+import SystemReadyGate from './components/SystemReadyGate';
 import Login from './pages/Login';
 
 const ParentHome = lazy(() => import('./pages/parent/ParentHome'));
@@ -16,8 +17,10 @@ const AdminPanel = lazy(() => import('./pages/admin/AdminPanel'));
 
 function PageLoader() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white px-6">
+      <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+      <p className="text-gray-600 lao text-sm">ກຳລັງໂຫຼດໜ້າ...</p>
+      <p className="text-gray-400 lao text-xs mt-1">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</p>
     </div>
   );
 }
@@ -111,15 +114,17 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <SocketProvider>
-          <Suspense fallback={<PageLoader />}>
-            <AppRoutes />
-          </Suspense>
-          <InstallPrompt />
-          <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-        </SocketProvider>
-      </AuthProvider>
+      <SystemReadyGate>
+        <AuthProvider>
+          <SocketProvider>
+            <Suspense fallback={<PageLoader />}>
+              <AppRoutes />
+            </Suspense>
+            <InstallPrompt />
+            <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+          </SocketProvider>
+        </AuthProvider>
+      </SystemReadyGate>
     </BrowserRouter>
   );
 }

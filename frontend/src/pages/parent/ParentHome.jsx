@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../api/axios';
+import { getCache, setCache } from '../../api/dataCache';
 import { useAuth } from '../../context/AuthContext';
 import { useSocketEvent } from '../../hooks/useSocket';
 import { usePickup } from '../../hooks/usePickup';
@@ -53,19 +54,43 @@ const CALL_BUTTONS = [
 
 export default function ParentHome() {
   const { user } = useAuth();
-  const [students, setStudents] = useState([]);
+  // Hydrate from cache layers (in priority order): students cache → parentStudent → empty
+  const [students, setStudents] = useState(() => {
+    const cached = getCache('students');
+    if (cached && Array.isArray(cached) && cached.length > 0) return cached;
+    try {
+      const single = localStorage.getItem('parentStudent');
+      if (single) {
+        const s = JSON.parse(single);
+        return [{ ...s, pickupRequests: s.pickupRequests || [] }];
+      }
+    } catch (_) {}
+    return [];
+  });
   const [activeIdx, setActiveIdx] = useState(0);
   const [confirmCancel, setConfirmCancel] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const { createRequest, cancelRequest, loading } = usePickup();
 
-  const fetchStudents = useCallback(async () => {
+  const fetchStudents = useCallback(async (silent = true) => {
+    if (!silent) setRefreshing(true);
     try {
       const { data } = await api.get('/students');
       setStudents(data);
-    } catch { toast.error('ໂຫຼດຂໍ້ມູນນັກຮຽນບໍ່ສຳເລັດ'); }
+      setCache('students', data);
+    } catch { /* keep cached data on failure — no toast spam */ }
+    finally { if (!silent) setRefreshing(false); }
   }, []);
 
-  useEffect(() => { fetchStudents(); }, [fetchStudents]);
+  // Initial mount: refresh in background; cache is already shown
+  useEffect(() => { fetchStudents(true); }, [fetchStudents]);
+
+  // Refresh when tab becomes visible again
+  useEffect(() => {
+    const onVis = () => { if (document.visibilityState === 'visible') fetchStudents(true); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, [fetchStudents]);
 
   useSocketEvent('queue-update', useCallback(() => fetchStudents(), [fetchStudents]));
   useSocketEvent('call-completed', useCallback(() => { toast.success('ຮັບນ້ອງແລ້ວ ✅'); fetchStudents(); }, [fetchStudents]));
@@ -135,9 +160,16 @@ export default function ParentHome() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-400 lao">
-            <p className="text-5xl mb-3">📚</p>
-            <p>ບໍ່ພົບຂໍ້ມູນນັກຮຽນ</p>
+          <div className="bg-white rounded-2xl shadow-md p-5 animate-pulse">
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-20 rounded-full bg-gray-200"></div>
+              <div className="flex-1 space-y-2">
+                <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-100 rounded w-1/2"></div>
+                <div className="h-3 bg-gray-100 rounded w-1/3"></div>
+              </div>
+            </div>
+            <p className="mt-4 text-center text-xs text-gray-400 lao">ກຳລັງໂຫຼດຂໍ້ມູນນັກຮຽນ...</p>
           </div>
         )}
 
